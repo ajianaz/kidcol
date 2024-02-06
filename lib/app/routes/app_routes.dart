@@ -4,9 +4,15 @@ part of 'app_pages.dart';
 abstract class Routes {
   Routes._();
   static const HOME = _Paths.HOME;
+  static const KOLEKSI = _Paths.KOLEKSI;
+  static const PROFILE = _Paths.PROFILE;
+  static const MAIN_PAGE = _Paths.MAIN_PAGE;
 }
 
 abstract class _Paths {
   _Paths._();
   static const HOME = '/home';
+  static const KOLEKSI = '/koleksi';
+  static const PROFILE = '/profile';
+  static const MAIN_PAGE = '/main-page';
 }

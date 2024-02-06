@@ -13,5 +13,5 @@ class Koleksi {
   //TODO : Add the backlink to collection <> image
 
   @Backlink(to: 'koleksis')
-  final gambars = IsarLink<Gambar>();
+  final gambars = IsarLinks<Gambar>();
 }

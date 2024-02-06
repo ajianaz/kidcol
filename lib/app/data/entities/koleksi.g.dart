@@ -13,12 +13,12 @@ extension GetKoleksiCollection on Isar {
   IsarCollection<Koleksi> get koleksis => this.collection();
 }
 
-const KoleksiSchema = CollectionSchema(
+final KoleksiSchema = CollectionSchema(
   name: r'Koleksi',
-  id: 3911746790148175282,
+  id: BigInt.parse("3911746790148175282").toInt(),
   properties: {
     r'title': PropertySchema(
-      id: 0,
+      id: BigInt.parse("0").toInt(),
       name: r'title',
       type: IsarType.string,
     )
@@ -31,10 +31,10 @@ const KoleksiSchema = CollectionSchema(
   indexes: {},
   links: {
     r'gambars': LinkSchema(
-      id: -5076744161796383303,
+      id: BigInt.parse("-5076744161796383303").toInt(),
       name: r'gambars',
       target: r'Gambar',
-      single: true,
+      single: false,
       linkName: r'koleksis',
     )
   },
@@ -42,7 +42,7 @@ const KoleksiSchema = CollectionSchema(
   getId: _koleksiGetId,
   getLinks: _koleksiGetLinks,
   attach: _koleksiAttach,
-  version: '3.1.0+1',
+  version: '3.1.0',
 );
 
 int _koleksiEstimateSize(
@@ -375,9 +375,53 @@ extension KoleksiQueryLinks
     });
   }
 
-  QueryBuilder<Koleksi, Koleksi, QAfterFilterCondition> gambarsIsNull() {
+  QueryBuilder<Koleksi, Koleksi, QAfterFilterCondition> gambarsLengthEqualTo(
+      int length) {
+    return QueryBuilder.apply(this, (query) {
+      return query.linkLength(r'gambars', length, true, length, true);
+    });
+  }
+
+  QueryBuilder<Koleksi, Koleksi, QAfterFilterCondition> gambarsIsEmpty() {
     return QueryBuilder.apply(this, (query) {
       return query.linkLength(r'gambars', 0, true, 0, true);
+    });
+  }
+
+  QueryBuilder<Koleksi, Koleksi, QAfterFilterCondition> gambarsIsNotEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.linkLength(r'gambars', 0, false, 999999, true);
+    });
+  }
+
+  QueryBuilder<Koleksi, Koleksi, QAfterFilterCondition> gambarsLengthLessThan(
+    int length, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.linkLength(r'gambars', 0, true, length, include);
+    });
+  }
+
+  QueryBuilder<Koleksi, Koleksi, QAfterFilterCondition>
+      gambarsLengthGreaterThan(
+    int length, {
+    bool include = false,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.linkLength(r'gambars', length, include, 999999, true);
+    });
+  }
+
+  QueryBuilder<Koleksi, Koleksi, QAfterFilterCondition> gambarsLengthBetween(
+    int lower,
+    int upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.linkLength(
+          r'gambars', lower, includeLower, upper, includeUpper);
     });
   }
 }

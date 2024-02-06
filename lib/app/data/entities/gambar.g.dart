@@ -13,12 +13,12 @@ extension GetGambarCollection on Isar {
   IsarCollection<Gambar> get gambars => this.collection();
 }
 
-const GambarSchema = CollectionSchema(
+final GambarSchema = CollectionSchema(
   name: r'Gambar',
-  id: 8747301943191105943,
+  id: BigInt.parse("8747301943191105943").toInt(),
   properties: {
     r'endpoint': PropertySchema(
-      id: 0,
+      id: BigInt.parse("0").toInt(),
       name: r'endpoint',
       type: IsarType.string,
     )
@@ -31,7 +31,7 @@ const GambarSchema = CollectionSchema(
   indexes: {},
   links: {
     r'koleksis': LinkSchema(
-      id: -2650002008927185709,
+      id: BigInt.parse("-2650002008927185709").toInt(),
       name: r'koleksis',
       target: r'Koleksi',
       single: false,
@@ -41,7 +41,7 @@ const GambarSchema = CollectionSchema(
   getId: _gambarGetId,
   getLinks: _gambarGetLinks,
   attach: _gambarAttach,
-  version: '3.1.0+1',
+  version: '3.1.0',
 );
 
 int _gambarEstimateSize(

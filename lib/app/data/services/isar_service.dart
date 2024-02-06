@@ -7,7 +7,7 @@ import 'package:path_provider/path_provider.dart';
 class IsarService {
   late Future<Isar> db;
 
-  IsarService(){
+  IsarService() {
     db = openDB();
   }
 
@@ -18,13 +18,13 @@ class IsarService {
   }
 
   //TODO : Save Gambar
-  Future<void> saveGambar (Gambar newGambar) async{
+  Future<void> saveGambar(Gambar newGambar) async {
     final isar = await db;
     isar.writeTxnSync(() => isar.gambars.putSync(newGambar));
   }
 
   //TODO : Get All Koleksi
-  Future<List<Koleksi>> getAllKoleksis() async{
+  Future<List<Koleksi>> getAllKoleksis() async {
     final isar = await db;
     return await isar.koleksis.where().findAll();
   }
@@ -38,7 +38,10 @@ class IsarService {
   //TODO : get All Gambar by koleksi id
   Future<List<Gambar>> getGambarKoleksi(Koleksi koleksi) async {
     final isar = await db;
-    return await isar.gambars.filter().koleksis((q) => q.idEqualTo(koleksi.id)).findAll();
+    return await isar.gambars
+        .filter()
+        .koleksis((q) => q.idEqualTo(koleksi.id))
+        .findAll();
   }
 
   //TODO : Delete Gambar
@@ -46,7 +49,6 @@ class IsarService {
     final isar = await db;
     isar.writeTxnSync(() => isar.gambars.delete(gambar.id));
   }
-  
 
   //open DB connection
   Future<Isar> openDB() async {
@@ -55,7 +57,7 @@ class IsarService {
       var appDocDir = await getApplicationDocumentsDirectory();
       dirPath = appDocDir.path;
     }
-    
+
     if (Isar.instanceNames.isEmpty) {
       return await Isar.open(
         [KoleksiSchema, GambarSchema],
