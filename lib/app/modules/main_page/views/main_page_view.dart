@@ -12,19 +12,18 @@ class MainPageView extends GetView<MainPageController> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('MainPageView'),
-        centerTitle: true,
-      ),
-      bottomNavigationBar: ConvexAppBar(
-        items: [
-          TabItem(icon: Icons.home, title: 'Home'),
-          TabItem(icon: Icons.collections, title: 'Koleksi'),
-          TabItem(icon: Icons.people, title: 'Profile'),
-        ],
-        onTap: (int i) => controller.activeIndex.value = i,
-      ),
-      body: Obx(() => controller.mainContents[controller.activeIndex.value])
-    );
+        appBar: AppBar(
+          title: Text('Kids Colouring'),
+          centerTitle: true,
+        ),
+        bottomNavigationBar: ConvexAppBar(
+          items: [
+            TabItem(icon: Icons.home, title: 'Home'),
+            TabItem(icon: Icons.collections, title: 'Koleksi'),
+            TabItem(icon: Icons.people, title: 'Profile'),
+          ],
+          onTap: (int i) => controller.activeIndex.value = i,
+        ),
+        body: Obx(() => controller.mainContents[controller.activeIndex.value]));
   }
 }
