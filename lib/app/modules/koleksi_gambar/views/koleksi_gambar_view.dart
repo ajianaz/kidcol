@@ -1,0 +1,77 @@
+// ignore_for_file: prefer_const_constructors
+
+import 'package:cached_network_image/cached_network_image.dart';
+import 'package:flutter/material.dart';
+
+import 'package:get/get.dart';
+import 'package:kidcol/app/utils/app_string.dart';
+import 'package:kidcol/app/widgets/cards/card_image.dart';
+
+import '../controllers/koleksi_gambar_controller.dart';
+
+class KoleksiGambarView extends GetView<KoleksiGambarController> {
+  const KoleksiGambarView({Key? key}) : super(key: key);
+  @override
+  Widget build(BuildContext context) {
+    return GetBuilder<KoleksiGambarController>(
+        init: KoleksiGambarController(),
+        builder: (context) {
+          return Scaffold(
+            appBar: AppBar(
+              title: Text('Koleksi ${controller.koleksi.title}'),
+              centerTitle: true,
+            ),
+            body: controller.gambars.isNotEmpty
+                ? Container(
+                    child: ListView.builder(
+                      itemCount: controller.gambars.length,
+                      itemBuilder: (context, index) {
+                        var gambar = controller.gambars[index];
+                        return InkWell(
+                          onTap: () {
+                            // TODO Konfirmasi Hapus
+                            // controller.getAllKoleksi();
+                            // dialogKoleksis(gambar.name.toString());
+                            Get.defaultDialog(
+                              title: "Konfirmasi Hapus Gambar",
+                              content: Container(
+                                child: Column(
+                                  children: [
+                                    CachedNetworkImage(
+                                        imageUrl:
+                                            "$baseUrl/images/${gambar.endpoint}"),
+                                    Text(
+                                      "Apakah anda yakin akan menghapus gambar tersebut?",
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.w500,
+                                          fontSize: 14),
+                                      textAlign: TextAlign.center,
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              textConfirm: "Hapus",
+                              textCancel: "Batal",
+                              onConfirm: () {
+                                controller.deleteGambarKoleksi(gambar);
+                                Get.back();
+                                // Get.defaultDialog(title: "Perhatian",
+                                // content: Text("Berhasil menghapus data."));
+                              },
+                              onCancel: () => Get.back(),
+                            );
+                          },
+                          child: CardImage(
+                            imageUrl: "$baseUrl/images/${gambar.endpoint}",
+                          ),
+                        );
+                      },
+                    ),
+                  )
+                : Center(
+                    child: Text("Data not found."),
+                  ),
+          );
+        });
+  }
+}

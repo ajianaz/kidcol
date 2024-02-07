@@ -3,6 +3,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
+import 'package:kidcol/app/routes/app_pages.dart';
 import '../controllers/koleksi_controller.dart';
 
 class KoleksiView extends GetView<KoleksiController> {
@@ -56,15 +57,31 @@ class KoleksiView extends GetView<KoleksiController> {
                         scrollDirection: Axis.vertical,
                         children: snapshot.hasData
                             ? snapshot.data!.map((koleksi) {
-                                return Container(
-                                  color: Colors.grey,
-                                  padding: EdgeInsets.all(12),
-                                  margin: EdgeInsets.all(8),
-                                  child: Column(
-                                    children: [
-                                      Text("${koleksi.gambars.length}"),
-                                      Text(koleksi.title),
-                                    ],
+                                return InkWell(
+                                  onTap: () {
+                                    Get.toNamed(Routes.KOLEKSI_GAMBAR, arguments: koleksi);
+                                  },
+                                  child: Container(
+                                    decoration: BoxDecoration(
+                                      color: Colors.grey,
+                                      borderRadius: BorderRadius.circular(16),
+                                    ),
+                                    alignment: Alignment.center,
+                                    padding: EdgeInsets.all(12),
+                                    margin: EdgeInsets.all(8),
+                                    child: Column(
+                                      mainAxisAlignment: MainAxisAlignment.center,
+                                      children: [
+                                        Text(
+                                          "${koleksi.gambars.length}",
+                                          style: TextStyle(
+                                            fontSize: 32,
+                                            fontWeight: FontWeight.bold,
+                                          ),
+                                        ),
+                                        Text(koleksi.title),
+                                      ],
+                                    ),
                                   ),
                                 );
                               }).toList()

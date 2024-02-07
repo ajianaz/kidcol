@@ -47,7 +47,7 @@ class IsarService {
   //TODO : Delete Gambar
   Future<void> deleteGambar(Gambar gambar) async {
     final isar = await db;
-    isar.writeTxnSync(() => isar.gambars.delete(gambar.id));
+    isar.writeTxn(() => isar.gambars.delete(gambar.id));
   }
 
   //open DB connection

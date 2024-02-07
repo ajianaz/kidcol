@@ -7,6 +7,7 @@ abstract class Routes {
   static const KOLEKSI = _Paths.KOLEKSI;
   static const PROFILE = _Paths.PROFILE;
   static const MAIN_PAGE = _Paths.MAIN_PAGE;
+  static const KOLEKSI_GAMBAR = _Paths.KOLEKSI_GAMBAR;
 }
 
 abstract class _Paths {
@@ -15,4 +16,5 @@ abstract class _Paths {
   static const KOLEKSI = '/koleksi';
   static const PROFILE = '/profile';
   static const MAIN_PAGE = '/main-page';
+  static const KOLEKSI_GAMBAR = '/koleksi-gambar';
 }

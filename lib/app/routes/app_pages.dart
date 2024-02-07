@@ -4,6 +4,8 @@ import '../modules/home/bindings/home_binding.dart';
 import '../modules/home/views/home_view.dart';
 import '../modules/koleksi/bindings/koleksi_binding.dart';
 import '../modules/koleksi/views/koleksi_view.dart';
+import '../modules/koleksi_gambar/bindings/koleksi_gambar_binding.dart';
+import '../modules/koleksi_gambar/views/koleksi_gambar_view.dart';
 import '../modules/main_page/bindings/main_page_binding.dart';
 import '../modules/main_page/views/main_page_view.dart';
 import '../modules/profile/bindings/profile_binding.dart';
@@ -36,6 +38,11 @@ class AppPages {
       name: _Paths.MAIN_PAGE,
       page: () => const MainPageView(),
       binding: MainPageBinding(),
+    ),
+    GetPage(
+      name: _Paths.KOLEKSI_GAMBAR,
+      page: () => const KoleksiGambarView(),
+      binding: KoleksiGambarBinding(),
     ),
   ];
 }

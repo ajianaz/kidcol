@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:kidcol/app/data/entities/gambar.dart';
 import 'package:kidcol/app/utils/app_string.dart';
+import 'package:kidcol/app/widgets/cards/card_image.dart';
 
 import '../controllers/home_controller.dart';
 
@@ -98,8 +99,8 @@ class HomeView extends GetView<HomeController> {
                               // controller.getAllKoleksi();
                               dialogKoleksis(asset.name.toString());
                             },
-                            child: cardImage(
-                              imgUrl: "$baseUrl/images/${asset.name}",
+                            child: CardImage(
+                              imageUrl: "$baseUrl/images/${asset.name}",
                             ),
                           );
                         },
