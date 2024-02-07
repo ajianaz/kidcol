@@ -2,6 +2,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
+import 'package:kidcol/app/data/entities/gambar.dart';
 import 'package:kidcol/app/utils/app_string.dart';
 
 import '../controllers/home_controller.dart';
@@ -39,16 +40,48 @@ class HomeView extends GetView<HomeController> {
       );
     }
 
-    return Scaffold(
-      // body: Center(child: Text("ABC")),
-      // appBar: AppBar(
-      //   title: const Text('HomeView'),
-      //   centerTitle: true,
-      // ),
-      body: GetBuilder<HomeController>(
-        init: HomeController(),
-        builder: (val) {
-          return controller.assets.isNotEmpty
+    dialogKoleksis(String value) {
+      if (controller.koleksis.isNotEmpty) {
+        return Get.defaultDialog(
+          title: "Pilih Koleksi Tujuanß",
+          content: SingleChildScrollView(
+            child: Container(
+              height: 200.0, // Change as per your requirement
+              width: 300.0, // Change as per your requirement
+              child: ListView.builder(
+                itemCount: controller.koleksis.length,
+                shrinkWrap: true,
+                itemBuilder: (context, index) {
+                  var koleksi = controller.koleksis[index];
+                  return InkWell(
+                    onTap: () {
+                      var data = Gambar()..endpoint = value;
+                      data.koleksis.add(koleksi);
+                      controller.service.saveGambar(data);
+                      Get.back();
+                    },
+                    child: Container(
+                      margin: EdgeInsets.symmetric(vertical: 4, horizontal: 4),
+                      padding: EdgeInsets.symmetric(vertical: 4, horizontal: 8),
+                      decoration: BoxDecoration(
+                          color: Colors.grey,
+                          borderRadius: BorderRadius.circular(12)),
+                      child: Text("${koleksi.title}"),
+                    ),
+                  );
+                },
+              ),
+            ),
+          ),
+        );
+      }
+    }
+
+    return GetBuilder<HomeController>(
+      init: HomeController(),
+      builder: (val) {
+        return Scaffold(
+          body: controller.assets.isNotEmpty
               ? controller.isLoading
                   ? CircularProgressIndicator()
                   : Container(
@@ -59,16 +92,22 @@ class HomeView extends GetView<HomeController> {
                         controller: controller.scrollController,
                         itemCount: controller.assets.length,
                         itemBuilder: (context, index) {
-                          return cardImage(
-                            imgUrl:
-                                "$baseUrl/images/${controller.assets[index].name}",
+                          var asset = controller.assets[index];
+                          return InkWell(
+                            onTap: () {
+                              // controller.getAllKoleksi();
+                              dialogKoleksis(asset.name.toString());
+                            },
+                            child: cardImage(
+                              imgUrl: "$baseUrl/images/${asset.name}",
+                            ),
                           );
                         },
                       ),
                     )
-              : SizedBox();
-        },
-      ),
+              : SizedBox(),
+        );
+      },
     );
   }
 }

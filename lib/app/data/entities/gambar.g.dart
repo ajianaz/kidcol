@@ -31,10 +31,11 @@ final GambarSchema = CollectionSchema(
   indexes: {},
   links: {
     r'koleksis': LinkSchema(
-      id: BigInt.parse("-2650002008927185709").toInt(),
+      id: BigInt.parse("-7389097611133800399").toInt(),
       name: r'koleksis',
       target: r'Koleksi',
       single: false,
+      linkName: r'gambars',
     )
   },
   embeddedSchemas: {},

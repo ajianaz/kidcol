@@ -1,11 +1,15 @@
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:kidcol/app/data/entities/koleksi.dart';
 import 'package:kidcol/app/data/models/asset.dart';
 import 'package:kidcol/app/data/models/assets_response.dart';
+import 'package:kidcol/app/data/services/isar_service.dart';
 import 'package:kidcol/app/utils/app_string.dart';
 
 class HomeController extends GetxController {
+  final service = IsarService();
+
   final dio = Dio();
 
   RxInt page = RxInt(1);
@@ -16,6 +20,8 @@ class HomeController extends GetxController {
   bool isLoading = true; //
 
   List<Asset> assets = List.empty(growable: true);
+
+  List<Koleksi> koleksis = List.empty(growable: true);
 
   requestData() async {
     isLoading = true;
@@ -40,6 +46,14 @@ class HomeController extends GetxController {
   resetData() {
     assets.clear();
     page.value = 1;
+  }
+
+  //Get All Koleksi dari local DB
+  getAllKoleksi() async {
+    var result = await service.getAllKoleksis();
+    koleksis = result;
+    update();
+    debugPrint("Total data : ${koleksis.length}");
   }
 
   //// ADDING THE SCROLL LISTINER
@@ -72,6 +86,7 @@ class HomeController extends GetxController {
   void onInit() {
     super.onInit();
     scrollController = ScrollController()..addListener(scrollListener);
+    getAllKoleksi();
   }
 
   @override
