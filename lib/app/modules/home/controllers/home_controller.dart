@@ -10,22 +10,68 @@ class HomeController extends GetxController {
 
   RxInt page = RxInt(1);
   RxInt limit = RxInt(10);
+  RxInt totalPage = RxInt(1);
 
-  List<Asset> assets = List.empty();
+  late ScrollController scrollController;
+  bool isLoading = true; //
+
+  List<Asset> assets = List.empty(growable: true);
 
   requestData() async {
-    var response = await dio
-        .get('$baseUrl/assets/endless?page=${page.value}&limit=${limit.value}');
-    debugPrint('${response.data}');
+    isLoading = true;
+    try {
+      var response = await dio.get(
+          '$baseUrl/assets/endless?page=${page.value}&limit=${limit.value}');
+      // debugPrint('${response.data}');
 
-    var result = AssetsResponse.fromJson(response.data);
-    assets = result.assets as List<Asset>;
-    update();
+      var result = AssetsResponse.fromJson(response.data);
+
+      debugPrint("Befor Add ALL : ${assets.length}");
+      assets.addAll(result.assets as List<Asset>);
+      debugPrint("After Add ALL : ${assets.length}");
+      totalPage.value = result.totalPages as int;
+      isLoading = false;
+      update();
+    } catch (e) {
+      debugPrint("$e");
+    }
+  }
+
+  resetData() {
+    assets.clear();
+    page.value = 1;
+  }
+
+  //// ADDING THE SCROLL LISTINER
+  void scrollListener() {
+    // debugPrint(
+    //     "current ${scrollController.offset}  max: ${scrollController.position.maxScrollExtent}");
+
+    if (scrollController.offset >= scrollController.position.maxScrollExtent &&
+        !scrollController.position.outOfRange) {
+      debugPrint("comes to bottom $isLoading");
+      isLoading = true;
+
+      if (isLoading) {
+        debugPrint("RUNNING LOAD MORE");
+
+        if (page.value < totalPage.value) {
+          page.value = page.value + 1;
+          requestData();
+        } else if (page.value == totalPage.value) {
+          Get.defaultDialog(
+            title: "Perhatian",
+            content: Text("Gambar sudah habis."),
+          );
+        }
+      }
+    }
   }
 
   @override
   void onInit() {
     super.onInit();
+    scrollController = ScrollController()..addListener(scrollListener);
   }
 
   @override
