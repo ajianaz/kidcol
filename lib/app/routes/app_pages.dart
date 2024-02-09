@@ -8,6 +8,8 @@ import '../modules/koleksi_gambar/bindings/koleksi_gambar_binding.dart';
 import '../modules/koleksi_gambar/views/koleksi_gambar_view.dart';
 import '../modules/main_page/bindings/main_page_binding.dart';
 import '../modules/main_page/views/main_page_view.dart';
+import '../modules/printing_pdf/bindings/printing_pdf_binding.dart';
+import '../modules/printing_pdf/views/printing_pdf_view.dart';
 import '../modules/profile/bindings/profile_binding.dart';
 import '../modules/profile/views/profile_view.dart';
 
@@ -43,6 +45,11 @@ class AppPages {
       name: _Paths.KOLEKSI_GAMBAR,
       page: () => const KoleksiGambarView(),
       binding: KoleksiGambarBinding(),
+    ),
+    GetPage(
+      name: _Paths.PRINTING_PDF,
+      page: () => PrintingPdfView(),
+      binding: PrintingPdfBinding(),
     ),
   ];
 }

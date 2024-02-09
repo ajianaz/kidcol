@@ -4,6 +4,7 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
+import 'package:kidcol/app/routes/app_pages.dart';
 import 'package:kidcol/app/utils/app_string.dart';
 import 'package:kidcol/app/widgets/cards/card_image.dart';
 
@@ -20,6 +21,12 @@ class KoleksiGambarView extends GetView<KoleksiGambarController> {
             appBar: AppBar(
               title: Text('Koleksi ${controller.koleksi.title}'),
               centerTitle: true,
+              actions: [
+                InkWell(
+                    onTap: () => Get.toNamed(Routes.PRINTING_PDF,
+                        arguments: controller.koleksi),
+                    child: Icon(Icons.print))
+              ],
             ),
             body: controller.gambars.isNotEmpty
                 ? Container(
