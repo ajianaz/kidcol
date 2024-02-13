@@ -96,8 +96,11 @@ class HomeView extends GetView<HomeController> {
                           var asset = controller.assets[index];
                           return InkWell(
                             onTap: () {
-                              // controller.getAllKoleksi();
-                              dialogKoleksis(asset.name.toString());
+                              if (controller.koleksis.isEmpty) {
+                                controller.dialogAddKoleksi();
+                              } else {
+                                dialogKoleksis(asset.name.toString());
+                              }
                             },
                             child: CardImage(
                               imageUrl: "$baseUrl/images/${asset.name}",

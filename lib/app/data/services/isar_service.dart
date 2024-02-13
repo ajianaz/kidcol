@@ -44,6 +44,19 @@ class IsarService {
         .findAll();
   }
 
+  //TODO : Change Listener for get All Gambar by koleksi id
+  Stream<List<Gambar>> listenToGambars(Koleksi koleksi) async* {
+    final isar = await db;
+    yield* isar.gambars.filter().koleksis((q) => q.idEqualTo(koleksi.id)).watch(fireImmediately: true); 
+    ;
+  }
+
+  //TODO : Delete Koleksi 
+  Future<void> deleteKoleksi(Koleksi koleksi) async {
+    final isar = await db;
+    isar.writeTxn(() => isar.koleksis.delete(koleksi.id));
+  }
+
   //TODO : Delete Gambar
   Future<void> deleteGambar(Gambar gambar) async {
     final isar = await db;

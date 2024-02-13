@@ -43,6 +43,20 @@ class HomeController extends GetxController {
     }
   }
 
+  isKoleksiEmpty() async {
+    var result = true;
+    service
+        .getAllKoleksis()
+        .then((data) => data.isEmpty ? result = true : result = false);
+    return result;
+  }
+
+  dialogAddKoleksi() {
+    Get.defaultDialog(
+        title: "Tidak Ada Koleksi",
+        content: Text("Mohon tambahkan koleksi terlebih dahulu."));
+  }
+
   resetData() {
     assets.clear();
     page.value = 1;

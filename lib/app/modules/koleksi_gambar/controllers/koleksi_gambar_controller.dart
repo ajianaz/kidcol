@@ -3,6 +3,7 @@ import 'package:get/get.dart';
 import 'package:kidcol/app/data/entities/gambar.dart';
 import 'package:kidcol/app/data/entities/koleksi.dart';
 import 'package:kidcol/app/data/services/isar_service.dart';
+import 'package:kidcol/app/utils/dialog.dart';
 
 class KoleksiGambarController extends GetxController {
   late Koleksi koleksi;
@@ -15,9 +16,26 @@ class KoleksiGambarController extends GetxController {
     update();
   }
 
-  deleteGambarKoleksi(Gambar gambar){
+  deleteGambarKoleksi(Gambar gambar) {
     service.deleteGambar(gambar);
     getGambarKoleksi(koleksi);
+  }
+
+  konfirmasiHapusKoleksi(){
+    dialogKonfirmasi(title: "Konfirmasi", subtitle: "Apa anda yakin akan menghapus data tersebut?", onConfirm: () {
+      deleteKoleksiData();
+    },);
+  }
+
+  deleteKoleksiData() {
+    service.deleteKoleksi(koleksi);
+    dialogKonfirmasi(
+        title: "Perhatian",
+        subtitle: "Berhasil menghapus data.",
+        onConfirm: () {
+          Get.back();
+          Get.back();
+        });
   }
 
   @override

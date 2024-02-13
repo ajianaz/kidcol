@@ -22,59 +22,92 @@ class KoleksiGambarView extends GetView<KoleksiGambarController> {
               title: Text('Koleksi ${controller.koleksi.title}'),
               centerTitle: true,
               actions: [
-                InkWell(
-                    onTap: () => Get.toNamed(Routes.PRINTING_PDF,
-                        arguments: controller.koleksi),
-                    child: Icon(Icons.print))
+                Padding(
+                  padding: const EdgeInsets.only(right: 16.0),
+                  child: Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: [
+                      InkWell(
+                        onTap: () => Get.toNamed(Routes.PRINTING_PDF,
+                            arguments: controller.koleksi),
+                        child: Icon(Icons.print),
+                      ),
+                      SizedBox(
+                        width: 16,
+                      ),
+                      InkWell(
+                        onTap: () => controller.konfirmasiHapusKoleksi(),
+                        child: Icon(Icons.delete),
+                      ),
+                    ],
+                  ),
+                )
               ],
             ),
             body: controller.gambars.isNotEmpty
-                ? Container(
-                    child: ListView.builder(
-                      itemCount: controller.gambars.length,
-                      itemBuilder: (context, index) {
-                        var gambar = controller.gambars[index];
-                        return InkWell(
-                          onTap: () {
-                            // TODO Konfirmasi Hapus
-                            // controller.getAllKoleksi();
-                            // dialogKoleksis(gambar.name.toString());
-                            Get.defaultDialog(
-                              title: "Konfirmasi Hapus Gambar",
-                              content: Container(
-                                child: Column(
-                                  children: [
-                                    CachedNetworkImage(
-                                        imageUrl:
-                                            "$baseUrl/images/${gambar.endpoint}"),
-                                    Text(
-                                      "Apakah anda yakin akan menghapus gambar tersebut?",
-                                      style: TextStyle(
-                                          fontWeight: FontWeight.w500,
-                                          fontSize: 14),
-                                      textAlign: TextAlign.center,
-                                    ),
-                                  ],
-                                ),
-                              ),
-                              textConfirm: "Hapus",
-                              textCancel: "Batal",
-                              onConfirm: () {
-                                controller.deleteGambarKoleksi(gambar);
-                                Get.back();
-                                // Get.defaultDialog(title: "Perhatian",
-                                // content: Text("Berhasil menghapus data."));
-                              },
-                              onCancel: () => Get.back(),
-                            );
-                          },
-                          child: CardImage(
-                            imageUrl: "$baseUrl/images/${gambar.endpoint}",
-                          ),
+                ? StreamBuilder(
+                    stream:
+                        controller.service.listenToGambars(controller.koleksi),
+                    builder: (context, snapshot) {
+                      if (snapshot.hasError) {
+                        return AlertDialog(
+                          content: Text(snapshot.error.toString()),
                         );
-                      },
-                    ),
-                  )
+                      } else if (snapshot.hasData) {
+                        final items = snapshot.data;
+                        if (items != null) {
+                          return Container(
+                            child: ListView.builder(
+                              itemCount: controller.gambars.length,
+                              itemBuilder: (context, index) {
+                                var gambar = controller.gambars[index];
+                                return InkWell(
+                                  onTap: () {
+                                    // TODO Konfirmasi Hapus
+                                    // controller.getAllKoleksi();
+                                    // dialogKoleksis(gambar.name.toString());
+                                    Get.defaultDialog(
+                                      title: "Konfirmasi Hapus Gambar",
+                                      content: Container(
+                                        child: Column(
+                                          children: [
+                                            CachedNetworkImage(
+                                                imageUrl:
+                                                    "$baseUrl/images/${gambar.endpoint}"),
+                                            Text(
+                                              "Apakah anda yakin akan menghapus gambar tersebut?",
+                                              style: TextStyle(
+                                                  fontWeight: FontWeight.w500,
+                                                  fontSize: 14),
+                                              textAlign: TextAlign.center,
+                                            ),
+                                          ],
+                                        ),
+                                      ),
+                                      textConfirm: "Hapus",
+                                      textCancel: "Batal",
+                                      onConfirm: () {
+                                        controller.deleteGambarKoleksi(gambar);
+                                        Get.back();
+                                      },
+                                      onCancel: () => Get.back(),
+                                    );
+                                  },
+                                  child: CardImage(
+                                    imageUrl:
+                                        "$baseUrl/images/${gambar.endpoint}",
+                                  ),
+                                );
+                              },
+                            ),
+                          );
+                        } else {
+                          return const Center(child: Text('No data found!'));
+                        }
+                        ;
+                      }
+                      return const CircularProgressIndicator();
+                    })
                 : Center(
                     child: Text("Data not found."),
                   ),
