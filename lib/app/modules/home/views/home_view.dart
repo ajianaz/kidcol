@@ -82,34 +82,32 @@ class HomeView extends GetView<HomeController> {
       init: HomeController(),
       builder: (val) {
         return Scaffold(
-          body: controller.assets.isNotEmpty
-              ? controller.isLoading
-                  ? CircularProgressIndicator()
-                  : Container(
-                      child: ListView.builder(
-                        // gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                        //   crossAxisCount: 2,
-                        // ),
-                        controller: controller.scrollController,
-                        itemCount: controller.assets.length,
-                        itemBuilder: (context, index) {
-                          var asset = controller.assets[index];
-                          return InkWell(
-                            onTap: () {
-                              if (controller.koleksis.isEmpty) {
-                                controller.dialogAddKoleksi();
-                              } else {
-                                dialogKoleksis(asset.name.toString());
-                              }
-                            },
-                            child: CardImage(
-                              imageUrl: "$baseUrl/images/${asset.name}",
-                            ),
-                          );
-                        },
-                      ),
+          body: !controller.isLoading.value
+              ? controller.assets.isNotEmpty
+                  ? ListView.builder(
+                      // gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                      //   crossAxisCount: 2,
+                      // ),
+                      controller: controller.scrollController,
+                      itemCount: controller.assets.length,
+                      itemBuilder: (context, index) {
+                        var asset = controller.assets[index];
+                        return InkWell(
+                          onTap: () {
+                            if (controller.koleksis.isEmpty) {
+                              controller.dialogAddKoleksi();
+                            } else {
+                              dialogKoleksis(asset.name.toString());
+                            }
+                          },
+                          child: CardImage(
+                            imageUrl: "$baseUrl/images/${asset.name}",
+                          ),
+                        );
+                      },
                     )
-              : SizedBox(),
+                  : const SizedBox()
+              : const Center(child: CircularProgressIndicator()),
         );
       },
     );

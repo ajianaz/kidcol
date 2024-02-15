@@ -17,14 +17,14 @@ class HomeController extends GetxController {
   RxInt totalPage = RxInt(1);
 
   late ScrollController scrollController;
-  bool isLoading = true; //
+  RxBool isLoading = RxBool(true);
 
   List<Asset> assets = List.empty(growable: true);
 
   List<Koleksi> koleksis = List.empty(growable: true);
 
   requestData() async {
-    isLoading = true;
+    isLoading.value = true;
     try {
       var response = await dio.get(
           '$baseUrl/assets/endless?page=${page.value}&limit=${limit.value}');
@@ -32,11 +32,9 @@ class HomeController extends GetxController {
 
       var result = AssetsResponse.fromJson(response.data);
 
-      debugPrint("Befor Add ALL : ${assets.length}");
       assets.addAll(result.assets as List<Asset>);
-      debugPrint("After Add ALL : ${assets.length}");
       totalPage.value = result.totalPages as int;
-      isLoading = false;
+      isLoading.value = false;
       update();
     } catch (e) {
       debugPrint("$e");
@@ -77,12 +75,9 @@ class HomeController extends GetxController {
 
     if (scrollController.offset >= scrollController.position.maxScrollExtent &&
         !scrollController.position.outOfRange) {
-      debugPrint("comes to bottom $isLoading");
-      isLoading = true;
+      isLoading.value = true;
 
-      if (isLoading) {
-        debugPrint("RUNNING LOAD MORE");
-
+      if (isLoading.value) {
         if (page.value < totalPage.value) {
           page.value = page.value + 1;
           requestData();

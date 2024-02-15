@@ -5,10 +5,10 @@ import 'package:kidcol/app/modules/koleksi/views/koleksi_view.dart';
 import 'package:kidcol/app/modules/profile/views/profile_view.dart';
 
 class MainPageController extends GetxController {
-  final List<Widget> mainContents = [ 
+  final List<Widget> mainContents = [
     HomeView(),
     KoleksiView(),
-    ProfileView()
+    // ProfileView()
   ];
 
   RxInt activeIndex = RxInt(0);
@@ -27,5 +27,4 @@ class MainPageController extends GetxController {
   void onClose() {
     super.onClose();
   }
-
 }

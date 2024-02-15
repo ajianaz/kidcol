@@ -20,7 +20,7 @@ class MainPageView extends GetView<MainPageController> {
           items: [
             TabItem(icon: Icons.home, title: 'Home'),
             TabItem(icon: Icons.collections, title: 'Koleksi'),
-            TabItem(icon: Icons.people, title: 'Profile'),
+            // TabItem(icon: Icons.people, title: 'Profile'),
           ],
           onTap: (int i) => controller.activeIndex.value = i,
         ),
