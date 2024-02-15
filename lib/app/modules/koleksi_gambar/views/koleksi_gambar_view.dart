@@ -44,73 +44,65 @@ class KoleksiGambarView extends GetView<KoleksiGambarController> {
                 )
               ],
             ),
-            body: controller.gambars.isNotEmpty
-                ? StreamBuilder(
-                    stream:
-                        controller.service.listenToGambars(controller.koleksi),
-                    builder: (context, snapshot) {
-                      if (snapshot.hasError) {
-                        return AlertDialog(
-                          content: Text(snapshot.error.toString()),
-                        );
-                      } else if (snapshot.hasData) {
-                        final items = snapshot.data;
-                        if (items != null) {
-                          return Container(
-                            child: ListView.builder(
-                              itemCount: controller.gambars.length,
-                              itemBuilder: (context, index) {
-                                var gambar = controller.gambars[index];
-                                return InkWell(
-                                  onTap: () {
-                                    // TODO Konfirmasi Hapus
-                                    // controller.getAllKoleksi();
-                                    // dialogKoleksis(gambar.name.toString());
-                                    Get.defaultDialog(
-                                      title: "Konfirmasi Hapus Gambar",
-                                      content: Container(
-                                        child: Column(
-                                          children: [
-                                            CachedNetworkImage(
-                                                imageUrl:
-                                                    "$baseUrl/images/${gambar.endpoint}"),
-                                            Text(
-                                              "Apakah anda yakin akan menghapus gambar tersebut?",
-                                              style: TextStyle(
-                                                  fontWeight: FontWeight.w500,
-                                                  fontSize: 14),
-                                              textAlign: TextAlign.center,
-                                            ),
-                                          ],
-                                        ),
-                                      ),
-                                      textConfirm: "Hapus",
-                                      textCancel: "Batal",
-                                      onConfirm: () {
-                                        controller.deleteGambarKoleksi(gambar);
-                                        Get.back();
-                                      },
-                                      onCancel: () => Get.back(),
-                                    );
-                                  },
-                                  child: CardImage(
-                                    imageUrl:
-                                        "$baseUrl/images/${gambar.endpoint}",
-                                  ),
-                                );
+            body: StreamBuilder(
+              stream: controller.service.listenToGambars(controller.koleksi),
+              builder: (context, snapshot) {
+                if (snapshot.hasError) {
+                  return AlertDialog(
+                    content: Text(snapshot.error.toString()),
+                  );
+                } else if (snapshot.hasData) {
+                  final items = snapshot.data;
+                  if (items!.isNotEmpty) {
+                    return ListView.builder(
+                      itemCount: items.length,
+                      itemBuilder: (context, index) {
+                        var gambar = items.elementAt(index);
+                        return InkWell(
+                          onTap: () {
+                            // TODO Konfirmasi Hapus
+                            // controller.getAllKoleksi();
+                            // dialogKoleksis(gambar.name.toString());
+                            Get.defaultDialog(
+                              title: "Konfirmasi Hapus Gambar",
+                              content: Container(
+                                child: Column(
+                                  children: [
+                                    CachedNetworkImage(
+                                        imageUrl:
+                                            "$baseUrl/images/${gambar.endpoint}"),
+                                    Text(
+                                      "Apakah anda yakin akan menghapus gambar tersebut?",
+                                      style: TextStyle(
+                                          fontWeight: FontWeight.w500,
+                                          fontSize: 14),
+                                      textAlign: TextAlign.center,
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              textConfirm: "Hapus",
+                              textCancel: "Batal",
+                              onConfirm: () {
+                                controller.deleteGambarKoleksi(gambar);
+                                Get.back();
                               },
-                            ),
-                          );
-                        } else {
-                          return const Center(child: Text('No data found!'));
-                        }
-                        ;
-                      }
-                      return const CircularProgressIndicator();
-                    })
-                : Center(
-                    child: Text("Data not found."),
-                  ),
+                              onCancel: () => Get.back(),
+                            );
+                          },
+                          child: CardImage(
+                            imageUrl: "$baseUrl/images/${gambar.endpoint}",
+                          ),
+                        );
+                      },
+                    );
+                  } else {
+                    return const Center(child: Text('Tidak ada gambar'));
+                  }
+                }
+                return const CircularProgressIndicator();
+              },
+            ),
           );
         });
   }

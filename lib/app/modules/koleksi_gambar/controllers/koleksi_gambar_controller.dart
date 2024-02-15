@@ -9,22 +9,27 @@ class KoleksiGambarController extends GetxController {
   late Koleksi koleksi;
   IsarService service = IsarService();
 
-  List<Gambar> gambars = List.empty(growable: true);
+  // List<Gambar> gambars = List.empty(growable: true);
 
-  getGambarKoleksi(Koleksi koleksi) async {
-    gambars = await service.getGambarKoleksi(koleksi);
-    update();
-  }
+  // getGambarKoleksi(Koleksi koleksi) async {
+  //   gambars = await service.getGambarKoleksi(koleksi);
+  //   update();
+  // }
 
   deleteGambarKoleksi(Gambar gambar) {
     service.deleteGambar(gambar);
-    getGambarKoleksi(koleksi);
+    // getGambarKoleksi(koleksi);
   }
 
-  konfirmasiHapusKoleksi(){
-    dialogKonfirmasi(title: "Konfirmasi", subtitle: "Apa anda yakin akan menghapus data tersebut?", onConfirm: () {
-      deleteKoleksiData();
-    },);
+  konfirmasiHapusKoleksi() {
+    dialogKonfirmasi(
+        title: "Konfirmasi",
+        subtitle: "Apa anda yakin akan menghapus data tersebut?",
+        onConfirm: () {
+          Get.back();
+          deleteKoleksiData();
+        },
+        textConfirm: "Hapus");
   }
 
   deleteKoleksiData() {
@@ -44,7 +49,7 @@ class KoleksiGambarController extends GetxController {
     if (Get.arguments != null) {
       koleksi = Get.arguments;
       debugPrint("Data Diterima: ${koleksi.title}");
-      getGambarKoleksi(koleksi);
+      // getGambarKoleksi(koleksi);
     }
   }
 
