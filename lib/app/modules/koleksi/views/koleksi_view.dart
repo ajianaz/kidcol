@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
 import 'package:kidcol/app/routes/app_pages.dart';
+import 'package:kidcol/app/utils/colors.dart';
 import '../controllers/koleksi_controller.dart';
 
 class KoleksiView extends GetView<KoleksiController> {
@@ -16,31 +17,33 @@ class KoleksiView extends GetView<KoleksiController> {
         builder: (_) {
           return Scaffold(
             floatingActionButton: FloatingActionButton(
-                child: Icon(Icons.add),
-                onPressed: () {
-                  Get.defaultDialog(
-                      title: "Input Nama Koleksi",
-                      content: Container(
-                        child: TextFormField(
-                          textCapitalization: TextCapitalization.characters,
-                          keyboardType: TextInputType.name,
-                          decoration: InputDecoration(
-                            hintText: 'Kendaraan',
-                            counterText: "",
-                            contentPadding:
-                                EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
-                            border: OutlineInputBorder(
-                                borderRadius: BorderRadius.circular(12.0)),
-                          ),
-                          onFieldSubmitted: (value) {
-                            debugPrint("Hasil Ketik : $value");
-                            controller.simpanKoleksi(value);
-                            Get.back();
-                          },
-                        ),
-                      ));
-                  debugPrint("FAB PRESSED");
-                }),
+              backgroundColor: cornFlower,
+              onPressed: () {
+                Get.defaultDialog(
+                  title: "Input Nama Koleksi",
+                  content: Container(
+                    child: TextFormField(
+                      textCapitalization: TextCapitalization.characters,
+                      keyboardType: TextInputType.name,
+                      decoration: InputDecoration(
+                        hintText: 'Kendaraan',
+                        counterText: "",
+                        contentPadding:
+                            EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
+                        border: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(12.0)),
+                      ),
+                      onFieldSubmitted: (value) {
+                        debugPrint("Hasil Ketik : $value");
+                        controller.simpanKoleksi(value);
+                        Get.back();
+                      },
+                    ),
+                  ),
+                );
+              },
+              child: Icon(Icons.add),
+            ),
             body: Container(
               child: StreamBuilder(
                 stream: controller.service.listenToKoleksis(),

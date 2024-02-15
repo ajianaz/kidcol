@@ -4,6 +4,7 @@ import 'package:convex_bottom_bar/convex_bottom_bar.dart';
 import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
+import 'package:kidcol/app/utils/colors.dart';
 
 import '../controllers/main_page_controller.dart';
 
@@ -17,6 +18,7 @@ class MainPageView extends GetView<MainPageController> {
           centerTitle: true,
         ),
         bottomNavigationBar: ConvexAppBar(
+          backgroundColor: blueCuracao,
           items: [
             TabItem(icon: Icons.home, title: 'Home'),
             TabItem(icon: Icons.collections, title: 'Koleksi'),
