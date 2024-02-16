@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
 import 'package:kidcol/app/utils/colors.dart';
+import 'package:kidcol/app/utils/navbot_style.dart';
 
 import '../controllers/main_page_controller.dart';
 
@@ -17,14 +18,20 @@ class MainPageView extends GetView<MainPageController> {
           title: Text('Kids Colouring'),
           centerTitle: true,
         ),
-        bottomNavigationBar: ConvexAppBar(
-          backgroundColor: blueCuracao,
-          items: [
-            TabItem(icon: Icons.home, title: 'Home'),
-            TabItem(icon: Icons.collections, title: 'Koleksi'),
-            // TabItem(icon: Icons.people, title: 'Profile'),
-          ],
-          onTap: (int i) => controller.activeIndex.value = i,
+        bottomNavigationBar: StyleProvider(
+          style: Style(),
+          child: ConvexAppBar(
+            backgroundColor: blueCuracao,
+            // activeColor: Colors.transparent,
+            // color: Colors.amber,
+            top: 0.0,
+            items: [
+              TabItem(icon: Icons.home, title: 'Home'),
+              TabItem(icon: Icons.featured_play_list, title: 'Koleksi'),
+              // TabItem(icon: Icons.people, title: 'Profile'),
+            ],
+            onTap: (int i) => controller.activeIndex.value = i,
+          ),
         ),
         body: Obx(() => controller.mainContents[controller.activeIndex.value]));
   }

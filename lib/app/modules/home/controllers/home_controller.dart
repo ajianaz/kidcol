@@ -1,6 +1,9 @@
+import 'dart:io';
+
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:kidcol/app/data/entities/koleksi.dart';
 import 'package:kidcol/app/data/models/asset.dart';
 import 'package:kidcol/app/data/models/assets_response.dart';
@@ -9,6 +12,8 @@ import 'package:kidcol/app/utils/app_string.dart';
 
 class HomeController extends GetxController {
   final service = IsarService();
+  BannerAd? bannerAd;
+  bool isLoaded = false;
 
   final dio = Dio();
 
@@ -91,6 +96,36 @@ class HomeController extends GetxController {
     }
   }
 
+  // TODO: replace this test ad unit with your own ad unit.
+  final adUnitId = Platform.isAndroid
+      ? 'ca-app-pub-3940256099942544/6300978111'
+      : 'ca-app-pub-3940256099942544/2934735716';
+
+  /// Loads a banner ad.
+  void loadAd() {
+    bannerAd = BannerAd(
+      adUnitId: adUnitId,
+      request: const AdRequest(),
+      size: AdSize.banner,
+      listener: BannerAdListener(
+        // Called when an ad is successfully received.
+        onAdLoaded: (ad) {
+          debugPrint('$ad loaded.');
+
+          isLoaded = true;
+          update();
+        },
+        // Called when an ad request failed.
+        onAdFailedToLoad: (ad, err) {
+          debugPrint('BannerAd failed to load: $err');
+          // Dispose the ad here to free resources.
+          ad.dispose();
+        },
+      ),
+    )..load();
+    update();
+  }
+
   @override
   void onInit() {
     super.onInit();
@@ -102,6 +137,8 @@ class HomeController extends GetxController {
   void onReady() {
     super.onReady();
     debugPrint("READY");
+    loadAd();
+
     requestData();
   }
 
