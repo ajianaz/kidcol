@@ -89,10 +89,16 @@ class HomeView extends GetView<HomeController> {
                   ? controller.assets.isNotEmpty
                       ? SingleChildScrollView(
                           scrollDirection: Axis.vertical,
-                          child: ListView.builder(
+                          child: ListView.separated(
                             // gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                             //   crossAxisCount: 2,
                             // ),
+                            separatorBuilder: (context, index) {
+                              if ((index + 1) % 2 == 0) {
+                                return controller.getAds();
+                              }
+                              return SizedBox();
+                            },
                             shrinkWrap: true,
                             controller: controller.scrollController,
                             itemCount: controller.assets.length,
@@ -115,16 +121,6 @@ class HomeView extends GetView<HomeController> {
                         )
                       : const SizedBox()
                   : const Center(child: CircularProgressIndicator()),
-              controller.bannerAd != null
-                  ? Align(
-                      alignment: Alignment.bottomCenter,
-                      child: SizedBox(
-                        width: controller.bannerAd?.size.width.toDouble(),
-                        height: controller.bannerAd?.size.height.toDouble(),
-                        child: AdWidget(ad: controller.bannerAd!),
-                      ),
-                    )
-                  : SizedBox(),
             ],
           ),
         );

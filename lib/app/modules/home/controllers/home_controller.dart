@@ -12,8 +12,8 @@ import 'package:kidcol/app/utils/app_string.dart';
 
 class HomeController extends GetxController {
   final service = IsarService();
-  BannerAd? bannerAd;
-  bool isLoaded = false;
+
+  // bool isLoaded = false;
 
   final dio = Dio();
 
@@ -75,24 +75,25 @@ class HomeController extends GetxController {
 
   //// ADDING THE SCROLL LISTINER
   void scrollListener() {
-    // debugPrint(
-    //     "current ${scrollController.offset}  max: ${scrollController.position.maxScrollExtent}");
+    debugPrint(
+        "current ${scrollController.offset}  max: ${scrollController.position.maxScrollExtent}");
 
     if (scrollController.offset >= scrollController.position.maxScrollExtent &&
         !scrollController.position.outOfRange) {
-      isLoading.value = true;
+      // isLoading.value = true;
 
-      if (isLoading.value) {
-        if (page.value < totalPage.value) {
-          page.value = page.value + 1;
-          requestData();
-        } else if (page.value == totalPage.value) {
-          Get.defaultDialog(
-            title: "Perhatian",
-            content: Text("Gambar sudah habis."),
-          );
-        }
+      // if (isLoading.value) {
+      if (page.value < totalPage.value) {
+        page.value = page.value + 1;
+        debugPrint("Load More");
+        requestData();
+      } else if (page.value == totalPage.value) {
+        Get.defaultDialog(
+          title: "Perhatian",
+          content: Text("Gambar sudah habis."),
+        );
       }
+      // }
     }
   }
 
@@ -102,34 +103,43 @@ class HomeController extends GetxController {
       : 'ca-app-pub-3940256099942544/2934735716';
 
   /// Loads a banner ad.
-  void loadAd() {
-    bannerAd = BannerAd(
+  getAds() {
+    BannerAdListener bannerAdListener = BannerAdListener(
+      onAdWillDismissScreen: (ad) {
+        ad.dispose();
+      },
+      onAdClosed: (ad) {
+        debugPrint("Ads Get Closed");
+      },
+      onAdLoaded: (ad) {
+        debugPrint('$ad loaded.');
+      },
+      // Called when an ad request failed.
+      onAdFailedToLoad: (ad, err) {
+        debugPrint('BannerAd failed to load: $err');
+        // Dispose the ad here to free resources.
+        ad.dispose();
+      },
+    );
+
+    BannerAd? bannerAd = BannerAd(
       adUnitId: adUnitId,
       request: const AdRequest(),
       size: AdSize.banner,
-      listener: BannerAdListener(
-        // Called when an ad is successfully received.
-        onAdLoaded: (ad) {
-          debugPrint('$ad loaded.');
-
-          isLoaded = true;
-          update();
-        },
-        // Called when an ad request failed.
-        onAdFailedToLoad: (ad, err) {
-          debugPrint('BannerAd failed to load: $err');
-          // Dispose the ad here to free resources.
-          ad.dispose();
-        },
-      ),
+      listener: bannerAdListener,
     )..load();
-    update();
+
+    return SizedBox(
+      width: bannerAd.size.width.toDouble(),
+      height: 100,
+      child: AdWidget(ad: bannerAd),
+    );
   }
 
   @override
   void onInit() {
     super.onInit();
-    scrollController = ScrollController()..addListener(scrollListener);
+
     getAllKoleksi();
   }
 
@@ -137,7 +147,8 @@ class HomeController extends GetxController {
   void onReady() {
     super.onReady();
     debugPrint("READY");
-    loadAd();
+    scrollController = ScrollController()..addListener(scrollListener);
+    update();
 
     requestData();
   }
