@@ -75,8 +75,8 @@ class HomeController extends GetxController {
 
   //// ADDING THE SCROLL LISTINER
   void scrollListener() {
-    debugPrint(
-        "current ${scrollController.offset}  max: ${scrollController.position.maxScrollExtent}");
+    // debugPrint(
+    //     "current ${scrollController.offset}  max: ${scrollController.position.maxScrollExtent}");
 
     if (scrollController.offset >= scrollController.position.maxScrollExtent &&
         !scrollController.position.outOfRange) {
@@ -85,7 +85,7 @@ class HomeController extends GetxController {
       // if (isLoading.value) {
       if (page.value < totalPage.value) {
         page.value = page.value + 1;
-        debugPrint("Load More");
+        // debugPrint("Load More");
         requestData();
       } else if (page.value == totalPage.value) {
         Get.defaultDialog(

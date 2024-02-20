@@ -2,7 +2,6 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
-import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:kidcol/app/data/entities/gambar.dart';
 import 'package:kidcol/app/utils/app_string.dart';
 import 'package:kidcol/app/widgets/cards/card_image.dart';
@@ -87,37 +86,34 @@ class HomeView extends GetView<HomeController> {
             children: [
               !controller.isLoading.value
                   ? controller.assets.isNotEmpty
-                      ? SingleChildScrollView(
-                          scrollDirection: Axis.vertical,
-                          child: ListView.separated(
-                            // gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                            //   crossAxisCount: 2,
-                            // ),
-                            separatorBuilder: (context, index) {
-                              if ((index + 1) % 2 == 0) {
-                                return controller.getAds();
-                              }
-                              return SizedBox();
-                            },
-                            shrinkWrap: true,
-                            controller: controller.scrollController,
-                            itemCount: controller.assets.length,
-                            itemBuilder: (context, index) {
-                              var asset = controller.assets[index];
-                              return InkWell(
-                                onTap: () {
-                                  if (controller.koleksis.isEmpty) {
-                                    controller.dialogAddKoleksi();
-                                  } else {
-                                    dialogKoleksis(asset.name.toString());
-                                  }
-                                },
-                                child: CardImage(
-                                  imageUrl: "$baseUrl/images/${asset.name}",
-                                ),
-                              );
-                            },
-                          ),
+                      ? ListView.separated(
+                          // gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                          //   crossAxisCount: 2,
+                          // ),
+                          separatorBuilder: (context, index) {
+                            if ((index + 1) % 2 == 0) {
+                              return controller.getAds();
+                            }
+                            return SizedBox();
+                          },
+                          // shrinkWrap: true,
+                          controller: controller.scrollController,
+                          itemCount: controller.assets.length,
+                          itemBuilder: (context, index) {
+                            var asset = controller.assets[index];
+                            return InkWell(
+                              onTap: () {
+                                if (controller.koleksis.isEmpty) {
+                                  controller.dialogAddKoleksi();
+                                } else {
+                                  dialogKoleksis(asset.name.toString());
+                                }
+                              },
+                              child: CardImage(
+                                imageUrl: "$baseUrl/images/${asset.name}",
+                              ),
+                            );
+                          },
                         )
                       : const SizedBox()
                   : const Center(child: CircularProgressIndicator()),

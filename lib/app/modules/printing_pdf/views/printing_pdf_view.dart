@@ -44,7 +44,7 @@ class PrintingPdfView extends GetView<PrintingPdfController> {
   Future<Uint8List> _generatePdf(
       PdfPageFormat format, String title, List<Gambar> gambars) async {
     final pdf = pw.Document(version: PdfVersion.pdf_1_5, compress: true);
-    final font = await PdfGoogleFonts.nunitoExtraLight();
+    // final font = await PdfGoogleFonts.nunitoExtraLight();
 
     debugPrint("Gambars : ${gambars.length}");
 
