@@ -9,6 +9,7 @@ import 'package:kidcol/app/data/models/asset.dart';
 import 'package:kidcol/app/data/models/assets_response.dart';
 import 'package:kidcol/app/data/services/isar_service.dart';
 import 'package:kidcol/app/utils/app_string.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 class HomeController extends GetxController {
   final service = IsarService();
@@ -98,9 +99,9 @@ class HomeController extends GetxController {
   }
 
   // TODO: replace this test ad unit with your own ad unit.
-  final adUnitId = Platform.isAndroid
-      ? 'ca-app-pub-3940256099942544/6300978111'
-      : 'ca-app-pub-3940256099942544/2934735716';
+  var adUnitId = Platform.isAndroid
+      ? dotenv.env['TestAdUnitIdAndroid']
+      : dotenv.env['TestAdUnitIdIos'];
 
   /// Loads a banner ad.
   getAds() {
@@ -123,7 +124,7 @@ class HomeController extends GetxController {
     );
 
     BannerAd? bannerAd = BannerAd(
-      adUnitId: adUnitId,
+      adUnitId: adUnitId.toString(),
       request: const AdRequest(),
       size: AdSize.banner,
       listener: bannerAdListener,
