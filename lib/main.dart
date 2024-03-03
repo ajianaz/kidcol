@@ -13,7 +13,8 @@ void main() async {
 
   runApp(
     GetMaterialApp(
-      title: "KidCol",
+      title: "Kids Coloring Zone",
+      debugShowCheckedModeBanner: false,
       initialRoute: AppPages.INITIAL,
       getPages: AppPages.routes,
     ),

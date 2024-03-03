@@ -24,8 +24,8 @@ dialogPopUp(
   Get.defaultDialog(
       title: title.toString(),
       content: Text("$subtitle"),
-      textConfirm: "OK",
+      // textConfirm: "OK",
       textCancel: "Tutup",
-      onConfirm: onConfirm ?? () {},
+      // onConfirm: onConfirm ?? () {},
       onCancel: onCancel ?? () {});
 }

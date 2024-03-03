@@ -91,9 +91,10 @@ class HomeView extends GetView<HomeController> {
                           //   crossAxisCount: 2,
                           // ),
                           separatorBuilder: (context, index) {
-                            if ((index + 1) % 2 == 0) {
-                              return controller.getAds();
-                            }
+                            //TODO Komen dulu untuk publish ke playstore
+                            // if ((index + 1) % 2 == 0) {
+                            //   return controller.getAds();
+                            // }
                             return SizedBox();
                           },
                           // shrinkWrap: true,
