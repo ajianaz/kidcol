@@ -6,6 +6,7 @@ import 'package:kidcol/app/data/entities/gambar.dart';
 import 'package:kidcol/app/utils/app_string.dart';
 import 'package:kidcol/app/widgets/cards/card_image.dart';
 
+import '../../../routes/app_pages.dart';
 import '../controllers/home_controller.dart';
 
 class HomeView extends GetView<HomeController> {
@@ -44,7 +45,7 @@ class HomeView extends GetView<HomeController> {
     dialogKoleksis(String value) {
       if (controller.koleksis.isNotEmpty) {
         return Get.defaultDialog(
-          title: "Pilih Koleksi Tujuanß",
+          title: "Pilih Koleksi Tujuan",
           content: SingleChildScrollView(
             child: Container(
               height: 200.0, // Change as per your requirement
@@ -109,6 +110,10 @@ class HomeView extends GetView<HomeController> {
                                 } else {
                                   dialogKoleksis(asset.name.toString());
                                 }
+                              },
+                              onDoubleTap: () {
+                                Get.toNamed(Routes.DRAWING_ROOM,
+                                    arguments: "$baseUrl/images/${asset.name}");
                               },
                               child: CardImage(
                                 imageUrl: "$baseUrl/images/${asset.name}",

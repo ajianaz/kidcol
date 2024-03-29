@@ -2,6 +2,8 @@ import 'package:get/get.dart';
 
 import '../modules/SplashScreen/bindings/splash_screen_binding.dart';
 import '../modules/SplashScreen/views/splash_screen_view.dart';
+import '../modules/drawing_room/bindings/drawing_room_binding.dart';
+import '../modules/drawing_room/views/drawing_room_view.dart';
 import '../modules/home/bindings/home_binding.dart';
 import '../modules/home/views/home_view.dart';
 import '../modules/koleksi/bindings/koleksi_binding.dart';
@@ -57,6 +59,11 @@ class AppPages {
       name: _Paths.SPLASH_SCREEN,
       page: () => const SplashScreenView(),
       binding: SplashScreenBinding(),
+    ),
+    GetPage(
+      name: _Paths.DRAWING_ROOM,
+      page: () => const DrawingRoomView(),
+      binding: DrawingRoomBinding(),
     ),
   ];
 }

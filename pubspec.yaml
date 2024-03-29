@@ -2,10 +2,10 @@ name: kidcol
 version: 1.0.0+1
 publish_to: none
 description: A new Flutter project.
-environment:
+environment: 
   sdk: '>=3.2.6 <4.0.0'
 
-dependencies:
+dependencies: 
   cupertino_icons: ^1.0.2
   get: 4.6.6
   isar: ^3.1.0
@@ -17,37 +17,38 @@ dependencies:
   printing: 5.11.1
   pdf: 3.10.7
   google_mobile_ads: 4.0.0
-  flutter:
-    sdk: flutter
   flutter_launcher_icons: ^0.13.1
   flutter_dotenv: ^5.1.0
+  photo_view: 0.14.0
+  flutter: 
+    sdk: flutter
 
-dev_dependencies:
+dev_dependencies: 
   flutter_lints: 3.0.1
   build_runner: 2.4.8
-  isar_generator:
-    git:
+  isar_generator: 
+    git: 
       url: https://github.com/Kiruel/isar
       ref: fix/web_build
       path: packages/isar_generator
-  flutter_test:
+  flutter_test: 
     sdk: flutter
 
-flutter_launcher_icons:
+flutter_launcher_icons: 
+  image_path: assets/launcher/ic_launcher.png
   android: true
   ios: true
-  image_path: 'assets/launcher/ic_launcher.png'
-  min_sdk_android: 21 # android min sdk min:16, default 21
+  min_sdk_android: 21
 
-isar_generator:
-  git:
+isar_generator: 
+  git: 
     url: https://github.com/Kiruel/isar
     ref: fix/web_build
     path: packages/isar_generator
 
-flutter:
-  uses-material-design: true
-
-  assets:
+flutter: 
+  assets: 
     - .env
     - assets/launcher/
+  uses-material-design: true
+

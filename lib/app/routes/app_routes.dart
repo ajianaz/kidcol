@@ -10,6 +10,7 @@ abstract class Routes {
   static const KOLEKSI_GAMBAR = _Paths.KOLEKSI_GAMBAR;
   static const PRINTING_PDF = _Paths.PRINTING_PDF;
   static const SPLASH_SCREEN = _Paths.SPLASH_SCREEN;
+  static const DRAWING_ROOM = _Paths.DRAWING_ROOM;
 }
 
 abstract class _Paths {
@@ -21,4 +22,5 @@ abstract class _Paths {
   static const KOLEKSI_GAMBAR = '/koleksi-gambar';
   static const PRINTING_PDF = '/printing-pdf';
   static const SPLASH_SCREEN = '/splash-screen';
+  static const DRAWING_ROOM = '/drawing-room';
 }
