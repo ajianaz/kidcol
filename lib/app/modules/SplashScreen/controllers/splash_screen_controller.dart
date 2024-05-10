@@ -16,7 +16,7 @@ class SplashScreenController extends GetxController {
   void checkDate() {
     debugPrint("Check Date Running");
     DateTime currentDate = DateTime.now();
-    DateTime checkDate = DateTime(2024, 5, 5);
+    DateTime checkDate = DateTime(2024, 10, 10);
 
     debugPrint("Hari : $checkDate - $currentDate");
 
