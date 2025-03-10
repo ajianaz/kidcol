@@ -60,8 +60,6 @@ class PrintingPdfView extends GetView<PrintingPdfController> {
                 itemCount: gambars.length,
                 itemBuilder: (context, index) {
                   debugPrint("index : $index");
-                  // var gambar = gambars[index];
-                  // var netImage = await networkImage("$baseUrl/images/${gambar.endpoint}");
 
                   return pw.Container(
                     child: pw.Flexible(
@@ -100,8 +98,6 @@ class PrintingPdfView extends GetView<PrintingPdfController> {
               itemCount: gambars.length,
               itemBuilder: (context, index) {
                 debugPrint("index : $index");
-                // var gambar = gambars[index];
-                // var netImage = await networkImage("$baseUrl/images/${gambar.endpoint}");
 
                 return pw.Container(
                   alignment: pw.Alignment.center,

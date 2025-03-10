@@ -69,8 +69,7 @@ class KoleksiGambarView extends GetView<KoleksiGambarController> {
                                 child: Column(
                                   children: [
                                     CachedNetworkImage(
-                                        imageUrl:
-                                            "$baseUrl/images/${gambar.endpoint}"),
+                                        imageUrl: "${gambar.endpoint}"),
                                     Text(
                                       "Apakah anda yakin akan menghapus gambar tersebut?",
                                       style: TextStyle(
@@ -91,7 +90,7 @@ class KoleksiGambarView extends GetView<KoleksiGambarController> {
                             );
                           },
                           child: CardImage(
-                            imageUrl: "$baseUrl/images/${gambar.endpoint}",
+                            imageUrl: "${gambar.endpoint}",
                           ),
                         );
                       },

@@ -24,7 +24,7 @@ class PrintingPdfController extends GetxController {
 
   addImage() async {
     gambars.forEach((element) async {
-      var netImage = await networkImage("$baseUrl/images/${element.endpoint}");
+      var netImage = await networkImage("${element.endpoint}");
       netImages.add(netImage);
       update();
     });
