@@ -1,15 +1,11 @@
-import 'dart:io';
-
 import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
-import 'package:google_mobile_ads/google_mobile_ads.dart';
 import 'package:kidcol/app/data/entities/koleksi.dart';
 import 'package:kidcol/app/data/models/asset.dart';
 import 'package:kidcol/app/data/models/assets_response.dart';
 import 'package:kidcol/app/data/services/isar_service.dart';
 import 'package:kidcol/app/utils/app_string.dart';
-import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 class HomeController extends GetxController {
   final service = IsarService();
@@ -19,7 +15,7 @@ class HomeController extends GetxController {
   final dio = Dio();
 
   RxInt page = RxInt(1);
-  RxInt limit = RxInt(10);
+  RxInt limit = RxInt(70);
   RxInt totalPage = RxInt(1);
 
   late ScrollController scrollController;
@@ -33,7 +29,7 @@ class HomeController extends GetxController {
     isLoading.value = true;
     try {
       var response = await dio.get(
-          '$baseUrl/assets/endless?page=${page.value}&limit=${limit.value}');
+          'https://gateway.ajianaz.dev/api/coloring-images/endless?page=${page.value}&limit=${limit.value}');
       // debugPrint('${response.data}');
 
       var result = AssetsResponse.fromJson(response.data);
@@ -96,45 +92,6 @@ class HomeController extends GetxController {
       }
       // }
     }
-  }
-
-  // TODO: replace this test ad unit with your own ad unit.
-  var adUnitId = Platform.isAndroid
-      ? dotenv.env['TestAdUnitIdAndroid']
-      : dotenv.env['TestAdUnitIdIos'];
-
-  /// Loads a banner ad.
-  getAds() {
-    BannerAdListener bannerAdListener = BannerAdListener(
-      onAdWillDismissScreen: (ad) {
-        ad.dispose();
-      },
-      onAdClosed: (ad) {
-        debugPrint("Ads Get Closed");
-      },
-      onAdLoaded: (ad) {
-        debugPrint('$ad loaded.');
-      },
-      // Called when an ad request failed.
-      onAdFailedToLoad: (ad, err) {
-        debugPrint('BannerAd failed to load: $err');
-        // Dispose the ad here to free resources.
-        ad.dispose();
-      },
-    );
-
-    BannerAd? bannerAd = BannerAd(
-      adUnitId: adUnitId.toString(),
-      request: const AdRequest(),
-      size: AdSize.banner,
-      listener: bannerAdListener,
-    )..load();
-
-    return SizedBox(
-      width: bannerAd.size.width.toDouble(),
-      height: 100,
-      child: AdWidget(ad: bannerAd),
-    );
   }
 
   @override

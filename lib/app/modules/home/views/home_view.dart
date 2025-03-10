@@ -1,9 +1,7 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
 import 'package:kidcol/app/data/entities/gambar.dart';
-import 'package:kidcol/app/utils/app_string.dart';
 import 'package:kidcol/app/widgets/cards/card_image.dart';
 
 import '../../../routes/app_pages.dart';
@@ -13,35 +11,6 @@ class HomeView extends GetView<HomeController> {
   const HomeView({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
-    cardImage({String? imgUrl}) {
-      return Column(
-        children: [
-          Container(
-            margin: EdgeInsets.symmetric(vertical: 2, horizontal: 2),
-            padding: EdgeInsets.all(2),
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(12),
-              border: Border.all(
-                color: Colors.black,
-                width: 0.2,
-              ),
-              color: Colors.white,
-            ),
-            child: ClipRRect(
-              borderRadius: BorderRadius.circular(12),
-              child: CachedNetworkImage(
-                imageUrl: imgUrl.toString(),
-                progressIndicatorBuilder: (context, url, progress) =>
-                    CircularProgressIndicator(),
-                fadeInCurve: Curves.bounceIn,
-                fit: BoxFit.contain,
-              ),
-            ),
-          ),
-        ],
-      );
-    }
-
     dialogKoleksis(String value) {
       if (controller.koleksis.isNotEmpty) {
         return Get.defaultDialog(
@@ -88,14 +57,11 @@ class HomeView extends GetView<HomeController> {
               !controller.isLoading.value
                   ? controller.assets.isNotEmpty
                       ? ListView.separated(
-                          // gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                          // gridDelegate:
+                          //     SliverGridDelegateWithFixedCrossAxisCount(
                           //   crossAxisCount: 2,
                           // ),
                           separatorBuilder: (context, index) {
-                            //TODO Komen dulu untuk publish ke playstore
-                            // if ((index + 1) % 2 == 0) {
-                            //   return controller.getAds();
-                            // }
                             return SizedBox();
                           },
                           // shrinkWrap: true,
@@ -108,15 +74,15 @@ class HomeView extends GetView<HomeController> {
                                 if (controller.koleksis.isEmpty) {
                                   controller.dialogAddKoleksi();
                                 } else {
-                                  dialogKoleksis(asset.name.toString());
+                                  dialogKoleksis(asset.imageUrl.toString());
                                 }
                               },
                               onDoubleTap: () {
                                 Get.toNamed(Routes.DRAWING_ROOM,
-                                    arguments: "$baseUrl/images/${asset.name}");
+                                    arguments: "${asset.imageUrl}");
                               },
                               child: CardImage(
-                                imageUrl: "$baseUrl/images/${asset.name}",
+                                imageUrl: "${asset.imageUrl}",
                               ),
                             );
                           },

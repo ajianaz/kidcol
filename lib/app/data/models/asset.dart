@@ -1,47 +1,45 @@
+// To parse this JSON data, do
+//
+//     final asset = assetFromJson(jsonString);
+
+import 'dart:convert';
+
+List<Asset> assetFromJson(String str) =>
+    List<Asset>.from(json.decode(str).map((x) => Asset.fromJson(x)));
+
+String assetToJson(List<Asset> data) =>
+    json.encode(List<dynamic>.from(data.map((x) => x.toJson())));
+
 class Asset {
-    final String? uuid;
-    final String? name;
-    final String? directory;
-    final int? typeId;
-    final int? categoryId;
-    final DateTime? createdAt;
-    final DateTime? updatedAt;
-    final String? createdBy;
-    final dynamic deletedAt;
+  final String? designId;
+  final String? designName;
+  final String? parentId;
+  final String? imageUrl;
+  final DateTime? createdAt;
 
-    Asset({
-        this.uuid,
-        this.name,
-        this.directory,
-        this.typeId,
-        this.categoryId,
-        this.createdAt,
-        this.updatedAt,
-        this.createdBy,
-        this.deletedAt,
-    });
+  Asset({
+    this.designId,
+    this.designName,
+    this.parentId,
+    this.imageUrl,
+    this.createdAt,
+  });
 
-    factory Asset.fromJson(Map<String, dynamic> json) => Asset(
-        uuid: json["uuid"],
-        name: json["name"],
-        directory: json["directory"],
-        typeId: json["type_id"],
-        categoryId: json["category_id"],
-        createdAt: json["created_at"] == null ? null : DateTime.parse(json["created_at"]),
-        updatedAt: json["updated_at"] == null ? null : DateTime.parse(json["updated_at"]),
-        createdBy: json["created_by"],
-        deletedAt: json["deleted_at"],
-    );
+  factory Asset.fromJson(Map<String, dynamic> json) => Asset(
+        designId: json["design_id"],
+        designName: json["design_name"],
+        parentId: json["parent_id"],
+        imageUrl: json["image_url"],
+        createdAt: json["created_at"] == null
+            ? null
+            : DateTime.parse(json["created_at"]),
+      );
 
-    Map<String, dynamic> toJson() => {
-        "uuid": uuid,
-        "name": name,
-        "directory": directory,
-        "type_id": typeId,
-        "category_id": categoryId,
+  Map<String, dynamic> toJson() => {
+        "design_id": designId,
+        "design_name": designName,
+        "parent_id": parentId,
+        "image_url": imageUrl,
         "created_at": createdAt?.toIso8601String(),
-        "updated_at": updatedAt?.toIso8601String(),
-        "created_by": createdBy,
-        "deleted_at": deletedAt,
-    };
+      };
 }

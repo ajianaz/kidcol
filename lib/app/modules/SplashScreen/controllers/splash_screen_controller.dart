@@ -16,7 +16,7 @@ class SplashScreenController extends GetxController {
   void checkDate() {
     debugPrint("Check Date Running");
     DateTime currentDate = DateTime.now();
-    DateTime checkDate = DateTime(2024, 10, 10);
+    DateTime checkDate = DateTime(2026, 05, 05);
 
     debugPrint("Hari : $checkDate - $currentDate");
 
@@ -28,10 +28,10 @@ class SplashScreenController extends GetxController {
   }
 
   void needUpdate() {
-    // Tambahkan logika atau fungsi yang ingin dijalankan jika perlu update di sini
+    // Add logic or functions to execute if an update is needed here
     dialogPopUp(
-        title: "Pemberitahuan",
-        subtitle: "Pembaruan tersedia, silahkan perbarui aplikasi.",
+        title: "Notification",
+        subtitle: "An update is available. Please update the app.",
         onCancel: () {
           Get.back();
         });
