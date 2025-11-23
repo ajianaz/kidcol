@@ -1,0 +1,6 @@
+base_locale: en
+output_dir: lib/i18n
+output_localization_file: generated.dart
+output_class: S
+input_directory: lib/i18n
+input_file_pattern: .json

@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:kidcol/app/data/entities/gambar.dart';
 import 'package:kidcol/app/widgets/cards/card_image.dart';
+import 'package:kidcol/i18n/strings.g.dart';
 
 import '../../../routes/app_pages.dart';
 import '../controllers/home_controller.dart';
@@ -14,7 +15,7 @@ class HomeView extends GetView<HomeController> {
     dialogKoleksis(String value) {
       if (controller.koleksis.isNotEmpty) {
         return Get.defaultDialog(
-          title: "Pilih Koleksi Tujuan",
+          title: t.collections.view_images,
           content: SingleChildScrollView(
             child: Container(
               height: 200.0, // Change as per your requirement

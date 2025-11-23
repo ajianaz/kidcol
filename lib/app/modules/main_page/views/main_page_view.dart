@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:kidcol/app/utils/colors.dart';
 import 'package:kidcol/app/utils/navbot_style.dart';
+import 'package:kidcol/i18n/strings.g.dart';
 
 import '../controllers/main_page_controller.dart';
 
@@ -15,7 +16,7 @@ class MainPageView extends GetView<MainPageController> {
   Widget build(BuildContext context) {
     return Scaffold(
         appBar: AppBar(
-          title: Text('Kids Colouring'),
+          title: Text(t.app.name),
           centerTitle: true,
         ),
         bottomNavigationBar: StyleProvider(
@@ -26,9 +27,9 @@ class MainPageView extends GetView<MainPageController> {
             // color: Colors.amber,
             top: 0.0,
             items: [
-              TabItem(icon: Icons.home, title: 'Home'),
-              TabItem(icon: Icons.featured_play_list, title: 'Koleksi'),
-              // TabItem(icon: Icons.people, title: 'Profile'),
+              TabItem(icon: Icons.home, title: t.app.home),
+              TabItem(icon: Icons.featured_play_list, title: t.app.collections),
+              TabItem(icon: Icons.settings, title: t.app.settings),
             ],
             onTap: (int i) => controller.activeIndex.value = i,
           ),

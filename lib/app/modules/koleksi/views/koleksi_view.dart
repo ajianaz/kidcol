@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:kidcol/app/routes/app_pages.dart';
 import 'package:kidcol/app/utils/colors.dart';
+import 'package:kidcol/i18n/strings.g.dart';
 import '../controllers/koleksi_controller.dart';
 
 class KoleksiView extends GetView<KoleksiController> {
@@ -20,13 +21,13 @@ class KoleksiView extends GetView<KoleksiController> {
               backgroundColor: cornFlower,
               onPressed: () {
                 Get.defaultDialog(
-                  title: "Input Nama Koleksi",
+                  title: t.collections.create_new,
                   content: Container(
                     child: TextFormField(
                       textCapitalization: TextCapitalization.characters,
                       keyboardType: TextInputType.name,
                       decoration: InputDecoration(
-                        hintText: 'Kendaraan',
+                        hintText: t.collections.name_hint,
                         counterText: "",
                         contentPadding:
                             EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
@@ -93,7 +94,7 @@ class KoleksiView extends GetView<KoleksiController> {
                             : [],
                       );
                     } else {
-                      return const Center(child: Text('Tidak ada koleksi'));
+                      return Center(child: Text(t.collections.empty));
                     }
                   }
                   return const CircularProgressIndicator();

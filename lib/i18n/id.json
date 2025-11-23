@@ -1,0 +1,84 @@
+{
+  "app": {
+    "name": "Kidcol",
+    "collections": "Koleksi",
+    "home": "Beranda",
+    "drawing_room": "Ruang Gambar",
+    "settings": "Pengaturan"
+  },
+  "home": {
+    "title": "Selamat Datang di Kidcol",
+    "subtitle": "Buat dan kelola koleksi Anda",
+    "create_collection": "Buat Koleksi",
+    "view_collections": "Lihat Koleksi",
+    "start_drawing": "Mulai Menggambar"
+  },
+  "collections": {
+    "title": "Koleksi Saya",
+    "empty": "Belum ada koleksi",
+    "create_new": "Buat Koleksi Baru",
+    "name": "Nama Koleksi",
+    "name_hint": "Masukkan nama koleksi",
+    "save": "Simpan",
+    "cancel": "Batal",
+    "delete": "Hapus",
+    "edit": "Edit",
+    "view_images": "Lihat Gambar"
+  },
+  "drawing": {
+    "title": "Ruang Gambar",
+    "tools": "Alat",
+    "brush": "Kuas",
+    "eraser": "Penghapus",
+    "color": "Warna",
+    "size": "Ukuran",
+    "clear": "Bersihkan",
+    "save": "Simpan",
+    "back": "Kembali"
+  },
+  "images": {
+    "title": "Gambar",
+    "empty": "Tidak ada gambar dalam koleksi ini",
+    "add_image": "Tambah Gambar",
+    "delete": "Hapus",
+    "view": "Lihat",
+    "download": "Unduh"
+  },
+  "settings": {
+    "title": "Pengaturan",
+    "language": "Bahasa",
+    "english": "English",
+    "indonesian": "Indonesia",
+    "faq": "FAQ",
+    "terms_of_service": "Syarat & Ketentuan",
+    "privacy_policy": "Kebijakan Privasi",
+    "about": "Tentang",
+    "version": "Versi"
+  },
+  "common": {
+    "ok": "OK",
+    "cancel": "Batal",
+    "yes": "Ya",
+    "no": "Tidak",
+    "delete": "Hapus",
+    "save": "Simpan",
+    "edit": "Edit",
+    "add": "Tambah",
+    "remove": "Hapus",
+    "loading": "Memuat...",
+    "error": "Error",
+    "success": "Berhasil",
+    "confirm": "Konfirmasi",
+    "warning": "Peringatan"
+  },
+  "messages": {
+    "collection_created": "Koleksi berhasil dibuat",
+    "collection_deleted": "Koleksi berhasil dihapus",
+    "collection_updated": "Koleksi berhasil diperbarui",
+    "image_saved": "Gambar berhasil disimpan",
+    "image_deleted": "Gambar berhasil dihapus",
+    "confirm_delete": "Apakah Anda yakin ingin menghapus item ini?",
+    "error_occurred": "Terjadi kesalahan. Silakan coba lagi.",
+    "no_internet": "Tidak ada koneksi internet. Silakan periksa jaringan Anda."
+  }
+}
