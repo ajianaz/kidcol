@@ -47,6 +47,8 @@ class Translations with BaseTranslations<AppLocale, Translations> {
 	late final TranslationsPrintingEn printing = TranslationsPrintingEn.internal(_root);
 	late final TranslationsErrorEn error = TranslationsErrorEn.internal(_root);
 	late final TranslationsCollectionEn collection = TranslationsCollectionEn.internal(_root);
+	late final TranslationsSearchEn search = TranslationsSearchEn.internal(_root);
+	late final TranslationsUiEn ui = TranslationsUiEn.internal(_root);
 }
 
 // Path: app
@@ -499,6 +501,42 @@ class TranslationsCollectionEn {
 
 	/// en: 'Collection'
 	String get title_prefix => 'Collection';
+}
+
+// Path: search
+class TranslationsSearchEn {
+	TranslationsSearchEn.internal(this._root);
+
+	final Translations _root; // ignore: unused_field
+
+	// Translations
+
+	/// en: 'Search Images'
+	String get title => 'Search Images';
+
+	/// en: 'Enter search keywords...'
+	String get hint => 'Enter search keywords...';
+
+	/// en: 'Search'
+	String get button => 'Search';
+
+	/// en: 'Search functionality will be implemented soon!'
+	String get not_implemented => 'Search functionality will be implemented soon!';
+}
+
+// Path: ui
+class TranslationsUiEn {
+	TranslationsUiEn.internal(this._root);
+
+	final Translations _root; // ignore: unused_field
+
+	// Translations
+
+	/// en: 'Tap to view'
+	String get tap_to_view => 'Tap to view';
+
+	/// en: 'Swipe up for more images'
+	String get swipe_for_more => 'Swipe up for more images';
 }
 
 // Path: dialog.whatsapp_verification

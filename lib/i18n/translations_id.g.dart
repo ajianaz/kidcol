@@ -45,6 +45,8 @@ class TranslationsId extends Translations with BaseTranslations<AppLocale, Trans
 	@override late final _TranslationsPrintingId printing = _TranslationsPrintingId._(_root);
 	@override late final _TranslationsErrorId error = _TranslationsErrorId._(_root);
 	@override late final _TranslationsCollectionId collection = _TranslationsCollectionId._(_root);
+	@override late final _TranslationsSearchId search = _TranslationsSearchId._(_root);
+	@override late final _TranslationsUiId ui = _TranslationsUiId._(_root);
 }
 
 // Path: app
@@ -268,6 +270,30 @@ class _TranslationsCollectionId extends TranslationsCollectionEn {
 
 	// Translations
 	@override String get title_prefix => 'Koleksi';
+}
+
+// Path: search
+class _TranslationsSearchId extends TranslationsSearchEn {
+	_TranslationsSearchId._(TranslationsId root) : this._root = root, super.internal(root);
+
+	final TranslationsId _root; // ignore: unused_field
+
+	// Translations
+	@override String get title => 'Cari Gambar';
+	@override String get hint => 'Masukkan kata kunci pencarian...';
+	@override String get button => 'Cari';
+	@override String get not_implemented => 'Fungsionalitas pencarian akan segera diimplementasikan!';
+}
+
+// Path: ui
+class _TranslationsUiId extends TranslationsUiEn {
+	_TranslationsUiId._(TranslationsId root) : this._root = root, super.internal(root);
+
+	final TranslationsId _root; // ignore: unused_field
+
+	// Translations
+	@override String get tap_to_view => 'Ketuk untuk melihat';
+	@override String get swipe_for_more => 'Geser ke atas untuk gambar lainnya';
 }
 
 // Path: dialog.whatsapp_verification

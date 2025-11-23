@@ -156,5 +156,15 @@
   },
   "collection": {
     "title_prefix": "Koleksi"
+  },
+  "search": {
+    "title": "Cari Gambar",
+    "hint": "Masukkan kata kunci pencarian...",
+    "button": "Cari",
+    "not_implemented": "Fungsionalitas pencarian akan segera diimplementasikan!"
+  },
+  "ui": {
+    "tap_to_view": "Ketuk untuk melihat",
+    "swipe_for_more": "Geser ke atas untuk gambar lainnya"
   }
 }

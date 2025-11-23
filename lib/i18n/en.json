@@ -156,5 +156,15 @@
   },
   "collection": {
     "title_prefix": "Collection"
+  },
+  "search": {
+    "title": "Search Images",
+    "hint": "Enter search keywords...",
+    "button": "Search",
+    "not_implemented": "Search functionality will be implemented soon!"
+  },
+  "ui": {
+    "tap_to_view": "Tap to view",
+    "swipe_for_more": "Swipe up for more images"
   }
 }

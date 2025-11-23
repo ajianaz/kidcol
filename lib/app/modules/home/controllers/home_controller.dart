@@ -277,6 +277,14 @@ class HomeController extends GetxController {
   resetData() {
     assets.clear();
     page.value = 1;
+    // Reset scroll position to top when refreshing data
+    if (scrollController.hasClients) {
+      scrollController.animateTo(
+        0,
+        duration: const Duration(milliseconds: 300),
+        curve: Curves.easeInOut,
+      );
+    }
   }
 
   //Get All Koleksi dari local DB
@@ -294,31 +302,42 @@ class HomeController extends GetxController {
 
   //// ADDING THE SCROLL LISTINER
   void scrollListener() {
-    // debugPrint(
-    //     "current ${scrollController.offset}  max: ${scrollController.position.maxScrollExtent}");
+    // Add null checks to prevent errors
+    if (!scrollController.hasClients) return;
 
-    if (scrollController.offset >= scrollController.position.maxScrollExtent &&
-        !scrollController.position.outOfRange) {
-      // isLoading.value = true;
+    try {
+      // debugPrint(
+      //     "current ${scrollController.offset}  max: ${scrollController.position.maxScrollExtent}");
 
-      // if (isLoading.value) {
-      if (page.value < totalPage.value) {
-        page.value = page.value + 1;
-        // debugPrint("Load More");
-        requestData();
-      } else if (page.value == totalPage.value) {
-        Get.defaultDialog(
-          title: t.dialog.attention,
-          content: Text(t.dialog.images_finished),
-        );
+      if (scrollController.offset >=
+              scrollController.position.maxScrollExtent &&
+          !scrollController.position.outOfRange) {
+        // isLoading.value = true;
+
+        // if (isLoading.value) {
+        if (page.value < totalPage.value) {
+          page.value = page.value + 1;
+          // debugPrint("Load More");
+          requestData();
+        } else if (page.value == totalPage.value) {
+          Get.defaultDialog(
+            title: t.dialog.attention,
+            content: Text(t.dialog.images_finished),
+          );
+        }
+        // }
       }
-      // }
+    } catch (e) {
+      debugPrint("Error in scrollListener: $e");
     }
   }
 
   @override
   void onInit() {
     super.onInit();
+
+    // Initialize ScrollController early to prevent errors
+    scrollController = ScrollController()..addListener(scrollListener);
 
     getAllKoleksi();
   }
@@ -327,7 +346,6 @@ class HomeController extends GetxController {
   void onReady() {
     super.onReady();
     debugPrint("READY");
-    scrollController = ScrollController()..addListener(scrollListener);
     update();
 
     // Check account verification before making any requests
@@ -338,6 +356,12 @@ class HomeController extends GetxController {
 
   @override
   void onClose() {
+    // Dispose ScrollController to prevent memory leaks
+    if (scrollController.hasClients) {
+      scrollController.removeListener(scrollListener);
+    }
+    scrollController.dispose();
+
     // Close database connection when controller is disposed
     service.close();
     super.onClose();
