@@ -13,12 +13,12 @@ extension GetGambarCollection on Isar {
   IsarCollection<Gambar> get gambars => this.collection();
 }
 
-final GambarSchema = CollectionSchema(
+const GambarSchema = CollectionSchema(
   name: r'Gambar',
-  id: BigInt.parse("8747301943191105943").toInt(),
+  id: 8747301943191105943,
   properties: {
     r'endpoint': PropertySchema(
-      id: BigInt.parse("0").toInt(),
+      id: 0,
       name: r'endpoint',
       type: IsarType.string,
     )
@@ -28,10 +28,24 @@ final GambarSchema = CollectionSchema(
   deserialize: _gambarDeserialize,
   deserializeProp: _gambarDeserializeProp,
   idName: r'id',
-  indexes: {},
+  indexes: {
+    r'endpoint': IndexSchema(
+      id: 1806334927932359301,
+      name: r'endpoint',
+      unique: false,
+      replace: false,
+      properties: [
+        IndexPropertySchema(
+          name: r'endpoint',
+          type: IndexType.hash,
+          caseSensitive: true,
+        )
+      ],
+    )
+  },
   links: {
     r'koleksis': LinkSchema(
-      id: BigInt.parse("-7389097611133800399").toInt(),
+      id: -7389097611133800399,
       name: r'koleksis',
       target: r'Koleksi',
       single: false,
@@ -42,7 +56,7 @@ final GambarSchema = CollectionSchema(
   getId: _gambarGetId,
   getLinks: _gambarGetLinks,
   attach: _gambarAttach,
-  version: '3.1.0',
+  version: '3.3.0',
 );
 
 int _gambarEstimateSize(
@@ -174,6 +188,51 @@ extension GambarQueryWhere on QueryBuilder<Gambar, Gambar, QWhereClause> {
         upper: upperId,
         includeUpper: includeUpper,
       ));
+    });
+  }
+
+  QueryBuilder<Gambar, Gambar, QAfterWhereClause> endpointEqualTo(
+      String endpoint) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addWhereClause(IndexWhereClause.equalTo(
+        indexName: r'endpoint',
+        value: [endpoint],
+      ));
+    });
+  }
+
+  QueryBuilder<Gambar, Gambar, QAfterWhereClause> endpointNotEqualTo(
+      String endpoint) {
+    return QueryBuilder.apply(this, (query) {
+      if (query.whereSort == Sort.asc) {
+        return query
+            .addWhereClause(IndexWhereClause.between(
+              indexName: r'endpoint',
+              lower: [],
+              upper: [endpoint],
+              includeUpper: false,
+            ))
+            .addWhereClause(IndexWhereClause.between(
+              indexName: r'endpoint',
+              lower: [endpoint],
+              includeLower: false,
+              upper: [],
+            ));
+      } else {
+        return query
+            .addWhereClause(IndexWhereClause.between(
+              indexName: r'endpoint',
+              lower: [endpoint],
+              includeLower: false,
+              upper: [],
+            ))
+            .addWhereClause(IndexWhereClause.between(
+              indexName: r'endpoint',
+              lower: [],
+              upper: [endpoint],
+              includeUpper: false,
+            ));
+      }
     });
   }
 }

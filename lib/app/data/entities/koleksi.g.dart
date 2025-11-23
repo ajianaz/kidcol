@@ -13,12 +13,12 @@ extension GetKoleksiCollection on Isar {
   IsarCollection<Koleksi> get koleksis => this.collection();
 }
 
-final KoleksiSchema = CollectionSchema(
+const KoleksiSchema = CollectionSchema(
   name: r'Koleksi',
-  id: BigInt.parse("3911746790148175282").toInt(),
+  id: 3911746790148175282,
   properties: {
     r'title': PropertySchema(
-      id: BigInt.parse("0").toInt(),
+      id: 0,
       name: r'title',
       type: IsarType.string,
     )
@@ -28,10 +28,24 @@ final KoleksiSchema = CollectionSchema(
   deserialize: _koleksiDeserialize,
   deserializeProp: _koleksiDeserializeProp,
   idName: r'id',
-  indexes: {},
+  indexes: {
+    r'title': IndexSchema(
+      id: -7636685945352118059,
+      name: r'title',
+      unique: false,
+      replace: false,
+      properties: [
+        IndexPropertySchema(
+          name: r'title',
+          type: IndexType.hash,
+          caseSensitive: true,
+        )
+      ],
+    )
+  },
   links: {
     r'gambars': LinkSchema(
-      id: BigInt.parse("8575741945735194630").toInt(),
+      id: 8575741945735194630,
       name: r'gambars',
       target: r'Gambar',
       single: false,
@@ -41,7 +55,7 @@ final KoleksiSchema = CollectionSchema(
   getId: _koleksiGetId,
   getLinks: _koleksiGetLinks,
   attach: _koleksiAttach,
-  version: '3.1.0',
+  version: '3.3.0',
 );
 
 int _koleksiEstimateSize(
@@ -173,6 +187,50 @@ extension KoleksiQueryWhere on QueryBuilder<Koleksi, Koleksi, QWhereClause> {
         upper: upperId,
         includeUpper: includeUpper,
       ));
+    });
+  }
+
+  QueryBuilder<Koleksi, Koleksi, QAfterWhereClause> titleEqualTo(String title) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addWhereClause(IndexWhereClause.equalTo(
+        indexName: r'title',
+        value: [title],
+      ));
+    });
+  }
+
+  QueryBuilder<Koleksi, Koleksi, QAfterWhereClause> titleNotEqualTo(
+      String title) {
+    return QueryBuilder.apply(this, (query) {
+      if (query.whereSort == Sort.asc) {
+        return query
+            .addWhereClause(IndexWhereClause.between(
+              indexName: r'title',
+              lower: [],
+              upper: [title],
+              includeUpper: false,
+            ))
+            .addWhereClause(IndexWhereClause.between(
+              indexName: r'title',
+              lower: [title],
+              includeLower: false,
+              upper: [],
+            ));
+      } else {
+        return query
+            .addWhereClause(IndexWhereClause.between(
+              indexName: r'title',
+              lower: [title],
+              includeLower: false,
+              upper: [],
+            ))
+            .addWhereClause(IndexWhereClause.between(
+              indexName: r'title',
+              lower: [],
+              upper: [title],
+              includeUpper: false,
+            ));
+      }
     });
   }
 }
