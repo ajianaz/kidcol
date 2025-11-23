@@ -230,13 +230,14 @@ class AppColors {
 - ✅ `lib/app/modules/koleksi_gambar/controllers/koleksi_gambar_controller.dart` - Gunakan AppDialogs
 - ✅ `lib/app/modules/koleksi/views/koleksi_view.dart` - Dark mode support & clean up hardcoded colors
 - ✅ `lib/app/widgets/dialogs/add_koleksi.dart` - Dark mode support & use AppSnackbars
+- ✅ `lib/app/modules/SplashScreen/views/splash_screen_view.dart` - Modern design & dark mode support
 
 ## 🎉 Result
 
 Sekarang aplikasi memiliki:
 - ✅ **Light & Dark Mode** dengan toggle di settings
 - ✅ **Persistent theme** - mengingat pilihan user
-- ✅ Warna yang konsisten di seluruh aplikasi (Home, Profile, Collection)
+- ✅ Warna yang konsisten di seluruh aplikasi (Home, Profile, Collection, Splash)
 - ✅ Dialog dengan styling yang seragam
 - ✅ Snackbar dengan tema yang sama
 - ✅ Smooth theme transitions

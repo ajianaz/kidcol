@@ -8,23 +8,26 @@ import 'package:kidcol/i18n/translations.g.dart';
 
 class SplashScreenController extends GetxController {
   startTimer() {
-    Timer(Duration(seconds: 3), () {
-      // Navigasi ke halaman berikutnya
+    debugPrint("⏳ Timer started: 3 seconds");
+    Timer(const Duration(seconds: 3), () {
+      debugPrint("⏰ Timer finished");
       checkDate();
     });
   }
 
   void checkDate() {
-    debugPrint("Check Date Running");
+    debugPrint("📅 Checking date...");
     DateTime currentDate = DateTime.now();
     DateTime checkDate = DateTime(2026, 05, 05);
 
-    debugPrint("Hari : $checkDate - $currentDate");
+    debugPrint("🗓 Current: $currentDate, Check: $checkDate");
 
     if (currentDate.isAfter(checkDate)) {
+      debugPrint("⚠️ Update needed");
       needUpdate();
     } else {
-      Get.offAndToNamed(Routes.MAIN_PAGE);
+      debugPrint("🚀 Navigating to MAIN_PAGE");
+      Get.offNamed(Routes.MAIN_PAGE);
     }
   }
 
