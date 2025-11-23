@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
 import 'package:kidcol/app/data/entities/gambar.dart';
+import 'package:kidcol/app/utils/constants.dart';
 import 'package:kidcol/app/utils/responsive_helper.dart';
 import 'package:kidcol/app/widgets/cards/card_image.dart';
 import 'package:kidcol/i18n/strings.g.dart';
@@ -35,8 +36,10 @@ class HomeView extends GetView<HomeController> {
                       Get.back();
                     },
                     child: Container(
-                      margin: EdgeInsets.symmetric(vertical: 4, horizontal: 4),
-                      padding: EdgeInsets.symmetric(vertical: 4, horizontal: 8),
+                      margin: EdgeInsets.symmetric(
+                          vertical: AppPadding.xs, horizontal: AppPadding.xs),
+                      padding: EdgeInsets.symmetric(
+                          vertical: AppPadding.xs, horizontal: AppPadding.sm),
                       decoration: BoxDecoration(
                           color: Colors.grey,
                           borderRadius: BorderRadius.circular(12)),
@@ -61,37 +64,45 @@ class HomeView extends GetView<HomeController> {
                   ? controller.assets.isNotEmpty
                       ? LayoutBuilder(
                           builder: (context, constraints) {
-                            return GridView.builder(
-                              gridDelegate:
-                                  SliverGridDelegateWithFixedCrossAxisCount(
-                                crossAxisCount:
-                                    ResponsiveHelper.getCrossAxisCount(context),
-                                crossAxisSpacing: 8.0,
-                                mainAxisSpacing: 8.0,
-                                childAspectRatio:
-                                    0.8, // Adjust aspect ratio as needed
+                            return Padding(
+                              padding:
+                                  AppPadding.getResponsiveAllPadding(context),
+                              child: GridView.builder(
+                                gridDelegate:
+                                    SliverGridDelegateWithFixedCrossAxisCount(
+                                  crossAxisCount:
+                                      ResponsiveHelper.getCrossAxisCount(
+                                          context),
+                                  crossAxisSpacing:
+                                      AppSpacing.gridCrossAxisSpacing,
+                                  mainAxisSpacing:
+                                      AppSpacing.gridMainAxisSpacing,
+                                  childAspectRatio:
+                                      0.8, // Adjust aspect ratio as needed
+                                ),
+                                controller: controller.scrollController,
+                                itemCount: controller.assets.length,
+                                itemBuilder: (context, index) {
+                                  var asset = controller.assets[index];
+                                  return InkWell(
+                                    onTap: () {
+                                      if (controller.koleksis.isEmpty) {
+                                        controller.dialogAddKoleksi();
+                                      } else {
+                                        dialogKoleksis(
+                                            asset.imageUrl.toString());
+                                      }
+                                    },
+                                    onDoubleTap: () {
+                                      Get.toNamed(Routes.DRAWING_ROOM,
+                                          arguments: "${asset.imageUrl}");
+                                    },
+                                    child: CardImage(
+                                      imageUrl: "${asset.imageUrl}",
+                                    ),
+                                  );
+                                },
                               ),
-                              controller: controller.scrollController,
-                              itemCount: controller.assets.length,
-                              itemBuilder: (context, index) {
-                                var asset = controller.assets[index];
-                                return InkWell(
-                                  onTap: () {
-                                    if (controller.koleksis.isEmpty) {
-                                      controller.dialogAddKoleksi();
-                                    } else {
-                                      dialogKoleksis(asset.imageUrl.toString());
-                                    }
-                                  },
-                                  onDoubleTap: () {
-                                    Get.toNamed(Routes.DRAWING_ROOM,
-                                        arguments: "${asset.imageUrl}");
-                                  },
-                                  child: CardImage(
-                                    imageUrl: "${asset.imageUrl}",
-                                  ),
-                                );
-                              },
                             );
                           },
                         )

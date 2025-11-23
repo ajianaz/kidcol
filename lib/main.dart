@@ -5,11 +5,19 @@ import 'package:get/get.dart';
 import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 import 'app/routes/app_pages.dart';
+import 'app/utils/env_config.dart';
+import 'app/data/services/account_service.dart';
 import 'i18n/strings.g.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await dotenv.load(fileName: ".env");
+
+  // Initialize environment configuration
+  await EnvConfig.init();
+
+  // Initialize GetX services
+  Get.put(AccountService());
 
   // Initialize slang
   LocaleSettings.setLocale(AppLocale.en);
