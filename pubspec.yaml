@@ -2,17 +2,19 @@ name: kidcol
 version: 1.0.1+2
 publish_to: none
 description: Kidcol
+
+isar_version: &isar_version 3.3.0
+
 environment:
   sdk: '>=3.2.6 <4.0.0'
 
 dependencies:
   cupertino_icons: ^1.0.2
   get: ^4.7.2
-  isar: ^3.1.0
-  # isar_flutter_libs: ^3.1.0
-  isar_flutter_libs:
-    git:
-      url: https://github.com/MrLittleWhite/isar_flutter_libs.git
+  isar_community:
+    version: *isar_version
+  isar_community_flutter_libs:
+    version: *isar_version
   path_provider: ^2.1.5
   convex_bottom_bar: 3.2.0
   dio: ^5.8.0+1
@@ -42,11 +44,8 @@ flutter_launcher_icons:
   ios: true
   min_sdk_android: 21
 
-isar_generator:
-  git:
-    url: https://github.com/Kiruel/isar
-    ref: fix/web_build
-    path: packages/isar_generator
+  isar_community_generator:
+    version: *isar_version
 
 flutter:
   assets:
