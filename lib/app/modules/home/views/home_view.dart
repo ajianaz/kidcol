@@ -260,7 +260,7 @@ class _ModernCollectionDialogState extends State<_ModernCollectionDialog>
         ),
         const SizedBox(height: 8),
         Text(
-          'Select a collection to add this image',
+          t.collections.select_collection,
           style: TextStyle(
             fontSize: 14,
             color: Colors.grey.shade600,
@@ -322,7 +322,7 @@ class _ModernCollectionDialogState extends State<_ModernCollectionDialog>
                       const SizedBox(width: 12),
                       Expanded(
                         child: Text(
-                          koleksi.title ?? 'Untitled Collection',
+                          koleksi.title ?? t.collections.untitled_collection,
                           style: TextStyle(
                             fontSize: 16,
                             fontWeight: FontWeight.w500,
@@ -358,7 +358,7 @@ class _ModernCollectionDialogState extends State<_ModernCollectionDialog>
           ),
         ),
         child: Text(
-          'Close',
+          t.collections.close,
           style: TextStyle(
             color: Colors.grey.shade600,
             fontWeight: FontWeight.w500,
@@ -494,7 +494,7 @@ class _ImagePreviewDialogState extends State<_ImagePreviewDialog>
         mainAxisAlignment: MainAxisAlignment.spaceBetween,
         children: [
           Text(
-            'Image Preview',
+            t.collections.image_preview,
             style: TextStyle(
               fontSize: 18,
               fontWeight: FontWeight.bold,
@@ -551,7 +551,7 @@ class _ImagePreviewDialogState extends State<_ImagePreviewDialog>
                         ),
                         const SizedBox(height: 8),
                         Text(
-                          'Failed to load image',
+                          t.collections.failed_to_load_image,
                           style: TextStyle(
                             color: Colors.grey.shade600,
                             fontSize: 14,
@@ -572,7 +572,7 @@ class _ImagePreviewDialogState extends State<_ImagePreviewDialog>
                       ),
                       const SizedBox(height: 8),
                       Text(
-                        'No image available',
+                        t.collections.no_image_available,
                         style: TextStyle(
                           color: Colors.grey.shade600,
                           fontSize: 14,
@@ -610,7 +610,7 @@ class _ImagePreviewDialogState extends State<_ImagePreviewDialog>
             child: ElevatedButton.icon(
               onPressed: widget.onAddToCollection,
               icon: const Icon(Icons.bookmark_border),
-              label: Text('Add to Collection'),
+              label: Text(t.collections.add_to_collection),
               style: ElevatedButton.styleFrom(
                 backgroundColor: cornFlower,
                 foregroundColor: Colors.white,
@@ -627,7 +627,7 @@ class _ImagePreviewDialogState extends State<_ImagePreviewDialog>
             child: ElevatedButton.icon(
               onPressed: widget.onOpenDrawingRoom,
               icon: const Icon(Icons.brush),
-              label: Text('Draw'),
+              label: Text(t.collections.draw),
               style: ElevatedButton.styleFrom(
                 backgroundColor: Colors.green,
                 foregroundColor: Colors.white,

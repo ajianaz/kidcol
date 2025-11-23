@@ -23,7 +23,15 @@
     "cancel": "Batal",
     "delete": "Hapus",
     "edit": "Edit",
-    "view_images": "Lihat Gambar"
+    "view_images": "Lihat Gambar",
+    "select_collection": "Pilih koleksi untuk menambahkan gambar ini",
+    "untitled_collection": "Koleksi Tanpa Judul",
+    "close": "Tutup",
+    "image_preview": "Pratinjau Gambar",
+    "failed_to_load_image": "Gagal memuat gambar",
+    "no_image_available": "Tidak ada gambar tersedia",
+    "add_to_collection": "Tambah ke Koleksi",
+    "draw": "Gambar"
   },
   "drawing": {
     "title": "Ruang Gambar",

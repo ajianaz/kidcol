@@ -92,6 +92,14 @@ class _TranslationsCollectionsId extends TranslationsCollectionsEn {
 	@override String get delete => 'Hapus';
 	@override String get edit => 'Edit';
 	@override String get view_images => 'Lihat Gambar';
+	@override String get select_collection => 'Pilih koleksi untuk menambahkan gambar ini';
+	@override String get untitled_collection => 'Koleksi Tanpa Judul';
+	@override String get close => 'Tutup';
+	@override String get image_preview => 'Pratinjau Gambar';
+	@override String get failed_to_load_image => 'Gagal memuat gambar';
+	@override String get no_image_available => 'Tidak ada gambar tersedia';
+	@override String get add_to_collection => 'Tambah ke Koleksi';
+	@override String get draw => 'Gambar';
 }
 
 // Path: drawing

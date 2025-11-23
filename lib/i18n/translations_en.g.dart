@@ -134,6 +134,30 @@ class TranslationsCollectionsEn {
 
 	/// en: 'View Images'
 	String get view_images => 'View Images';
+
+	/// en: 'Select a collection to add this image'
+	String get select_collection => 'Select a collection to add this image';
+
+	/// en: 'Untitled Collection'
+	String get untitled_collection => 'Untitled Collection';
+
+	/// en: 'Close'
+	String get close => 'Close';
+
+	/// en: 'Image Preview'
+	String get image_preview => 'Image Preview';
+
+	/// en: 'Failed to load image'
+	String get failed_to_load_image => 'Failed to load image';
+
+	/// en: 'No image available'
+	String get no_image_available => 'No image available';
+
+	/// en: 'Add to Collection'
+	String get add_to_collection => 'Add to Collection';
+
+	/// en: 'Draw'
+	String get draw => 'Draw';
 }
 
 // Path: drawing

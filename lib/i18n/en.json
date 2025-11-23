@@ -23,7 +23,15 @@
     "cancel": "Cancel",
     "delete": "Delete",
     "edit": "Edit",
-    "view_images": "View Images"
+    "view_images": "View Images",
+    "select_collection": "Select a collection to add this image",
+    "untitled_collection": "Untitled Collection",
+    "close": "Close",
+    "image_preview": "Image Preview",
+    "failed_to_load_image": "Failed to load image",
+    "no_image_available": "No image available",
+    "add_to_collection": "Add to Collection",
+    "draw": "Draw"
   },
   "drawing": {
     "title": "Drawing Room",
