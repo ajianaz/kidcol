@@ -1,4 +1,11 @@
-import 'package:flutter/material.dart';
+import 'package:kidcol/app/utils/app_theme.dart';
 
-const blueCuracao = Color(0xff3dc1d3);
-const cornFlower = Color(0xff546de5);
+// Export the new theme system
+export 'package:kidcol/app/utils/app_theme.dart';
+
+// Backward compatibility - use AppColors instead
+@Deprecated('Use AppColors.secondary instead')
+const blueCuracao = AppColors.secondary;
+
+@Deprecated('Use AppColors.primary instead')
+const cornFlower = AppColors.primary;

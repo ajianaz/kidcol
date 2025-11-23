@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:kidcol/app/routes/app_pages.dart';
 import 'package:kidcol/app/utils/app_string.dart';
+import 'package:kidcol/app/utils/app_dialogs.dart';
 import 'package:kidcol/app/utils/constants.dart';
 import 'package:kidcol/app/utils/responsive_helper.dart';
 import 'package:kidcol/app/widgets/cards/card_image.dart';
@@ -216,45 +217,23 @@ class KoleksiGambarView extends GetView<KoleksiGambarController> {
   }
 
   void _confirmDeleteImage(gambar) {
-    Get.defaultDialog(
+    AppDialogs.showDeleteConfirmation(
       title: t.dialog.confirm_delete_image,
-      titleStyle: TextStyle(fontWeight: FontWeight.bold),
-      content: Container(
-        child: Column(
-          children: [
-            Container(
-              height: 150,
-              width: 150,
-              child: ClipRRect(
-                borderRadius: BorderRadius.circular(8),
-                child: CachedNetworkImage(
-                  imageUrl: "${gambar.endpoint}",
-                  fit: BoxFit.cover,
-                ),
-              ),
-            ),
-            SizedBox(height: AppPadding.md),
-            Text(
-              t.dialog.confirm_delete_image_message,
-              style: TextStyle(
-                fontWeight: FontWeight.w500,
-                fontSize: 14,
-              ),
-              textAlign: TextAlign.center,
-            ),
-          ],
+      message: t.dialog.confirm_delete_image_message,
+      confirmText: t.common.delete,
+      cancelText: t.common.cancel,
+      preview: Container(
+        height: 150,
+        width: 150,
+        child: ClipRRect(
+          borderRadius: BorderRadius.circular(12),
+          child: CachedNetworkImage(
+            imageUrl: "${gambar.endpoint}",
+            fit: BoxFit.cover,
+          ),
         ),
       ),
-      textConfirm: t.common.delete,
-      textCancel: t.common.cancel,
-      confirmTextColor: Colors.white,
-      buttonColor: Colors.red,
-      onConfirm: () {
-        controller.deleteGambarKoleksi(gambar);
-        Get.back();
-      },
-      onCancel: () => Get.back(),
-      radius: 12,
+      onConfirm: () => controller.deleteGambarKoleksi(gambar),
     );
   }
 

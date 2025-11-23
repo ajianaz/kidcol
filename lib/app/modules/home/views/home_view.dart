@@ -5,6 +5,7 @@ import 'package:get/get.dart';
 import 'package:kidcol/app/data/entities/gambar.dart';
 import 'package:kidcol/app/utils/constants.dart';
 import 'package:kidcol/app/utils/colors.dart';
+import 'package:kidcol/app/utils/app_dialogs.dart';
 import 'package:kidcol/app/utils/responsive_helper.dart';
 import 'package:kidcol/app/utils/api_config.dart';
 import 'package:kidcol/i18n/translations.g.dart';
@@ -38,25 +39,17 @@ class HomeView extends GetView<HomeController> {
                 Get.back();
 
                 // Show success notification
-                Get.snackbar(
-                  t.common.success,
+                AppSnackbars.showSuccess(
                   t.messages.image_added_to_collection,
-                  backgroundColor: Colors.green,
-                  colorText: Colors.white,
-                  duration: const Duration(seconds: 2),
-                  snackPosition: SnackPosition.BOTTOM,
+                  title: t.common.success,
                 );
               } catch (e) {
                 Get.back();
 
                 // Show error notification
-                Get.snackbar(
-                  t.common.error,
+                AppSnackbars.showError(
                   t.messages.image_failed_to_add_to_collection,
-                  backgroundColor: Colors.red,
-                  colorText: Colors.white,
-                  duration: const Duration(seconds: 3),
-                  snackPosition: SnackPosition.BOTTOM,
+                  title: t.common.error,
                 );
                 debugPrint('Error saving image to collection: $e');
               }
