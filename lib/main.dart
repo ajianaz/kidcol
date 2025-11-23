@@ -7,6 +7,7 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'app/routes/app_pages.dart';
 import 'app/utils/env_config.dart';
 import 'app/utils/app_theme.dart';
+import 'app/controllers/theme_controller.dart';
 import 'app/data/services/account_service.dart';
 import 'i18n/translations.g.dart';
 
@@ -19,6 +20,7 @@ void main() async {
 
   // Initialize GetX services
   Get.put(AccountService());
+  Get.put(ThemeController());
 
   // Initialize slang
   LocaleSettings.setLocale(AppLocale.en);
@@ -29,6 +31,8 @@ void main() async {
         title: "Kids Coloring Zone",
         debugShowCheckedModeBanner: false,
         theme: AppTheme.lightTheme,
+        darkTheme: AppTheme.darkTheme,
+        themeMode: ThemeMode.light, // Will be overridden by ThemeController
         initialRoute: AppPages.INITIAL,
         getPages: AppPages.routes,
         localizationsDelegates: const [

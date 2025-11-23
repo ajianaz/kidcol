@@ -5,7 +5,7 @@ import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
 import 'package:kidcol/app/routes/app_pages.dart';
-import 'package:kidcol/app/utils/app_string.dart';
+
 import 'package:kidcol/app/utils/app_dialogs.dart';
 import 'package:kidcol/app/utils/constants.dart';
 import 'package:kidcol/app/utils/responsive_helper.dart';

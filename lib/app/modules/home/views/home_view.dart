@@ -88,21 +88,18 @@ class HomeView extends GetView<HomeController> {
             title: Text(
               t.home.title,
               style: TextStyle(
-                color: Colors.black87,
                 fontWeight: FontWeight.w600,
               ),
             ),
-            backgroundColor: Colors.white,
             elevation: 1,
             centerTitle: true,
-            iconTheme: IconThemeData(color: Colors.black87),
           ),
           body: RefreshIndicator(
             onRefresh: () async {
               controller.resetData();
               await controller.requestData();
             },
-            color: cornFlower,
+            color: AppColors.primary,
             displacement: 40,
             child: Container(
               decoration: _buildBackgroundDecoration(),
@@ -143,9 +140,9 @@ BoxDecoration _buildBackgroundDecoration() {
       begin: Alignment.topLeft,
       end: Alignment.bottomRight,
       colors: [
-        Colors.white,
-        cornFlower.withValues(alpha: 0.03),
-        blueCuracao.withValues(alpha: 0.02),
+        AppColors.surface,
+        AppColors.primary.withValues(alpha: 0.03),
+        AppColors.secondary.withValues(alpha: 0.02),
       ],
       stops: const [0.0, 0.6, 1.0],
     ),
@@ -191,13 +188,13 @@ Widget _buildEmptyState(BuildContext context) {
           width: 120,
           height: 120,
           decoration: BoxDecoration(
-            color: cornFlower.withValues(alpha: 0.1),
+            color: AppColors.primary.withValues(alpha: 0.1),
             shape: BoxShape.circle,
           ),
           child: Icon(
             Icons.image_search_outlined,
             size: 60,
-            color: cornFlower,
+            color: AppColors.primary,
           ),
         ),
         const SizedBox(height: 20),
@@ -228,7 +225,7 @@ Widget _buildEmptyState(BuildContext context) {
           icon: const Icon(Icons.refresh),
           label: Text(t.common.loading),
           style: ElevatedButton.styleFrom(
-            backgroundColor: cornFlower,
+            backgroundColor: AppColors.primary,
             foregroundColor: Colors.white,
             padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
             shape: RoundedRectangleBorder(
@@ -492,7 +489,7 @@ class _EnhancedImageCardState extends State<_EnhancedImageCard>
                 boxShadow: [
                   BoxShadow(
                     color: _isPressed
-                        ? cornFlower.withValues(alpha: 0.4)
+                        ? AppColors.primary.withValues(alpha: 0.4)
                         : Colors.grey.withValues(alpha: 0.2),
                     spreadRadius: _isPressed ? 2 : 1,
                     blurRadius: _isPressed ? 8 : 4,
@@ -574,29 +571,29 @@ class _EnhancedCardImage extends StatelessWidget {
             width: double.infinity,
             height: double.infinity,
             placeholder: (context, url) => Container(
-              color: Colors.grey[200],
+              color: AppColors.surfaceLight,
               child: Center(
                 child: CircularProgressIndicator(
                   strokeWidth: 2,
-                  valueColor: AlwaysStoppedAnimation<Color>(cornFlower),
+                  valueColor: AlwaysStoppedAnimation<Color>(AppColors.primary),
                 ),
               ),
             ),
             errorWidget: (context, url, error) => Container(
-              color: Colors.grey[200],
+              color: AppColors.surfaceLight,
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Icon(
                     Icons.broken_image_outlined,
-                    color: Colors.grey[400],
+                    color: AppColors.grey400,
                     size: 32,
                   ),
                   const SizedBox(height: 4),
                   Text(
                     t.error.failed_to_load_images,
                     style: TextStyle(
-                      color: Colors.grey[600],
+                      color: AppColors.textSecondary,
                       fontSize: 12,
                     ),
                   ),
@@ -608,20 +605,20 @@ class _EnhancedCardImage extends StatelessWidget {
             memCacheHeight: 300,
           )
         : Container(
-            color: Colors.grey[200],
+            color: AppColors.surfaceLight,
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Icon(
                   Icons.image_not_supported_outlined,
-                  color: Colors.grey[400],
+                  color: AppColors.grey400,
                   size: 32,
                 ),
                 const SizedBox(height: 4),
                 Text(
                   t.images.empty,
                   style: TextStyle(
-                    color: Colors.grey[600],
+                    color: AppColors.textSecondary,
                     fontSize: 12,
                   ),
                 ),
@@ -720,8 +717,8 @@ class _ModernCollectionDialogState extends State<_ModernCollectionDialog>
                     begin: Alignment.topLeft,
                     end: Alignment.bottomRight,
                     colors: [
-                      Colors.white,
-                      cornFlower.withValues(alpha: 0.05),
+                      AppColors.surface,
+                      AppColors.primary.withValues(alpha: 0.05),
                     ],
                   ),
                 ),
@@ -750,13 +747,13 @@ class _ModernCollectionDialogState extends State<_ModernCollectionDialog>
           width: 60,
           height: 60,
           decoration: BoxDecoration(
-            color: cornFlower.withValues(alpha: 0.1),
+            color: AppColors.primary.withValues(alpha: 0.1),
             shape: BoxShape.circle,
           ),
           child: Icon(
             Icons.collections_bookmark,
             size: 30,
-            color: cornFlower,
+            color: AppColors.primary,
           ),
         ),
         const SizedBox(height: 16),
@@ -765,7 +762,7 @@ class _ModernCollectionDialogState extends State<_ModernCollectionDialog>
           style: TextStyle(
             fontSize: 20,
             fontWeight: FontWeight.bold,
-            color: Colors.grey.shade800,
+            color: AppColors.textPrimary,
           ),
         ),
         const SizedBox(height: 8),
@@ -773,7 +770,7 @@ class _ModernCollectionDialogState extends State<_ModernCollectionDialog>
           t.collections.select_collection,
           style: TextStyle(
             fontSize: 14,
-            color: Colors.grey.shade600,
+            color: AppColors.textSecondary,
           ),
         ),
       ],
@@ -800,15 +797,15 @@ class _ModernCollectionDialogState extends State<_ModernCollectionDialog>
                     horizontal: 16,
                   ),
                   decoration: BoxDecoration(
-                    color: Colors.white,
+                    color: AppColors.surface,
                     borderRadius: BorderRadius.circular(12),
                     border: Border.all(
-                      color: cornFlower.withValues(alpha: 0.3),
+                      color: AppColors.primary.withValues(alpha: 0.3),
                       width: 1,
                     ),
                     boxShadow: [
                       BoxShadow(
-                        color: Colors.grey.withValues(alpha: 0.1),
+                        color: AppColors.shadow.withValues(alpha: 0.1),
                         spreadRadius: 1,
                         blurRadius: 2,
                         offset: const Offset(0, 1),
@@ -820,12 +817,12 @@ class _ModernCollectionDialogState extends State<_ModernCollectionDialog>
                       Container(
                         padding: const EdgeInsets.all(8),
                         decoration: BoxDecoration(
-                          color: cornFlower.withValues(alpha: 0.1),
+                          color: AppColors.primary.withValues(alpha: 0.1),
                           borderRadius: BorderRadius.circular(8),
                         ),
                         child: Icon(
                           Icons.bookmark,
-                          color: cornFlower,
+                          color: AppColors.primary,
                           size: 20,
                         ),
                       ),
@@ -836,13 +833,13 @@ class _ModernCollectionDialogState extends State<_ModernCollectionDialog>
                           style: TextStyle(
                             fontSize: 16,
                             fontWeight: FontWeight.w500,
-                            color: Colors.grey.shade800,
+                            color: AppColors.textPrimary,
                           ),
                         ),
                       ),
                       Icon(
                         Icons.arrow_forward_ios,
-                        color: cornFlower,
+                        color: AppColors.primary,
                         size: 16,
                       ),
                     ],
@@ -870,7 +867,7 @@ class _ModernCollectionDialogState extends State<_ModernCollectionDialog>
         child: Text(
           t.collections.close,
           style: TextStyle(
-            color: Colors.grey.shade600,
+            color: AppColors.textSecondary,
             fontWeight: FontWeight.w500,
           ),
         ),
@@ -955,10 +952,10 @@ class _ImagePreviewDialogState extends State<_ImagePreviewDialog>
                 height: MediaQuery.of(context).size.height * 0.85,
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(20),
-                  color: Colors.white,
+                  color: AppColors.surface,
                   boxShadow: [
                     BoxShadow(
-                      color: Colors.black.withValues(alpha: 0.3),
+                      color: AppColors.shadow.withValues(alpha: 0.3),
                       spreadRadius: 5,
                       blurRadius: 15,
                       offset: const Offset(0, 5),
@@ -995,8 +992,8 @@ class _ImagePreviewDialogState extends State<_ImagePreviewDialog>
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
           colors: [
-            cornFlower,
-            cornFlower.withValues(alpha: 0.8),
+            AppColors.primary,
+            AppColors.primary.withValues(alpha: 0.8),
           ],
         ),
       ),
@@ -1008,14 +1005,14 @@ class _ImagePreviewDialogState extends State<_ImagePreviewDialog>
             style: TextStyle(
               fontSize: 18,
               fontWeight: FontWeight.bold,
-              color: Colors.white,
+              color: AppColors.textOnPrimary,
             ),
           ),
           IconButton(
             onPressed: () => Navigator.of(context).pop(),
-            icon: const Icon(
+            icon: Icon(
               Icons.close,
-              color: Colors.white,
+              color: AppColors.textOnPrimary,
             ),
           ),
         ],
@@ -1030,7 +1027,7 @@ class _ImagePreviewDialogState extends State<_ImagePreviewDialog>
       margin: const EdgeInsets.all(16),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(12),
-        color: Colors.grey.shade100,
+        color: AppColors.surfaceLight,
       ),
       child: ClipRRect(
         borderRadius: BorderRadius.circular(12),
@@ -1047,7 +1044,8 @@ class _ImagePreviewDialogState extends State<_ImagePreviewDialog>
                   placeholder: (context, url) => Center(
                     child: CircularProgressIndicator(
                       strokeWidth: 2,
-                      valueColor: AlwaysStoppedAnimation<Color>(cornFlower),
+                      valueColor:
+                          AlwaysStoppedAnimation<Color>(AppColors.primary),
                     ),
                   ),
                   errorWidget: (context, url, error) => Center(
@@ -1056,14 +1054,14 @@ class _ImagePreviewDialogState extends State<_ImagePreviewDialog>
                       children: [
                         Icon(
                           Icons.broken_image_outlined,
-                          color: Colors.grey.shade400,
+                          color: AppColors.grey400,
                           size: 48,
                         ),
                         const SizedBox(height: 8),
                         Text(
                           t.collections.failed_to_load_image,
                           style: TextStyle(
-                            color: Colors.grey.shade600,
+                            color: AppColors.textSecondary,
                             fontSize: 14,
                           ),
                         ),
@@ -1077,14 +1075,14 @@ class _ImagePreviewDialogState extends State<_ImagePreviewDialog>
                     children: [
                       Icon(
                         Icons.image_not_supported_outlined,
-                        color: Colors.grey.shade400,
+                        color: AppColors.grey400,
                         size: 48,
                       ),
                       const SizedBox(height: 8),
                       Text(
                         t.collections.no_image_available,
                         style: TextStyle(
-                          color: Colors.grey.shade600,
+                          color: AppColors.textSecondary,
                           fontSize: 14,
                         ),
                       ),
@@ -1100,14 +1098,14 @@ class _ImagePreviewDialogState extends State<_ImagePreviewDialog>
     return Container(
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: AppColors.surface,
         borderRadius: const BorderRadius.only(
           bottomLeft: Radius.circular(20),
           bottomRight: Radius.circular(20),
         ),
         boxShadow: [
           BoxShadow(
-            color: Colors.grey.withValues(alpha: 0.2),
+            color: AppColors.shadow.withValues(alpha: 0.2),
             spreadRadius: 1,
             blurRadius: 5,
             offset: const Offset(0, -2),
@@ -1122,8 +1120,8 @@ class _ImagePreviewDialogState extends State<_ImagePreviewDialog>
               icon: const Icon(Icons.bookmark_border),
               label: Text(t.collections.add_to_collection),
               style: ElevatedButton.styleFrom(
-                backgroundColor: cornFlower,
-                foregroundColor: Colors.white,
+                backgroundColor: AppColors.primary,
+                foregroundColor: AppColors.textOnPrimary,
                 padding: const EdgeInsets.symmetric(vertical: 12),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(12),
@@ -1139,8 +1137,8 @@ class _ImagePreviewDialogState extends State<_ImagePreviewDialog>
               icon: const Icon(Icons.brush),
               label: Text(t.collections.draw),
               style: ElevatedButton.styleFrom(
-                backgroundColor: Colors.green,
-                foregroundColor: Colors.white,
+                backgroundColor: AppColors.success,
+                foregroundColor: AppColors.white,
                 padding: const EdgeInsets.symmetric(vertical: 12),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(12),

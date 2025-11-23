@@ -1,15 +1,27 @@
 # App Theme & Design System
 
-Sistem tema terpusat untuk konsistensi UI di seluruh aplikasi Kids Coloring Zone.
+Sistem tema terpusat untuk konsistensi UI di seluruh aplikasi Kids Coloring Zone dengan dukungan **Light & Dark Mode**.
 
 ## 📁 File Structure
 
 ```
-lib/app/utils/
-├── app_theme.dart      # Tema utama & warna
-├── app_dialogs.dart    # Dialog & snackbar helpers
-└── colors.dart         # Backward compatibility
+lib/app/
+├── utils/
+│   ├── app_theme.dart      # Tema utama & warna (light + dark)
+│   ├── app_dialogs.dart    # Dialog & snackbar helpers
+│   └── colors.dart         # Backward compatibility
+└── controllers/
+    └── theme_controller.dart  # Theme mode controller
 ```
+
+## 🌓 Dark Mode Support
+
+Aplikasi sekarang mendukung **Light & Dark Mode** dengan:
+- ✅ Toggle di halaman Profile/Settings
+- ✅ Persistent storage (mengingat pilihan user)
+- ✅ Smooth transition antar mode
+- ✅ Semua komponen ter-theme dengan baik
+
 
 ## 🎨 Color Palette
 
@@ -109,6 +121,37 @@ AppSnackbars.showInfo('Processing...');
 AppSnackbars.showWarning('Low storage space');
 ```
 
+### 4. Menggunakan Dark Mode
+
+```dart
+import 'package:kidcol/app/controllers/theme_controller.dart';
+
+// Get theme controller
+final themeController = Get.find<ThemeController>();
+
+// Toggle theme
+themeController.toggleTheme();
+
+// Set specific theme
+themeController.setThemeMode(ThemeMode.dark);
+themeController.setThemeMode(ThemeMode.light);
+
+// Check current theme
+if (themeController.isDarkMode) {
+  // Dark mode is active
+}
+
+// Use in widget with Obx
+Obx(() => Icon(
+  themeController.isDarkMode ? Icons.dark_mode : Icons.light_mode,
+))
+```
+
+**User Interface:**
+- Buka halaman **Profile/Settings** dari navigation bar
+- Toggle switch **Dark Mode** untuk mengubah tema
+- Pilihan akan tersimpan otomatis dan diterapkan saat app dibuka kembali
+
 ## 🎯 Theme Configuration
 
 Theme sudah diterapkan di `main.dart`:
@@ -176,18 +219,27 @@ class AppColors {
 
 ## 🔧 Files Changed
 
-- ✅ `lib/app/utils/app_theme.dart` - Sistem tema lengkap
+- ✅ `lib/app/utils/app_theme.dart` - Sistem tema lengkap (light + dark)
 - ✅ `lib/app/utils/app_dialogs.dart` - Dialog & snackbar helpers
 - ✅ `lib/app/utils/colors.dart` - Backward compatibility
-- ✅ `lib/main.dart` - Apply theme
+- ✅ `lib/app/controllers/theme_controller.dart` - Theme mode controller
+- ✅ `lib/main.dart` - Apply theme & initialize controller
+- ✅ `lib/app/modules/profile/views/profile_view.dart` - Dark mode toggle
 - ✅ `lib/app/modules/home/views/home_view.dart` - Gunakan AppSnackbars
 - ✅ `lib/app/modules/koleksi_gambar/views/koleksi_gambar_view.dart` - Gunakan AppDialogs
+- ✅ `lib/app/modules/koleksi_gambar/controllers/koleksi_gambar_controller.dart` - Gunakan AppDialogs
+- ✅ `lib/app/modules/koleksi/views/koleksi_view.dart` - Dark mode support & clean up hardcoded colors
+- ✅ `lib/app/widgets/dialogs/add_koleksi.dart` - Dark mode support & use AppSnackbars
 
 ## 🎉 Result
 
 Sekarang aplikasi memiliki:
-- ✅ Warna yang konsisten di seluruh aplikasi
+- ✅ **Light & Dark Mode** dengan toggle di settings
+- ✅ **Persistent theme** - mengingat pilihan user
+- ✅ Warna yang konsisten di seluruh aplikasi (Home, Profile, Collection)
 - ✅ Dialog dengan styling yang seragam
 - ✅ Snackbar dengan tema yang sama
+- ✅ Smooth theme transitions
 - ✅ Easy to maintain & customize
 - ✅ Professional & polished UI
+- ✅ Better accessibility dengan dark mode

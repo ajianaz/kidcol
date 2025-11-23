@@ -1,7 +1,8 @@
 import 'package:flutter/material.dart';
-import 'package:get/get.dart';
+
 import '../../../i18n/translations.g.dart';
 import '../../../app/utils/colors.dart';
+import '../../../app/utils/app_dialogs.dart';
 import '../../../app/utils/responsive_helper.dart';
 
 /// Dialog for creating a new collection with modern design and animations
@@ -106,30 +107,16 @@ class _AddKoleksiDialogState extends State<AddKoleksiDialog>
   }
 
   void _showSuccessFeedback() {
-    Get.snackbar(
+    AppSnackbars.showSuccess(
       t.messages.collection_created,
-      t.collections.title,
-      backgroundColor: Colors.green,
-      colorText: Colors.white,
-      icon: const Icon(Icons.check_circle, color: Colors.white),
-      duration: const Duration(seconds: 2),
-      snackStyle: SnackStyle.FLOATING,
-      margin: const EdgeInsets.all(16),
-      borderRadius: 12,
+      title: t.collections.title,
     );
   }
 
   void _showErrorFeedback() {
-    Get.snackbar(
-      t.common.error,
+    AppSnackbars.showError(
       t.messages.error_occurred,
-      backgroundColor: Colors.red,
-      colorText: Colors.white,
-      icon: const Icon(Icons.error, color: Colors.white),
-      duration: const Duration(seconds: 3),
-      snackStyle: SnackStyle.FLOATING,
-      margin: const EdgeInsets.all(16),
-      borderRadius: 12,
+      title: t.common.error,
     );
   }
 
@@ -167,8 +154,8 @@ class _AddKoleksiDialogState extends State<AddKoleksiDialog>
                     begin: Alignment.topLeft,
                     end: Alignment.bottomRight,
                     colors: [
-                      Colors.white,
-                      Colors.blue.shade50,
+                      AppColors.surface,
+                      AppColors.primary.withValues(alpha: 0.05),
                     ],
                   ),
                 ),
@@ -197,13 +184,13 @@ class _AddKoleksiDialogState extends State<AddKoleksiDialog>
           width: 60,
           height: 60,
           decoration: BoxDecoration(
-            color: cornFlower.withValues(alpha: 0.1),
+            color: AppColors.primary.withValues(alpha: 0.1),
             shape: BoxShape.circle,
           ),
           child: Icon(
             Icons.collections_bookmark,
             size: 30,
-            color: cornFlower,
+            color: AppColors.primary,
           ),
         ),
         const SizedBox(height: 16),
@@ -212,7 +199,7 @@ class _AddKoleksiDialogState extends State<AddKoleksiDialog>
           style: TextStyle(
             fontSize: 24,
             fontWeight: FontWeight.bold,
-            color: Colors.grey.shade800,
+            color: AppColors.textPrimary,
           ),
         ),
         const SizedBox(height: 8),
@@ -220,7 +207,7 @@ class _AddKoleksiDialogState extends State<AddKoleksiDialog>
           t.collections.name_hint,
           style: TextStyle(
             fontSize: 14,
-            color: Colors.grey.shade600,
+            color: AppColors.textSecondary,
           ),
         ),
       ],
@@ -241,32 +228,32 @@ class _AddKoleksiDialogState extends State<AddKoleksiDialog>
           hintText: t.collections.name_hint,
           prefixIcon: Icon(
             Icons.bookmark,
-            color: cornFlower,
+            color: AppColors.primary,
           ),
           suffixIcon: _isFormValid && !_isLoading
               ? Icon(
                   Icons.check_circle,
-                  color: Colors.green,
+                  color: AppColors.success,
                 )
               : null,
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(12),
-            borderSide: BorderSide(color: Colors.grey.shade300),
+            borderSide: BorderSide(color: AppColors.border),
           ),
           enabledBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(12),
-            borderSide: BorderSide(color: Colors.grey.shade300),
+            borderSide: BorderSide(color: AppColors.border),
           ),
           focusedBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(12),
-            borderSide: const BorderSide(color: cornFlower, width: 2),
+            borderSide: const BorderSide(color: AppColors.primary, width: 2),
           ),
           errorBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(12),
-            borderSide: const BorderSide(color: Colors.red, width: 2),
+            borderSide: const BorderSide(color: AppColors.error, width: 2),
           ),
           filled: true,
-          fillColor: Colors.white,
+          fillColor: AppColors.surface,
           contentPadding: const EdgeInsets.symmetric(
             horizontal: 16,
             vertical: 16,
@@ -308,7 +295,7 @@ class _AddKoleksiDialogState extends State<AddKoleksiDialog>
           child: Text(
             t.common.cancel,
             style: TextStyle(
-              color: Colors.grey.shade600,
+              color: AppColors.textSecondary,
               fontWeight: FontWeight.w500,
             ),
           ),
@@ -319,8 +306,8 @@ class _AddKoleksiDialogState extends State<AddKoleksiDialog>
           child: ElevatedButton(
             onPressed: _isLoading || !_isFormValid ? null : _createCollection,
             style: ElevatedButton.styleFrom(
-              backgroundColor: cornFlower,
-              foregroundColor: Colors.white,
+              backgroundColor: AppColors.primary,
+              foregroundColor: AppColors.textOnPrimary,
               padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(8),
@@ -333,7 +320,8 @@ class _AddKoleksiDialogState extends State<AddKoleksiDialog>
                     height: 20,
                     child: CircularProgressIndicator(
                       strokeWidth: 2,
-                      valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                      valueColor: AlwaysStoppedAnimation<Color>(
+                          AppColors.textOnPrimary),
                     ),
                   )
                 : Row(

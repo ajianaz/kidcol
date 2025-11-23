@@ -18,14 +18,10 @@ class KoleksiView extends GetView<KoleksiController> {
         init: KoleksiController(),
         builder: (_) {
           return Scaffold(
-            backgroundColor: Colors.grey.shade50,
             appBar: AppBar(
-              elevation: 0,
-              backgroundColor: Colors.transparent,
               title: Text(
                 t.collections.title,
                 style: TextStyle(
-                  color: Colors.grey.shade800,
                   fontWeight: FontWeight.bold,
                   fontSize: 24,
                 ),
@@ -94,15 +90,15 @@ class KoleksiView extends GetView<KoleksiController> {
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
-            color: cornFlower.withValues(alpha: 0.3),
+            color: AppColors.primary.withValues(alpha: 0.3),
             blurRadius: 12,
             offset: const Offset(0, 6),
           ),
         ],
       ),
       child: FloatingActionButton.extended(
-        backgroundColor: cornFlower,
-        foregroundColor: Colors.white,
+        backgroundColor: AppColors.primary,
+        foregroundColor: AppColors.textOnPrimary,
         elevation: 0,
         onPressed: () {
           Get.dialog(
@@ -157,7 +153,7 @@ class KoleksiView extends GetView<KoleksiController> {
               ),
               boxShadow: [
                 BoxShadow(
-                  color: Colors.black.withValues(alpha: 0.1),
+                  color: AppColors.shadow.withValues(alpha: 0.1),
                   blurRadius: 10,
                   offset: const Offset(0, 4),
                 ),
@@ -263,11 +259,11 @@ class KoleksiView extends GetView<KoleksiController> {
         padding: const EdgeInsets.all(24),
         margin: const EdgeInsets.all(16),
         decoration: BoxDecoration(
-          color: Colors.white,
+          color: AppColors.surface,
           borderRadius: BorderRadius.circular(16),
           boxShadow: [
             BoxShadow(
-              color: Colors.black.withValues(alpha: 0.05),
+              color: AppColors.shadow.withValues(alpha: 0.05),
               blurRadius: 10,
               offset: const Offset(0, 4),
             ),
@@ -279,7 +275,7 @@ class KoleksiView extends GetView<KoleksiController> {
             Icon(
               Icons.error_outline,
               size: 64,
-              color: Colors.red.shade300,
+              color: AppColors.error,
             ),
             const SizedBox(height: 16),
             Text(
@@ -287,7 +283,7 @@ class KoleksiView extends GetView<KoleksiController> {
               style: TextStyle(
                 fontSize: 20,
                 fontWeight: FontWeight.bold,
-                color: Colors.grey.shade800,
+                color: AppColors.textPrimary,
               ),
             ),
             const SizedBox(height: 8),
@@ -296,7 +292,7 @@ class KoleksiView extends GetView<KoleksiController> {
               textAlign: TextAlign.center,
               style: TextStyle(
                 fontSize: 14,
-                color: Colors.grey.shade600,
+                color: AppColors.textSecondary,
               ),
             ),
             const SizedBox(height: 24),
@@ -307,8 +303,8 @@ class KoleksiView extends GetView<KoleksiController> {
               icon: const Icon(Icons.refresh),
               label: const Text('Try Again'),
               style: ElevatedButton.styleFrom(
-                backgroundColor: cornFlower,
-                foregroundColor: Colors.white,
+                backgroundColor: AppColors.primary,
+                foregroundColor: AppColors.textOnPrimary,
                 padding:
                     const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
                 shape: RoundedRectangleBorder(
@@ -331,13 +327,13 @@ class KoleksiView extends GetView<KoleksiController> {
             width: 120,
             height: 120,
             decoration: BoxDecoration(
-              color: cornFlower.withValues(alpha: 0.1),
+              color: AppColors.primary.withValues(alpha: 0.1),
               shape: BoxShape.circle,
             ),
             child: Icon(
               Icons.collections_bookmark_outlined,
               size: 60,
-              color: cornFlower,
+              color: AppColors.primary,
             ),
           ),
           const SizedBox(height: 24),
@@ -346,7 +342,7 @@ class KoleksiView extends GetView<KoleksiController> {
             style: TextStyle(
               fontSize: 20,
               fontWeight: FontWeight.w600,
-              color: Colors.grey.shade700,
+              color: AppColors.textPrimary,
             ),
           ),
           const SizedBox(height: 8),
@@ -354,7 +350,7 @@ class KoleksiView extends GetView<KoleksiController> {
             'Create your first collection to get started',
             style: TextStyle(
               fontSize: 14,
-              color: Colors.grey.shade500,
+              color: AppColors.textSecondary,
             ),
           ),
           const SizedBox(height: 24),
@@ -372,8 +368,8 @@ class KoleksiView extends GetView<KoleksiController> {
             icon: const Icon(Icons.add),
             label: Text(t.collections.create_new),
             style: ElevatedButton.styleFrom(
-              backgroundColor: cornFlower,
-              foregroundColor: Colors.white,
+              backgroundColor: AppColors.primary,
+              foregroundColor: AppColors.textOnPrimary,
               padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(8),
@@ -395,11 +391,11 @@ class KoleksiView extends GetView<KoleksiController> {
             height: 60,
             padding: const EdgeInsets.all(16),
             decoration: BoxDecoration(
-              color: Colors.white,
+              color: AppColors.surface,
               shape: BoxShape.circle,
               boxShadow: [
                 BoxShadow(
-                  color: Colors.black.withValues(alpha: 0.05),
+                  color: AppColors.shadow.withValues(alpha: 0.05),
                   blurRadius: 10,
                   offset: const Offset(0, 4),
                 ),
@@ -407,7 +403,7 @@ class KoleksiView extends GetView<KoleksiController> {
             ),
             child: CircularProgressIndicator(
               strokeWidth: 3,
-              valueColor: AlwaysStoppedAnimation<Color>(cornFlower),
+              valueColor: AlwaysStoppedAnimation<Color>(AppColors.primary),
             ),
           ),
           const SizedBox(height: 16),
@@ -415,7 +411,7 @@ class KoleksiView extends GetView<KoleksiController> {
             'Loading collections...',
             style: TextStyle(
               fontSize: 16,
-              color: Colors.grey.shade600,
+              color: AppColors.textSecondary,
               fontWeight: FontWeight.w500,
             ),
           ),

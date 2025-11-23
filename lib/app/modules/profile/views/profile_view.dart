@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
+import 'package:kidcol/app/controllers/theme_controller.dart';
 import 'package:kidcol/i18n/translations.g.dart';
 
 import '../controllers/profile_controller.dart';
@@ -9,6 +10,8 @@ class ProfileView extends GetView<ProfileController> {
   const ProfileView({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
+    final themeController = Get.find<ThemeController>();
+
     return Scaffold(
       appBar: AppBar(
         title: Text(t.settings.title),
@@ -17,20 +20,42 @@ class ProfileView extends GetView<ProfileController> {
       body: ListView(
         padding: const EdgeInsets.all(16),
         children: [
-          // Language Section
+          // Appearance Section
           Card(
-            child: ListTile(
-              leading: const Icon(Icons.language),
-              title: Text(t.settings.language),
-              trailing: Obx(() => Switch(
-                    value: controller.isEnglish.value,
-                    onChanged: (value) => controller.toggleLanguage(),
-                  )),
-              subtitle: Obx(() => Text(
-                    controller.isEnglish.value
-                        ? t.settings.english
-                        : t.settings.indonesian,
-                  )),
+            child: Column(
+              children: [
+                // Language Toggle
+                ListTile(
+                  leading: const Icon(Icons.language),
+                  title: Text(t.settings.language),
+                  trailing: Obx(() => Switch(
+                        value: controller.isEnglish.value,
+                        onChanged: (value) => controller.toggleLanguage(),
+                      )),
+                  subtitle: Obx(() => Text(
+                        controller.isEnglish.value
+                            ? t.settings.english
+                            : t.settings.indonesian,
+                      )),
+                ),
+                const Divider(),
+                // Dark Mode Toggle
+                ListTile(
+                  leading: Obx(() => Icon(
+                        themeController.isDarkMode
+                            ? Icons.dark_mode
+                            : Icons.light_mode,
+                      )),
+                  title: const Text('Dark Mode'),
+                  trailing: Obx(() => Switch(
+                        value: themeController.isDarkMode,
+                        onChanged: (value) => themeController.toggleTheme(),
+                      )),
+                  subtitle: Obx(() => Text(
+                        themeController.isDarkMode ? 'Dark' : 'Light',
+                      )),
+                ),
+              ],
             ),
           ),
 
