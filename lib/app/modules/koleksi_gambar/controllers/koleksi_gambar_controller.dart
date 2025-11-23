@@ -3,7 +3,7 @@ import 'package:get/get.dart';
 import 'package:kidcol/app/data/entities/gambar.dart';
 import 'package:kidcol/app/data/entities/koleksi.dart';
 import 'package:kidcol/app/data/services/isar_service.dart';
-import 'package:kidcol/app/utils/dialog.dart';
+import 'package:kidcol/app/utils/app_dialogs.dart';
 import 'package:kidcol/i18n/translations.g.dart';
 
 class KoleksiGambarController extends GetxController {
@@ -28,29 +28,35 @@ class KoleksiGambarController extends GetxController {
   }
 
   konfirmasiHapusKoleksi() {
-    dialogKonfirmasi(
-        title: t.common.confirm,
-        subtitle: t.messages.confirm_delete,
-        onConfirm: () {
-          Get.back();
-          deleteKoleksiData();
-        },
-        textConfirm: t.common.delete);
+    AppDialogs.showDeleteConfirmation(
+      title: t.common.confirm,
+      message: t.messages.confirm_delete,
+      confirmText: t.common.delete,
+      onConfirm: () => deleteKoleksiData(),
+    );
   }
 
   Future<void> deleteKoleksiData() async {
     try {
       await service.deleteKoleksi(koleksi);
-      dialogKonfirmasi(
-          title: t.common.success,
-          subtitle: t.messages.collection_deleted,
-          onConfirm: () {
-            Get.back();
-            Get.back();
-          });
+
+      // Show success and navigate back
+      AppDialogs.showSuccess(
+        title: t.common.success,
+        message: t.messages.collection_deleted,
+        onConfirm: () {
+          Get.back(); // Close dialog
+          Get.back(); // Go back to previous screen
+        },
+      );
     } catch (e) {
       debugPrint("Error deleting koleksi: $e");
+
       // Show error to user
+      AppDialogs.showError(
+        title: t.common.error,
+        message: 'Failed to delete collection',
+      );
     }
   }
 

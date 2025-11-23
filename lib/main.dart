@@ -6,6 +6,7 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 
 import 'app/routes/app_pages.dart';
 import 'app/utils/env_config.dart';
+import 'app/utils/app_theme.dart';
 import 'app/data/services/account_service.dart';
 import 'i18n/translations.g.dart';
 
@@ -27,6 +28,7 @@ void main() async {
       child: GetMaterialApp(
         title: "Kids Coloring Zone",
         debugShowCheckedModeBanner: false,
+        theme: AppTheme.lightTheme,
         initialRoute: AppPages.INITIAL,
         getPages: AppPages.routes,
         localizationsDelegates: const [
