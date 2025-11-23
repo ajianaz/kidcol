@@ -16,9 +16,14 @@ class KoleksiGambarController extends GetxController {
   //   update();
   // }
 
-  deleteGambarKoleksi(Gambar gambar) {
-    service.deleteGambar(gambar);
-    // getGambarKoleksi(koleksi);
+  Future<void> deleteGambarKoleksi(Gambar gambar) async {
+    try {
+      await service.deleteGambar(gambar);
+      // getGambarKoleksi(koleksi);
+    } catch (e) {
+      debugPrint("Error deleting gambar: $e");
+      // Show error to user
+    }
   }
 
   konfirmasiHapusKoleksi() {
@@ -32,15 +37,20 @@ class KoleksiGambarController extends GetxController {
         textConfirm: "Hapus");
   }
 
-  deleteKoleksiData() {
-    service.deleteKoleksi(koleksi);
-    dialogKonfirmasi(
-        title: "Perhatian",
-        subtitle: "Berhasil menghapus data.",
-        onConfirm: () {
-          Get.back();
-          Get.back();
-        });
+  Future<void> deleteKoleksiData() async {
+    try {
+      await service.deleteKoleksi(koleksi);
+      dialogKonfirmasi(
+          title: "Perhatian",
+          subtitle: "Berhasil menghapus data.",
+          onConfirm: () {
+            Get.back();
+            Get.back();
+          });
+    } catch (e) {
+      debugPrint("Error deleting koleksi: $e");
+      // Show error to user
+    }
   }
 
   @override
@@ -60,6 +70,8 @@ class KoleksiGambarController extends GetxController {
 
   @override
   void onClose() {
+    // Close database connection when controller is disposed
+    service.close();
     super.onClose();
   }
 }

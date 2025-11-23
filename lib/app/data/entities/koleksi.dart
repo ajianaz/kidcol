@@ -1,4 +1,4 @@
-import "package:isar/isar.dart";
+import "package:isar_community/isar.dart";
 import "package:kidcol/app/data/entities/gambar.dart";
 
 part 'koleksi.g.dart';
@@ -8,6 +8,8 @@ part 'koleksi.g.dart';
 @collection
 class Koleksi {
   Id id = Isar.autoIncrement;
+
+  @Index()
   late String title;
 
   //TODO : Add the backlink to collection <> image

@@ -1,1 +1,3 @@
-var baseUrl = 'http://103.175.216.16:3333';
+import 'package:kidcol/app/utils/api_config.dart';
+
+var baseUrl = ApiConfig.baseUrl;

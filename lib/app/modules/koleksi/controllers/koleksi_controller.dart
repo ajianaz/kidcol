@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:kidcol/app/data/entities/koleksi.dart';
 import 'package:kidcol/app/data/services/isar_service.dart';
@@ -5,11 +6,17 @@ import 'package:kidcol/app/data/services/isar_service.dart';
 class KoleksiController extends GetxController {
   final service = IsarService();
 
-  simpanKoleksi(String value){
-    final data = Koleksi()..title = value;
-    service.saveKoleksi(data);
+  Future<void> simpanKoleksi(String value) async {
+    try {
+      final data = Koleksi()..title = value;
+      await service.saveKoleksi(data);
+      // Optionally show success message
+    } catch (e) {
+      debugPrint("Error saving koleksi: $e");
+      // Show error to user
+    }
   }
-  
+
   @override
   void onInit() {
     super.onInit();
@@ -22,6 +29,8 @@ class KoleksiController extends GetxController {
 
   @override
   void onClose() {
+    // Close database connection when controller is disposed
+    service.close();
     super.onClose();
   }
 }

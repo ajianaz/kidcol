@@ -11,7 +11,7 @@ import 'package:printing/printing.dart';
 import '../controllers/printing_pdf_controller.dart';
 
 class PrintingPdfView extends GetView<PrintingPdfController> {
-  PrintingPdfView({Key? key}) : super(key: key);
+  PrintingPdfView({super.key});
 
   final pdf = pw.Document();
 
@@ -25,18 +25,66 @@ class PrintingPdfView extends GetView<PrintingPdfController> {
               title: const Text('Cetak PDF'),
               centerTitle: true,
             ),
-            body: controller.gambars.isNotEmpty
-                ? PdfPreview(
-                    dynamicLayout: false,
-                    canChangePageFormat: false,
-                    canChangeOrientation: false,
-                    canDebug: false,
-                    build: (format) =>
-                        _generatePdf2(format, "Test", controller.gambars),
-                  )
-                : Center(
-                    child: Text("Data not found."),
+            body: Column(
+              children: [
+                // Progress indicator section
+                if (controller.isProcessingImages.value)
+                  Container(
+                    padding: const EdgeInsets.all(16.0),
+                    child: Column(
+                      children: [
+                        Text(
+                          "Processing images: ${controller.processedImages.value}/${controller.totalImages.value}",
+                          style: const TextStyle(fontSize: 16),
+                        ),
+                        const SizedBox(height: 8),
+                        LinearProgressIndicator(
+                          value: controller.imageProcessingProgress.value,
+                          backgroundColor: Colors.grey[300],
+                          valueColor:
+                              const AlwaysStoppedAnimation<Color>(Colors.blue),
+                        ),
+                        const SizedBox(height: 8),
+                        if (controller.processingError.value.isNotEmpty)
+                          Text(
+                            controller.processingError.value,
+                            style: const TextStyle(
+                                color: Colors.red, fontSize: 12),
+                            textAlign: TextAlign.center,
+                          ),
+                      ],
+                    ),
                   ),
+
+                // PDF preview or loading/not found message
+                Expanded(
+                  child: controller.gambars.isNotEmpty &&
+                          !controller.isProcessingImages.value
+                      ? PdfPreview(
+                          dynamicLayout: false,
+                          canChangePageFormat: false,
+                          canChangeOrientation: false,
+                          canDebug: false,
+                          build: (format) =>
+                              _generatePdf2(format, "Test", controller.gambars),
+                        )
+                      : controller.isProcessingImages.value
+                          ? const Center(
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: [
+                                  CircularProgressIndicator(),
+                                  SizedBox(height: 16),
+                                  Text("Preparing images for PDF..."),
+                                ],
+                              ),
+                            )
+                          : const Center(
+                              child: Text("Data not found."),
+                            ),
+                ),
+              ],
+            ),
           );
         });
   }

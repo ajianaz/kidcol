@@ -6,6 +6,7 @@ import 'package:kidcol/app/data/models/asset.dart';
 import 'package:kidcol/app/data/models/assets_response.dart';
 import 'package:kidcol/app/data/services/isar_service.dart';
 import 'package:kidcol/app/utils/app_string.dart';
+import 'package:kidcol/app/utils/api_config.dart';
 
 class HomeController extends GetxController {
   final service = IsarService();
@@ -15,7 +16,7 @@ class HomeController extends GetxController {
   final dio = Dio();
 
   RxInt page = RxInt(1);
-  RxInt limit = RxInt(70);
+  RxInt limit = RxInt(30);
   RxInt totalPage = RxInt(1);
 
   late ScrollController scrollController;
@@ -29,7 +30,10 @@ class HomeController extends GetxController {
     isLoading.value = true;
     try {
       var response = await dio.get(
-          'https://gateway.ajianaz.dev/api/coloring-images/endless?page=${page.value}&limit=${limit.value}');
+          '${ApiConfig.baseUrl}/api/coloring-images/endless?page=${page.value}&limit=${limit.value}',
+          options: ApiConfig.gatewayKey.isNotEmpty
+              ? Options(headers: {'gateway_key': ApiConfig.gatewayKey})
+              : null);
       // debugPrint('${response.data}');
 
       var result = AssetsResponse.fromJson(response.data);
@@ -44,11 +48,15 @@ class HomeController extends GetxController {
   }
 
   isKoleksiEmpty() async {
-    var result = true;
-    service
-        .getAllKoleksis()
-        .then((data) => data.isEmpty ? result = true : result = false);
-    return result;
+    try {
+      var result = true;
+      final data = await service.getAllKoleksis();
+      result = data.isEmpty;
+      return result;
+    } catch (e) {
+      debugPrint("Error checking if koleksi is empty: $e");
+      return true; // Assume empty on error
+    }
   }
 
   dialogAddKoleksi() {
@@ -64,10 +72,15 @@ class HomeController extends GetxController {
 
   //Get All Koleksi dari local DB
   getAllKoleksi() async {
-    var result = await service.getAllKoleksis();
-    koleksis = result;
-    update();
-    debugPrint("Total data : ${koleksis.length}");
+    try {
+      var result = await service.getAllKoleksis();
+      koleksis = result;
+      update();
+      debugPrint("Total data : ${koleksis.length}");
+    } catch (e) {
+      debugPrint("Error getting all koleksis: $e");
+      // Show error to user if needed
+    }
   }
 
   //// ADDING THE SCROLL LISTINER
@@ -113,6 +126,8 @@ class HomeController extends GetxController {
 
   @override
   void onClose() {
+    // Close database connection when controller is disposed
+    service.close();
     super.onClose();
   }
 }
