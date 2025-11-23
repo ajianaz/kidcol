@@ -33,8 +33,8 @@ class HomeView extends GetView<HomeController> {
             onSave: (koleksi) async {
               try {
                 var data = Gambar()..endpoint = imageUrl;
-                data.koleksis.add(koleksi);
-                await controller.service.saveGambar(data);
+                // Pass koleksi as parameter instead of adding to backlink
+                await controller.service.saveGambar(data, koleksis: [koleksi]);
                 Get.back();
 
                 // Show success notification

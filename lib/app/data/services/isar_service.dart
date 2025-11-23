@@ -29,32 +29,46 @@ class IsarService {
   }
 
   //TODO : Save Gambar
-  Future<void> saveGambar(Gambar newGambar) async {
+  Future<void> saveGambar(Gambar newGambar, {List<Koleksi>? koleksis}) async {
     try {
       final isar = await db;
 
-      // Save the gambar first without any relationships
+      // Validate input
+      if (newGambar.endpoint.isEmpty) {
+        throw ArgumentError('Gambar endpoint cannot be empty');
+      }
+
+      debugPrint('📸 Saving gambar: ${newGambar.endpoint}');
+      debugPrint('📚 Koleksis to link: ${koleksis?.length ?? 0}');
+
+      // Save the gambar first
       await isar.writeTxn(() async {
         await isar.gambars.put(newGambar);
       });
+      debugPrint('✅ Gambar saved with ID: ${newGambar.id}');
 
-      // If there are koleksis, establish the relationships separately
-      if (newGambar.koleksis.isNotEmpty) {
-        // Get the saved gambar with its ID
-        final savedGambar = await isar.gambars.get(newGambar.id);
-        if (savedGambar != null) {
-          // For each koleksi, update it to include this gambar
-          for (final koleksi in newGambar.koleksis) {
+      // Now save the relationships from the Koleksi side
+      // Since Gambar.koleksis is a @Backlink, we must save from Koleksi.gambars
+      if (koleksis != null && koleksis.isNotEmpty) {
+        for (final koleksi in koleksis) {
+          debugPrint(
+              '🔗 Linking to koleksi: ${koleksi.title} (ID: ${koleksi.id})');
+
+          // Reload koleksi from DB to get managed instance
+          final managedKoleksi = await isar.koleksis.get(koleksi.id);
+          if (managedKoleksi != null) {
+            // Add and save in a transaction
             await isar.writeTxn(() async {
-              // Add this gambar to the koleksi's gambars link
-              koleksi.gambars.add(savedGambar);
-              // Save the koleksi to update the relationship
-              await isar.koleksis.put(koleksi);
+              managedKoleksi.gambars.add(newGambar);
+              await managedKoleksi.gambars.save();
             });
+            debugPrint('✅ Link saved for koleksi: ${koleksi.title}');
           }
         }
       }
+      debugPrint('🎉 All done! Gambar and relationships saved.');
     } catch (e) {
+      debugPrint('❌ Error in saveGambar: $e');
       throw Exception('Failed to save gambar: $e');
     }
   }
@@ -83,11 +97,15 @@ class IsarService {
   Future<List<Gambar>> getGambarKoleksi(Koleksi koleksi) async {
     try {
       final isar = await db;
-      return await isar.gambars
-          .filter()
-          .koleksis((q) => q.idEqualTo(koleksi.id))
-          .sortByEndpoint()
-          .findAll();
+      // Use the reference approach with proper filtering
+      final koleksiWithGambars =
+          await isar.koleksis.filter().idEqualTo(koleksi.id).findFirst();
+
+      if (koleksiWithGambars != null) {
+        await koleksiWithGambars.gambars.load();
+        return koleksiWithGambars.gambars.toList();
+      }
+      return [];
     } catch (e) {
       throw Exception('Failed to get gambar koleksi: $e');
     }
@@ -97,12 +115,13 @@ class IsarService {
   Stream<List<Gambar>> listenToGambars(Koleksi koleksi) async* {
     try {
       final isar = await db;
+      // Watch gambars collection directly with filter for better reactivity
       yield* isar.gambars
           .filter()
           .koleksis((q) => q.idEqualTo(koleksi.id))
-          .sortByEndpoint()
           .watch(fireImmediately: true);
     } catch (e) {
+      debugPrint('Error in listenToGambars: $e');
       throw Exception('Failed to listen to gambars: $e');
     }
   }
