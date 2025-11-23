@@ -233,6 +233,15 @@ class TranslationsSettingsEn {
 
 	/// en: 'Version'
 	String get version => 'Version';
+
+	/// en: 'Device ID'
+	String get device_id => 'Device ID';
+
+	/// en: 'Copy Device ID'
+	String get copy_device_id => 'Copy Device ID';
+
+	/// en: 'Device ID copied to clipboard'
+	String get device_id_copied => 'Device ID copied to clipboard';
 }
 
 // Path: common

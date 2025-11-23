@@ -53,7 +53,10 @@
     "terms_of_service": "Terms of Service",
     "privacy_policy": "Privacy Policy",
     "about": "About",
-    "version": "Version"
+    "version": "Version",
+    "device_id": "Device ID",
+    "copy_device_id": "Copy Device ID",
+    "device_id_copied": "Device ID copied to clipboard"
   },
   "common": {
     "ok": "OK",

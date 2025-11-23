@@ -66,6 +66,26 @@ class ProfileView extends GetView<ProfileController> {
 
           const SizedBox(height: 16),
 
+          // Device ID Section
+          Card(
+            child: ListTile(
+              leading: const Icon(Icons.device_hub),
+              title: Text(t.settings.device_id),
+              subtitle: Obx(() => Text(
+                    controller.deviceId.value,
+                    style:
+                        const TextStyle(fontFamily: 'monospace', fontSize: 12),
+                  )),
+              trailing: IconButton(
+                icon: const Icon(Icons.copy),
+                onPressed: () => controller.copyDeviceId(),
+                tooltip: t.settings.copy_device_id,
+              ),
+            ),
+          ),
+
+          const SizedBox(height: 16),
+
           // About Section
           Card(
             child: ListTile(

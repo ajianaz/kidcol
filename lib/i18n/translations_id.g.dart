@@ -143,6 +143,9 @@ class _TranslationsSettingsId extends TranslationsSettingsEn {
 	@override String get privacy_policy => 'Kebijakan Privasi';
 	@override String get about => 'Tentang';
 	@override String get version => 'Versi';
+	@override String get device_id => 'ID Perangkat';
+	@override String get copy_device_id => 'Salin ID Perangkat';
+	@override String get device_id_copied => 'ID Perangkat disalin ke clipboard';
 }
 
 // Path: common

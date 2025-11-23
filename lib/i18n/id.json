@@ -53,7 +53,10 @@
     "terms_of_service": "Syarat & Ketentuan",
     "privacy_policy": "Kebijakan Privasi",
     "about": "Tentang",
-    "version": "Versi"
+    "version": "Versi",
+    "device_id": "ID Perangkat",
+    "copy_device_id": "Salin ID Perangkat",
+    "device_id_copied": "ID Perangkat disalin ke clipboard"
   },
   "common": {
     "ok": "OK",
