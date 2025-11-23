@@ -10,9 +10,19 @@ class EnvConfig {
     _env = dotenv;
   }
 
+  /// Get the base URL for API requests
+  static String get baseUrl {
+    return _env.env['base_url'] ?? 'https://gateway.ajianaz.dev';
+  }
+
+  /// Get the gateway key for API requests
+  static String get gatewayKey {
+    return _env.env['gateway_key'] ?? '';
+  }
+
   /// Get the limit for free users
   static int get limitFree {
-    final limitStr = _env.env['limit_FREE'] ?? '10';
+    final limitStr = _env.env['limit_free'] ?? '10';
     return int.tryParse(limitStr) ?? 10;
   }
 

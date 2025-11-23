@@ -17,7 +17,7 @@ class HomeController extends GetxController {
 
   // bool isLoaded = false;
 
-  final dio = Dio();
+  final dio = Dio(BaseOptions(baseUrl: ApiConfig.baseUrl));
 
   RxInt page = RxInt(1);
   RxInt limit = RxInt(30);
@@ -175,9 +175,9 @@ class HomeController extends GetxController {
     isLoading.value = true;
     try {
       var response = await dio.get(
-          '${ApiConfig.baseUrl}/api/coloring-images/endless?page=${page.value}&limit=${limit.value}',
+          '/api/coloring-images/endless?page=${page.value}&limit=${limit.value}',
           options: ApiConfig.gatewayKey.isNotEmpty
-              ? Options(headers: {'gateway_key': ApiConfig.gatewayKey})
+              ? Options(headers: ApiConfig.authHeaders)
               : null);
       // debugPrint('${response.data}');
 
