@@ -9,32 +9,46 @@ class CardImage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
-      child: Column(
-        children: [
-          Container(
-            margin: EdgeInsets.symmetric(vertical: 2, horizontal: 2),
-            padding: EdgeInsets.all(2),
-            decoration: BoxDecoration(
-              borderRadius: BorderRadius.circular(12),
-              border: Border.all(
-                color: Colors.black,
-                width: 0.2,
-              ),
-              color: Colors.white,
-            ),
-            child: ClipRRect(
-              borderRadius: BorderRadius.circular(12),
-              child: CachedNetworkImage(
-                imageUrl: imageUrl.toString(),
-                progressIndicatorBuilder: (context, url, progress) =>
-                    CircularProgressIndicator(),
-                fadeInCurve: Curves.bounceIn,
-                fit: BoxFit.contain,
-              ),
-            ),
+      margin: EdgeInsets.all(4.0),
+      decoration: BoxDecoration(
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(
+          color: Colors.black.withOpacity(0.2),
+          width: 0.5,
+        ),
+        color: Colors.white,
+        boxShadow: [
+          BoxShadow(
+            color: Colors.grey.withOpacity(0.2),
+            spreadRadius: 1,
+            blurRadius: 2,
+            offset: Offset(0, 1),
           ),
         ],
+      ),
+      child: ClipRRect(
+        borderRadius:
+            BorderRadius.circular(11.5), // Slightly smaller than container
+        child: CachedNetworkImage(
+          imageUrl: imageUrl.toString(),
+          progressIndicatorBuilder: (context, url, progress) => Center(
+            child: CircularProgressIndicator(
+              value: progress.progress,
+              strokeWidth: 2.0,
+            ),
+          ),
+          errorWidget: (context, url, error) => Container(
+            color: Colors.grey[200],
+            child: Icon(
+              Icons.error_outline,
+              color: Colors.grey[400],
+            ),
+          ),
+          fadeInDuration: Duration(milliseconds: 300),
+          fit: BoxFit.cover, // Changed to cover for better grid appearance
+          width: double.infinity,
+          height: double.infinity,
+        ),
       ),
     );
   }

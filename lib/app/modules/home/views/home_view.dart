@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
 import 'package:kidcol/app/data/entities/gambar.dart';
+import 'package:kidcol/app/utils/responsive_helper.dart';
 import 'package:kidcol/app/widgets/cards/card_image.dart';
 import 'package:kidcol/i18n/strings.g.dart';
 
@@ -10,6 +11,7 @@ import '../controllers/home_controller.dart';
 
 class HomeView extends GetView<HomeController> {
   const HomeView({Key? key}) : super(key: key);
+
   @override
   Widget build(BuildContext context) {
     dialogKoleksis(String value) {
@@ -57,34 +59,39 @@ class HomeView extends GetView<HomeController> {
             children: [
               !controller.isLoading.value
                   ? controller.assets.isNotEmpty
-                      ? ListView.separated(
-                          // gridDelegate:
-                          //     SliverGridDelegateWithFixedCrossAxisCount(
-                          //   crossAxisCount: 2,
-                          // ),
-                          separatorBuilder: (context, index) {
-                            return SizedBox();
-                          },
-                          // shrinkWrap: true,
-                          controller: controller.scrollController,
-                          itemCount: controller.assets.length,
-                          itemBuilder: (context, index) {
-                            var asset = controller.assets[index];
-                            return InkWell(
-                              onTap: () {
-                                if (controller.koleksis.isEmpty) {
-                                  controller.dialogAddKoleksi();
-                                } else {
-                                  dialogKoleksis(asset.imageUrl.toString());
-                                }
-                              },
-                              onDoubleTap: () {
-                                Get.toNamed(Routes.DRAWING_ROOM,
-                                    arguments: "${asset.imageUrl}");
-                              },
-                              child: CardImage(
-                                imageUrl: "${asset.imageUrl}",
+                      ? LayoutBuilder(
+                          builder: (context, constraints) {
+                            return GridView.builder(
+                              gridDelegate:
+                                  SliverGridDelegateWithFixedCrossAxisCount(
+                                crossAxisCount:
+                                    ResponsiveHelper.getCrossAxisCount(context),
+                                crossAxisSpacing: 8.0,
+                                mainAxisSpacing: 8.0,
+                                childAspectRatio:
+                                    0.8, // Adjust aspect ratio as needed
                               ),
+                              controller: controller.scrollController,
+                              itemCount: controller.assets.length,
+                              itemBuilder: (context, index) {
+                                var asset = controller.assets[index];
+                                return InkWell(
+                                  onTap: () {
+                                    if (controller.koleksis.isEmpty) {
+                                      controller.dialogAddKoleksi();
+                                    } else {
+                                      dialogKoleksis(asset.imageUrl.toString());
+                                    }
+                                  },
+                                  onDoubleTap: () {
+                                    Get.toNamed(Routes.DRAWING_ROOM,
+                                        arguments: "${asset.imageUrl}");
+                                  },
+                                  child: CardImage(
+                                    imageUrl: "${asset.imageUrl}",
+                                  ),
+                                );
+                              },
                             );
                           },
                         )

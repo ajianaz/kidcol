@@ -21,19 +21,18 @@ class MainPageView extends GetView<MainPageController> {
         ),
         bottomNavigationBar: StyleProvider(
           style: Style(),
-          child: Obx(() => ConvexAppBar(
-                backgroundColor: blueCuracao,
-                // activeColor: Colors.transparent,
-                // color: Colors.amber,
-                top: 0.0,
-                items: [
-                  TabItem(icon: Icons.home, title: t.app.home),
-                  TabItem(
-                      icon: Icons.featured_play_list, title: t.app.collections),
-                  TabItem(icon: Icons.settings, title: t.app.settings),
-                ],
-                onTap: (int i) => controller.navigateToPage(i),
-              )),
+          child: ConvexAppBar(
+            backgroundColor: blueCuracao,
+            // activeColor: Colors.transparent,
+            // color: Colors.amber,
+            top: 0.0,
+            items: [
+              TabItem(icon: Icons.home, title: t.app.home),
+              TabItem(icon: Icons.featured_play_list, title: t.app.collections),
+              TabItem(icon: Icons.settings, title: t.app.settings),
+            ],
+            onTap: (int i) => controller.navigateToPage(i),
+          ),
         ),
         body: Obx(() => controller.mainContents[controller.activeIndex.value]));
   }

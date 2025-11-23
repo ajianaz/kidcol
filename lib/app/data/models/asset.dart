@@ -16,6 +16,12 @@ class Asset {
   final String? parentId;
   final String? imageUrl;
   final DateTime? createdAt;
+  final String? id;
+  final int? level;
+  final String? object;
+  final String? category;
+  final String? type;
+  final DateTime? deletedAt;
 
   Asset({
     this.designId,
@@ -23,6 +29,12 @@ class Asset {
     this.parentId,
     this.imageUrl,
     this.createdAt,
+    this.id,
+    this.level,
+    this.object,
+    this.category,
+    this.type,
+    this.deletedAt,
   });
 
   factory Asset.fromJson(Map<String, dynamic> json) => Asset(
@@ -33,6 +45,14 @@ class Asset {
         createdAt: json["created_at"] == null
             ? null
             : DateTime.parse(json["created_at"]),
+        id: json["id"],
+        level: json["level"],
+        object: json["object"],
+        category: json["category"],
+        type: json["type"],
+        deletedAt: json["deleted_at"] == null
+            ? null
+            : DateTime.parse(json["deleted_at"]),
       );
 
   Map<String, dynamic> toJson() => {
@@ -41,5 +61,11 @@ class Asset {
         "parent_id": parentId,
         "image_url": imageUrl,
         "created_at": createdAt?.toIso8601String(),
+        "id": id,
+        "level": level,
+        "object": object,
+        "category": category,
+        "type": type,
+        "deleted_at": deletedAt?.toIso8601String(),
       };
 }
