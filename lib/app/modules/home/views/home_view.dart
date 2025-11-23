@@ -30,11 +30,36 @@ class HomeView extends GetView<HomeController> {
           return _ModernCollectionDialog(
             koleksis: controller.koleksis,
             imageUrl: imageUrl,
-            onSave: (koleksi) {
-              var data = Gambar()..endpoint = imageUrl;
-              data.koleksis.add(koleksi);
-              controller.service.saveGambar(data);
-              Get.back();
+            onSave: (koleksi) async {
+              try {
+                var data = Gambar()..endpoint = imageUrl;
+                data.koleksis.add(koleksi);
+                await controller.service.saveGambar(data);
+                Get.back();
+
+                // Show success notification
+                Get.snackbar(
+                  t.common.success,
+                  t.messages.image_added_to_collection,
+                  backgroundColor: Colors.green,
+                  colorText: Colors.white,
+                  duration: const Duration(seconds: 2),
+                  snackPosition: SnackPosition.BOTTOM,
+                );
+              } catch (e) {
+                Get.back();
+
+                // Show error notification
+                Get.snackbar(
+                  t.common.error,
+                  t.messages.image_failed_to_add_to_collection,
+                  backgroundColor: Colors.red,
+                  colorText: Colors.white,
+                  duration: const Duration(seconds: 3),
+                  snackPosition: SnackPosition.BOTTOM,
+                );
+                debugPrint('Error saving image to collection: $e');
+              }
             },
           );
         },

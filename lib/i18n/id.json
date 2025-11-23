@@ -88,6 +88,8 @@
     "collection_updated": "Koleksi berhasil diperbarui",
     "image_saved": "Gambar berhasil disimpan",
     "image_deleted": "Gambar berhasil dihapus",
+    "image_added_to_collection": "Gambar berhasil ditambahkan ke koleksi",
+    "image_failed_to_add_to_collection": "Gagal menambahkan gambar ke koleksi",
     "confirm_delete": "Apakah Anda yakin ingin menghapus item ini?",
     "error_occurred": "Terjadi kesalahan. Silakan coba lagi.",
     "no_internet": "Tidak ada koneksi internet. Silakan periksa jaringan Anda.",

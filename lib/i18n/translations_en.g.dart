@@ -344,6 +344,12 @@ class TranslationsMessagesEn {
 	/// en: 'Image deleted successfully'
 	String get image_deleted => 'Image deleted successfully';
 
+	/// en: 'Image added to collection successfully'
+	String get image_added_to_collection => 'Image added to collection successfully';
+
+	/// en: 'Failed to add image to collection'
+	String get image_failed_to_add_to_collection => 'Failed to add image to collection';
+
 	/// en: 'Are you sure you want to delete this item?'
 	String get confirm_delete => 'Are you sure you want to delete this item?';
 

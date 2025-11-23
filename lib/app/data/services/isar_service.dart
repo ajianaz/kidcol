@@ -32,9 +32,28 @@ class IsarService {
   Future<void> saveGambar(Gambar newGambar) async {
     try {
       final isar = await db;
+
+      // Save the gambar first without any relationships
       await isar.writeTxn(() async {
         await isar.gambars.put(newGambar);
       });
+
+      // If there are koleksis, establish the relationships separately
+      if (newGambar.koleksis.isNotEmpty) {
+        // Get the saved gambar with its ID
+        final savedGambar = await isar.gambars.get(newGambar.id);
+        if (savedGambar != null) {
+          // For each koleksi, update it to include this gambar
+          for (final koleksi in newGambar.koleksis) {
+            await isar.writeTxn(() async {
+              // Add this gambar to the koleksi's gambars link
+              koleksi.gambars.add(savedGambar);
+              // Save the koleksi to update the relationship
+              await isar.koleksis.put(koleksi);
+            });
+          }
+        }
+      }
     } catch (e) {
       throw Exception('Failed to save gambar: $e');
     }
@@ -155,13 +174,24 @@ class IsarService {
   // Cleanup method to properly close database connections
   Future<void> close() async {
     try {
-      if (_isInitialized && _cachedInstance != null) {
-        await _cachedInstance!.close();
-        _cachedInstance = null;
-        _isInitialized = false;
+      // Check if database is already closed or not initialized
+      if (!_isInitialized || _cachedInstance == null) {
+        return; // Already closed or never initialized
       }
+
+      // Check if the instance is still open
+      if (_cachedInstance!.isOpen) {
+        await _cachedInstance!.close();
+      }
+
+      _cachedInstance = null;
+      _isInitialized = false;
     } catch (e) {
-      throw Exception('Failed to close database: $e');
+      // Log the error but don't throw to prevent crashes
+      debugPrint('Error closing database: $e');
+      // Ensure state is reset even if close fails
+      _cachedInstance = null;
+      _isInitialized = false;
     }
   }
 

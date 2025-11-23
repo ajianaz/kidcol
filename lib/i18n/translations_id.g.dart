@@ -193,6 +193,8 @@ class _TranslationsMessagesId extends TranslationsMessagesEn {
 	@override String get collection_updated => 'Koleksi berhasil diperbarui';
 	@override String get image_saved => 'Gambar berhasil disimpan';
 	@override String get image_deleted => 'Gambar berhasil dihapus';
+	@override String get image_added_to_collection => 'Gambar berhasil ditambahkan ke koleksi';
+	@override String get image_failed_to_add_to_collection => 'Gagal menambahkan gambar ke koleksi';
 	@override String get confirm_delete => 'Apakah Anda yakin ingin menghapus item ini?';
 	@override String get error_occurred => 'Terjadi kesalahan. Silakan coba lagi.';
 	@override String get no_internet => 'Tidak ada koneksi internet. Silakan periksa jaringan Anda.';
