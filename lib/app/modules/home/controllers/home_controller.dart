@@ -170,25 +170,90 @@ class HomeController extends GetxController {
 
     // If access is not allowed, don't proceed with request
     if (!accountService.isAccountAccessAllowed()) {
+      isLoading.value = false;
+      update();
       return;
     }
+
     isLoading.value = true;
+    update();
+
     try {
-      var response = await dio.get(
-          '/api/coloring-images/endless?page=${page.value}&limit=${limit.value}',
+      final url =
+          '/api/coloring-images/endless?page=${page.value}&limit=${limit.value}';
+      debugPrint('Making API request to: ${ApiConfig.baseUrl}$url');
+      debugPrint(
+          'Using gateway key: ${ApiConfig.gatewayKey.isNotEmpty ? "Yes" : "No"}');
+
+      var response = await dio.get(url,
           options: ApiConfig.gatewayKey.isNotEmpty
               ? Options(headers: ApiConfig.authHeaders)
               : null);
-      // debugPrint('${response.data}');
 
-      var result = AssetsResponse.fromJson(response.data);
+      debugPrint('API response status: ${response.statusCode}');
 
-      assets.addAll(result.assets as List<Asset>);
-      totalPage.value = result.totalPages as int;
+      if (response.statusCode == 200) {
+        var result = AssetsResponse.fromJson(response.data);
+        debugPrint('Successfully loaded ${result.assets?.length ?? 0} assets');
+
+        assets.addAll(result.assets as List<Asset>);
+        totalPage.value = result.totalPages as int;
+        isLoading.value = false;
+        update();
+      } else {
+        throw Exception(
+            'Failed to load data: Status code ${response.statusCode}');
+      }
+    } on DioException catch (e) {
+      debugPrint('Dio error: ${e.message}');
+      debugPrint('Response data: ${e.response?.data}');
+      debugPrint('Status code: ${e.response?.statusCode}');
+
+      String errorMessage = 'Failed to load images';
+
+      if (e.type == DioExceptionType.connectionTimeout) {
+        errorMessage =
+            'Connection timeout. Please check your internet connection.';
+      } else if (e.type == DioExceptionType.receiveTimeout) {
+        errorMessage = 'Server response timeout. Please try again.';
+      } else if (e.type == DioExceptionType.connectionError) {
+        errorMessage = 'No internet connection. Please check your network.';
+      } else if (e.response?.statusCode == 401) {
+        errorMessage = 'Authentication failed. Please check your API key.';
+      } else if (e.response?.statusCode == 403) {
+        errorMessage = 'Access forbidden. You may need to verify your account.';
+      } else if (e.response?.statusCode == 404) {
+        errorMessage =
+            'API endpoint not found. Please check the server configuration.';
+      } else if (e.response?.statusCode == 500) {
+        errorMessage = 'Server error. Please try again later.';
+      }
+
+      Get.snackbar(
+        'Error Loading Data',
+        errorMessage,
+        backgroundColor: Colors.red,
+        colorText: Colors.white,
+        duration: const Duration(seconds: 5),
+        snackPosition: SnackPosition.BOTTOM,
+      );
+
       isLoading.value = false;
       update();
     } catch (e) {
-      debugPrint("$e");
+      debugPrint('Unexpected error: $e');
+
+      Get.snackbar(
+        'Error',
+        'An unexpected error occurred while loading data',
+        backgroundColor: Colors.red,
+        colorText: Colors.white,
+        duration: const Duration(seconds: 3),
+        snackPosition: SnackPosition.BOTTOM,
+      );
+
+      isLoading.value = false;
+      update();
     }
   }
 
