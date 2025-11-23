@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
 import 'package:photo_view/photo_view.dart';
-import 'package:kidcol/i18n/strings.g.dart';
+import 'package:kidcol/i18n/translations.g.dart';
 
 import '../../../utils/drawing_painter.dart';
 import '../controllers/drawing_room_controller.dart';

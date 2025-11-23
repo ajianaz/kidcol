@@ -7,7 +7,7 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'app/routes/app_pages.dart';
 import 'app/utils/env_config.dart';
 import 'app/data/services/account_service.dart';
-import 'i18n/strings.g.dart';
+import 'i18n/translations.g.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();

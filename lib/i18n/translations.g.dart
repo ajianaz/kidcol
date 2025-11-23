@@ -4,9 +4,9 @@
 /// To regenerate, run: `dart run slang`
 ///
 /// Locales: 2
-/// Strings: 132 (66 per locale)
+/// Strings: 242 (121 per locale)
 ///
-/// Built on 2025-11-23 at 07:32 UTC
+/// Built on 2025-11-23 at 10:50 UTC
 
 // coverage:ignore-file
 // ignore_for_file: type=lint, unused_import
@@ -18,8 +18,8 @@ import 'package:slang/generated.dart';
 import 'package:slang_flutter/slang_flutter.dart';
 export 'package:slang_flutter/slang_flutter.dart';
 
-import 'strings_id.g.dart' deferred as l_id;
-part 'strings_en.g.dart';
+import 'translations_id.g.dart' deferred as l_id;
+part 'translations_en.g.dart';
 
 /// Supported locales.
 ///
@@ -98,7 +98,6 @@ enum AppLocale with BaseAppLocale<AppLocale, Translations> {
 ///
 /// Usage:
 /// String a = t.someKey.anotherKey;
-/// String b = t['someKey.anotherKey']; // Only for edge cases!
 Translations get t => LocaleSettings.instance.currentTranslations;
 
 /// Method B: Advanced
@@ -115,7 +114,6 @@ Translations get t => LocaleSettings.instance.currentTranslations;
 /// Step 2:
 /// final t = Translations.of(context); // Get t variable.
 /// String a = t.someKey.anotherKey; // Use t variable.
-/// String b = t['someKey.anotherKey']; // Only for edge cases!
 class TranslationProvider extends BaseTranslationProvider<AppLocale, Translations> {
 	TranslationProvider({required super.child}) : super(settings: LocaleSettings.instance);
 

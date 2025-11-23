@@ -79,6 +79,71 @@
     "image_deleted": "Gambar berhasil dihapus",
     "confirm_delete": "Apakah Anda yakin ingin menghapus item ini?",
     "error_occurred": "Terjadi kesalahan. Silakan coba lagi.",
-    "no_internet": "Tidak ada koneksi internet. Silakan periksa jaringan Anda."
+    "no_internet": "Tidak ada koneksi internet. Silakan periksa jaringan Anda.",
+    "update_available": "Pembaruan tersedia. Silakan perbarui aplikasi."
+  },
+  "dialog": {
+    "no_collections": "Tidak Ada Koleksi",
+    "please_add_collection_first": "Mohon tambahkan koleksi terlebih dahulu.",
+    "attention": "Perhatian",
+    "images_finished": "Gambar sudah habis.",
+    "confirm_delete_image": "Konfirmasi Hapus Gambar",
+    "confirm_delete_image_message": "Apakah anda yakin akan menghapus gambar tersebut?",
+    "no_images": "Tidak ada gambar",
+    "device_verification_required": "Verifikasi Perangkat Diperlukan",
+    "device_verification_message": "Sebagai pengguna berbayar, Anda perlu memverifikasi perangkat Anda untuk terus menggunakan aplikasi.",
+    "device_info": "Informasi Perangkat:",
+    "device_id": "ID Perangkat:",
+    "device_id_copied": "ID Perangkat Disalin",
+    "device_id_copied_message": "ID Perangkat telah disalin ke clipboard",
+    "copy_device_id": "Salin ID Perangkat",
+    "verify_device": "Verifikasi Perangkat",
+    "device_verified_successfully": "Perangkat berhasil diverifikasi",
+    "failed_to_verify_device": "Gagal memverifikasi perangkat",
+    "whatsapp_verification": {
+      "enter_whatsapp_number": "Masukkan Nomor WhatsApp",
+      "verify_whatsapp_number": "Verifikasi Nomor WhatsApp",
+      "enter_whatsapp_message": "Silakan masukkan nomor WhatsApp Anda untuk memverifikasi akun Anda",
+      "verification_code_sent": "Kode verifikasi telah dikirim ke",
+      "verification_code": "Kode Verifikasi",
+      "enter_6_digit_code": "Masukkan kode 6 digit",
+      "please_enter_phone": "Silakan masukkan nomor telepon Anda",
+      "please_enter_code": "Silakan masukkan kode verifikasi",
+      "code_must_be_6_digits": "Kode harus 6 digit",
+      "resend_code": "Kirim Ulang Kode",
+      "verify": "Verifikasi",
+      "send_code": "Kirim Kode",
+      "code_sent": "Kode Dikirim",
+      "code_sent_message": "Kode verifikasi telah dikirim ke nomor WhatsApp Anda",
+      "invalid_code": "Kode Tidak Valid",
+      "invalid_code_message": "Kode verifikasi yang Anda masukkan tidak valid",
+      "whatsapp_verified": "Terverifikasi",
+      "whatsapp_verified_message": "Nomor WhatsApp Anda telah berhasil diverifikasi"
+    },
+    "please_enter_collection_name": "Silakan masukkan nama koleksi",
+    "collection_name_too_short": "Nama koleksi harus minimal 2 karakter",
+    "collection_name_too_long": "Nama koleksi harus kurang dari 50 karakter"
+  },
+  "printing": {
+    "title": "Cetak PDF",
+    "processing_images": "Memproses gambar:",
+    "preparing_images": "Menyiapkan gambar untuk PDF...",
+    "data_not_found": "Data tidak ditemukan.",
+    "download_app_message": "Unduh Aplikasi KidCol di Playstore dan buat buku mewarnaimu sendiri"
+  },
+  "error": {
+    "failed_to_load_images": "Gagal memuat gambar",
+    "connection_timeout": "Koneksi timeout. Silakan periksa koneksi internet Anda.",
+    "server_response_timeout": "Timeout respons server. Silakan coba lagi.",
+    "no_internet_connection": "Tidak ada koneksi internet. Silakan periksa jaringan Anda.",
+    "authentication_failed": "Autentikasi gagal. Silakan periksa kunci API Anda.",
+    "access_forbidden": "Akses ditolak. Anda mungkin perlu memverifikasi akun Anda.",
+    "api_endpoint_not_found": "Endpoint API tidak ditemukan. Silakan periksa konfigurasi server.",
+    "server_error": "Kesalahan server. Silakan coba lagi nanti.",
+    "error_loading_data": "Kesalahan Memuat Data",
+    "unexpected_error": "Terjadi kesalahan tak terduga saat memuat data"
+  },
+  "collection": {
+    "title_prefix": "Koleksi"
   }
 }

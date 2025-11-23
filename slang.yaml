@@ -1,6 +1,25 @@
 base_locale: en
-output_dir: lib/i18n
-output_localization_file: generated.dart
-output_class: S
+fallback_strategy: base_locale
 input_directory: lib/i18n
 input_file_pattern: .json
+output_directory: lib/i18n
+output_file_name: translations.g.dart
+lazy: true
+locale_handling: true
+flutter_integration: true
+namespaces: false
+translate_var: t
+enum_name: AppLocale
+class_name: Translations
+translation_class_visibility: private
+key_case: snake
+key_map_case: camel
+param_case: pascal
+sanitization:
+  enabled: true
+  prefix: k
+  case: camel
+string_interpolation: double_braces
+flat_map: false
+translation_overrides: false
+timestamp: true

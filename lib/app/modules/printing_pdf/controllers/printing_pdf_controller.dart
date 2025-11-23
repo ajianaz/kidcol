@@ -4,6 +4,7 @@ import 'package:get/get.dart';
 import 'package:kidcol/app/data/entities/gambar.dart';
 import 'package:kidcol/app/data/entities/koleksi.dart';
 import 'package:kidcol/app/data/services/isar_service.dart';
+import 'package:kidcol/i18n/translations.g.dart';
 import 'package:pdf/widgets.dart' as pw;
 import 'package:printing/printing.dart';
 
@@ -31,7 +32,8 @@ class PrintingPdfController extends GetxController {
       update();
     } catch (e) {
       debugPrint("Error getting gambar koleksi: $e");
-      processingError.value = "Error loading images: ${e.toString()}";
+      processingError.value =
+          "${t.error.failed_to_load_images}: ${e.toString()}";
       update();
     }
   }
@@ -72,7 +74,7 @@ class PrintingPdfController extends GetxController {
       } catch (e) {
         debugPrint("Error processing image ${i + 1}: $e");
         processingError.value =
-            "Error processing image ${i + 1}: ${e.toString()}";
+            "${t.error.failed_to_load_images} ${i + 1}: ${e.toString()}";
         // Continue processing other images even if one fails
       }
     }

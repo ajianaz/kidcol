@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:kidcol/app/routes/app_pages.dart';
 import 'package:kidcol/app/utils/dialog.dart';
+import 'package:kidcol/i18n/translations.g.dart';
 
 class SplashScreenController extends GetxController {
   startTimer() {
@@ -30,8 +31,8 @@ class SplashScreenController extends GetxController {
   void needUpdate() {
     // Add logic or functions to execute if an update is needed here
     dialogPopUp(
-        title: "Notification",
-        subtitle: "An update is available. Please update the app.",
+        title: t.common.warning,
+        subtitle: t.messages.update_available,
         onCancel: () {
           Get.back();
         });

@@ -10,6 +10,7 @@ import 'package:kidcol/app/utils/app_string.dart';
 import 'package:kidcol/app/utils/api_config.dart';
 import 'package:kidcol/app/utils/env_config.dart';
 import 'package:kidcol/app/widgets/dialogs/whatsapp_verification.dart';
+import 'package:kidcol/i18n/translations.g.dart';
 
 class HomeController extends GetxController {
   final service = IsarService();
@@ -59,19 +60,19 @@ class HomeController extends GetxController {
     final deviceInfo = accountService.getDeviceInfo();
 
     await Get.defaultDialog(
-      title: 'Device Verification Required',
+      title: t.dialog.device_verification_required,
       content: Column(
         mainAxisSize: MainAxisSize.min,
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          const Text(
-            'As a paid user, you need to verify your device to continue using the app.',
+          Text(
+            t.dialog.device_verification_message,
             textAlign: TextAlign.center,
           ),
           const SizedBox(height: 20),
-          const Text(
-            'Device Information:',
-            style: TextStyle(fontWeight: FontWeight.bold),
+          Text(
+            t.dialog.device_info,
+            style: const TextStyle(fontWeight: FontWeight.bold),
           ),
           const SizedBox(height: 8),
           Container(
@@ -93,7 +94,7 @@ class HomeController extends GetxController {
                   children: [
                     Expanded(
                       child: Text(
-                        'Device ID: $deviceId',
+                        '${t.dialog.device_id} $deviceId',
                         style: const TextStyle(
                           fontSize: 12,
                           fontFamily: 'monospace',
@@ -107,15 +108,15 @@ class HomeController extends GetxController {
                         // In a real implementation, you would use flutter/services
                         // For now, we'll just show a snackbar
                         Get.snackbar(
-                          'Device ID Copied',
-                          'Device ID has been copied to clipboard',
+                          t.dialog.device_id_copied,
+                          t.dialog.device_id_copied_message,
                           backgroundColor: Colors.green,
                           colorText: Colors.white,
                           duration: const Duration(seconds: 2),
                         );
                       },
                       icon: const Icon(Icons.copy, size: 18),
-                      tooltip: 'Copy Device ID',
+                      tooltip: t.dialog.copy_device_id,
                     ),
                   ],
                 ),
@@ -131,8 +132,8 @@ class HomeController extends GetxController {
                 final success = await accountService.lockAccountToDevice();
                 if (success) {
                   Get.snackbar(
-                    'Success',
-                    'Device verified successfully',
+                    t.common.success,
+                    t.dialog.device_verified_successfully,
                     backgroundColor: Colors.green,
                     colorText: Colors.white,
                   );
@@ -140,14 +141,14 @@ class HomeController extends GetxController {
                   await _checkAccountVerification();
                 } else {
                   Get.snackbar(
-                    'Error',
-                    'Failed to verify device',
+                    t.common.error,
+                    t.dialog.failed_to_verify_device,
                     backgroundColor: Colors.red,
                     colorText: Colors.white,
                   );
                 }
               },
-              child: const Text('Verify Device'),
+              child: Text(t.dialog.verify_device),
             ),
           ),
         ],
@@ -209,28 +210,26 @@ class HomeController extends GetxController {
       debugPrint('Response data: ${e.response?.data}');
       debugPrint('Status code: ${e.response?.statusCode}');
 
-      String errorMessage = 'Failed to load images';
+      String errorMessage = t.error.failed_to_load_images;
 
       if (e.type == DioExceptionType.connectionTimeout) {
-        errorMessage =
-            'Connection timeout. Please check your internet connection.';
+        errorMessage = t.error.connection_timeout;
       } else if (e.type == DioExceptionType.receiveTimeout) {
-        errorMessage = 'Server response timeout. Please try again.';
+        errorMessage = t.error.server_response_timeout;
       } else if (e.type == DioExceptionType.connectionError) {
-        errorMessage = 'No internet connection. Please check your network.';
+        errorMessage = t.error.no_internet_connection;
       } else if (e.response?.statusCode == 401) {
-        errorMessage = 'Authentication failed. Please check your API key.';
+        errorMessage = t.error.authentication_failed;
       } else if (e.response?.statusCode == 403) {
-        errorMessage = 'Access forbidden. You may need to verify your account.';
+        errorMessage = t.error.access_forbidden;
       } else if (e.response?.statusCode == 404) {
-        errorMessage =
-            'API endpoint not found. Please check the server configuration.';
+        errorMessage = t.error.api_endpoint_not_found;
       } else if (e.response?.statusCode == 500) {
-        errorMessage = 'Server error. Please try again later.';
+        errorMessage = t.error.server_error;
       }
 
       Get.snackbar(
-        'Error Loading Data',
+        t.error.error_loading_data,
         errorMessage,
         backgroundColor: Colors.red,
         colorText: Colors.white,
@@ -244,8 +243,8 @@ class HomeController extends GetxController {
       debugPrint('Unexpected error: $e');
 
       Get.snackbar(
-        'Error',
-        'An unexpected error occurred while loading data',
+        t.common.error,
+        t.error.unexpected_error,
         backgroundColor: Colors.red,
         colorText: Colors.white,
         duration: const Duration(seconds: 3),
@@ -271,8 +270,8 @@ class HomeController extends GetxController {
 
   dialogAddKoleksi() {
     Get.defaultDialog(
-        title: "Tidak Ada Koleksi",
-        content: Text("Mohon tambahkan koleksi terlebih dahulu."));
+        title: t.dialog.no_collections,
+        content: Text(t.dialog.please_add_collection_first));
   }
 
   resetData() {
@@ -309,8 +308,8 @@ class HomeController extends GetxController {
         requestData();
       } else if (page.value == totalPage.value) {
         Get.defaultDialog(
-          title: "Perhatian",
-          content: Text("Gambar sudah habis."),
+          title: t.dialog.attention,
+          content: Text(t.dialog.images_finished),
         );
       }
       // }

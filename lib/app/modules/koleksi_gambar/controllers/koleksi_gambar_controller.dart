@@ -4,6 +4,7 @@ import 'package:kidcol/app/data/entities/gambar.dart';
 import 'package:kidcol/app/data/entities/koleksi.dart';
 import 'package:kidcol/app/data/services/isar_service.dart';
 import 'package:kidcol/app/utils/dialog.dart';
+import 'package:kidcol/i18n/translations.g.dart';
 
 class KoleksiGambarController extends GetxController {
   late Koleksi koleksi;
@@ -28,21 +29,21 @@ class KoleksiGambarController extends GetxController {
 
   konfirmasiHapusKoleksi() {
     dialogKonfirmasi(
-        title: "Konfirmasi",
-        subtitle: "Apa anda yakin akan menghapus data tersebut?",
+        title: t.common.confirm,
+        subtitle: t.messages.confirm_delete,
         onConfirm: () {
           Get.back();
           deleteKoleksiData();
         },
-        textConfirm: "Hapus");
+        textConfirm: t.common.delete);
   }
 
   Future<void> deleteKoleksiData() async {
     try {
       await service.deleteKoleksi(koleksi);
       dialogKonfirmasi(
-          title: "Perhatian",
-          subtitle: "Berhasil menghapus data.",
+          title: t.common.success,
+          subtitle: t.messages.collection_deleted,
           onConfirm: () {
             Get.back();
             Get.back();

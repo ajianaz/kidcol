@@ -5,7 +5,7 @@ import 'package:kidcol/app/data/entities/gambar.dart';
 import 'package:kidcol/app/utils/constants.dart';
 import 'package:kidcol/app/utils/responsive_helper.dart';
 import 'package:kidcol/app/widgets/cards/card_image.dart';
-import 'package:kidcol/i18n/strings.g.dart';
+import 'package:kidcol/i18n/translations.g.dart';
 
 import '../../../routes/app_pages.dart';
 import '../controllers/home_controller.dart';

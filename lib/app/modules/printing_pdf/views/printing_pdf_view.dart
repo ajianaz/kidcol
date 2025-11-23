@@ -7,6 +7,7 @@ import 'package:kidcol/app/data/entities/gambar.dart';
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
 import 'package:printing/printing.dart';
+import 'package:kidcol/i18n/translations.g.dart';
 
 import '../controllers/printing_pdf_controller.dart';
 
@@ -22,7 +23,7 @@ class PrintingPdfView extends GetView<PrintingPdfController> {
         builder: (context) {
           return Scaffold(
             appBar: AppBar(
-              title: const Text('Cetak PDF'),
+              title: Text(t.printing.title),
               centerTitle: true,
             ),
             body: Column(
@@ -34,7 +35,7 @@ class PrintingPdfView extends GetView<PrintingPdfController> {
                     child: Column(
                       children: [
                         Text(
-                          "Processing images: ${controller.processedImages.value}/${controller.totalImages.value}",
+                          "${t.printing.processing_images} ${controller.processedImages.value}/${controller.totalImages.value}",
                           style: const TextStyle(fontSize: 16),
                         ),
                         const SizedBox(height: 8),
@@ -65,22 +66,22 @@ class PrintingPdfView extends GetView<PrintingPdfController> {
                           canChangePageFormat: false,
                           canChangeOrientation: false,
                           canDebug: false,
-                          build: (format) =>
-                              _generatePdf2(format, "Test", controller.gambars),
+                          build: (format) => _generatePdf2(
+                              format, t.printing.title, controller.gambars),
                         )
                       : controller.isProcessingImages.value
-                          ? const Center(
+                          ? Center(
                               child: Column(
                                 mainAxisAlignment: MainAxisAlignment.center,
                                 children: [
-                                  CircularProgressIndicator(),
-                                  SizedBox(height: 16),
-                                  Text("Preparing images for PDF..."),
+                                  const CircularProgressIndicator(),
+                                  const SizedBox(height: 16),
+                                  Text(t.printing.preparing_images),
                                 ],
                               ),
                             )
-                          : const Center(
-                              child: Text("Data not found."),
+                          : Center(
+                              child: Text(t.printing.data_not_found),
                             ),
                 ),
               ],
@@ -156,8 +157,7 @@ class PrintingPdfView extends GetView<PrintingPdfController> {
                         height: size,
                         width: size,
                       ),
-                      pw.Text(
-                          "Download Aplikasi KidCol di Playstore dan buat buku mewarnaimu sendiri"),
+                      pw.Text(t.printing.download_app_message),
                     ]),
                   ),
                 );

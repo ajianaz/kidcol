@@ -7,6 +7,7 @@ import 'package:get/get.dart';
 import 'package:kidcol/app/routes/app_pages.dart';
 import 'package:kidcol/app/utils/app_string.dart';
 import 'package:kidcol/app/widgets/cards/card_image.dart';
+import 'package:kidcol/i18n/translations.g.dart';
 
 import '../controllers/koleksi_gambar_controller.dart';
 
@@ -19,7 +20,8 @@ class KoleksiGambarView extends GetView<KoleksiGambarController> {
         builder: (context) {
           return Scaffold(
             appBar: AppBar(
-              title: Text('Koleksi ${controller.koleksi.title}'),
+              title: Text(
+                  '${t.collection.title_prefix} ${controller.koleksi.title}'),
               centerTitle: true,
               actions: [
                 Padding(
@@ -64,15 +66,15 @@ class KoleksiGambarView extends GetView<KoleksiGambarController> {
                             // controller.getAllKoleksi();
                             // dialogKoleksis(gambar.name.toString());
                             Get.defaultDialog(
-                              title: "Konfirmasi Hapus Gambar",
+                              title: t.dialog.confirm_delete_image,
                               content: Container(
                                 child: Column(
                                   children: [
                                     CachedNetworkImage(
                                         imageUrl: "${gambar.endpoint}"),
                                     Text(
-                                      "Apakah anda yakin akan menghapus gambar tersebut?",
-                                      style: TextStyle(
+                                      t.dialog.confirm_delete_image_message,
+                                      style: const TextStyle(
                                           fontWeight: FontWeight.w500,
                                           fontSize: 14),
                                       textAlign: TextAlign.center,
@@ -80,8 +82,8 @@ class KoleksiGambarView extends GetView<KoleksiGambarController> {
                                   ],
                                 ),
                               ),
-                              textConfirm: "Hapus",
-                              textCancel: "Batal",
+                              textConfirm: t.common.delete,
+                              textCancel: t.common.cancel,
                               onConfirm: () {
                                 controller.deleteGambarKoleksi(gambar);
                                 Get.back();
@@ -96,7 +98,7 @@ class KoleksiGambarView extends GetView<KoleksiGambarController> {
                       },
                     );
                   } else {
-                    return const Center(child: Text('Tidak ada gambar'));
+                    return Center(child: Text(t.dialog.no_images));
                   }
                 }
                 return const CircularProgressIndicator();

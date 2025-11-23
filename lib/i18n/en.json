@@ -79,6 +79,71 @@
     "image_deleted": "Image deleted successfully",
     "confirm_delete": "Are you sure you want to delete this item?",
     "error_occurred": "An error occurred. Please try again.",
-    "no_internet": "No internet connection. Please check your network."
+    "no_internet": "No internet connection. Please check your network.",
+    "update_available": "An update is available. Please update the app."
+  },
+  "dialog": {
+    "no_collections": "No Collections",
+    "please_add_collection_first": "Please add a collection first.",
+    "attention": "Attention",
+    "images_finished": "All images have been loaded.",
+    "confirm_delete_image": "Confirm Delete Image",
+    "confirm_delete_image_message": "Are you sure you want to delete this image?",
+    "no_images": "No images",
+    "device_verification_required": "Device Verification Required",
+    "device_verification_message": "As a paid user, you need to verify your device to continue using the app.",
+    "device_info": "Device Information:",
+    "device_id": "Device ID:",
+    "device_id_copied": "Device ID Copied",
+    "device_id_copied_message": "Device ID has been copied to clipboard",
+    "copy_device_id": "Copy Device ID",
+    "verify_device": "Verify Device",
+    "device_verified_successfully": "Device verified successfully",
+    "failed_to_verify_device": "Failed to verify device",
+    "whatsapp_verification": {
+      "enter_whatsapp_number": "Enter WhatsApp Number",
+      "verify_whatsapp_number": "Verify WhatsApp Number",
+      "enter_whatsapp_message": "Please enter your WhatsApp number to verify your account",
+      "verification_code_sent": "A verification code has been sent to",
+      "verification_code": "Verification Code",
+      "enter_6_digit_code": "Enter 6-digit code",
+      "please_enter_phone": "Please enter your phone number",
+      "please_enter_code": "Please enter the verification code",
+      "code_must_be_6_digits": "Code must be 6 digits",
+      "resend_code": "Resend Code",
+      "verify": "Verify",
+      "send_code": "Send Code",
+      "code_sent": "Code Sent",
+      "code_sent_message": "A verification code has been sent to your WhatsApp number",
+      "invalid_code": "Invalid Code",
+      "invalid_code_message": "The verification code you entered is invalid",
+      "whatsapp_verified": "Verified",
+      "whatsapp_verified_message": "Your WhatsApp number has been verified successfully"
+    },
+    "please_enter_collection_name": "Please enter a collection name",
+    "collection_name_too_short": "Collection name must be at least 2 characters",
+    "collection_name_too_long": "Collection name must be less than 50 characters"
+  },
+  "printing": {
+    "title": "Print PDF",
+    "processing_images": "Processing images:",
+    "preparing_images": "Preparing images for PDF...",
+    "data_not_found": "Data not found.",
+    "download_app_message": "Download KidCol App from Playstore and create your own coloring book"
+  },
+  "error": {
+    "failed_to_load_images": "Failed to load images",
+    "connection_timeout": "Connection timeout. Please check your internet connection.",
+    "server_response_timeout": "Server response timeout. Please try again.",
+    "no_internet_connection": "No internet connection. Please check your network.",
+    "authentication_failed": "Authentication failed. Please check your API key.",
+    "access_forbidden": "Access forbidden. You may need to verify your account.",
+    "api_endpoint_not_found": "API endpoint not found. Please check the server configuration.",
+    "server_error": "Server error. Please try again later.",
+    "error_loading_data": "Error Loading Data",
+    "unexpected_error": "An unexpected error occurred while loading data"
+  },
+  "collection": {
+    "title_prefix": "Collection"
   }
 }

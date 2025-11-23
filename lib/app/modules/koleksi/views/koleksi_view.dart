@@ -5,7 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:kidcol/app/routes/app_pages.dart';
 import 'package:kidcol/app/utils/colors.dart';
-import 'package:kidcol/i18n/strings.g.dart';
+import 'package:kidcol/i18n/translations.g.dart';
+import 'package:kidcol/app/widgets/dialogs/add_koleksi.dart';
 import '../controllers/koleksi_controller.dart';
 
 class KoleksiView extends GetView<KoleksiController> {
@@ -20,26 +21,12 @@ class KoleksiView extends GetView<KoleksiController> {
             floatingActionButton: FloatingActionButton(
               backgroundColor: cornFlower,
               onPressed: () {
-                Get.defaultDialog(
-                  title: t.collections.create_new,
-                  content: Container(
-                    child: TextFormField(
-                      textCapitalization: TextCapitalization.characters,
-                      keyboardType: TextInputType.name,
-                      decoration: InputDecoration(
-                        hintText: t.collections.name_hint,
-                        counterText: "",
-                        contentPadding:
-                            EdgeInsets.fromLTRB(20.0, 10.0, 20.0, 10.0),
-                        border: OutlineInputBorder(
-                            borderRadius: BorderRadius.circular(12.0)),
-                      ),
-                      onFieldSubmitted: (value) {
-                        debugPrint("Hasil Ketik : $value");
-                        controller.simpanKoleksi(value);
-                        Get.back();
-                      },
-                    ),
+                showDialog(
+                  context: context,
+                  builder: (context) => AddKoleksiDialog(
+                    onCollectionCreated: (collectionName) async {
+                      await controller.simpanKoleksi(collectionName);
+                    },
                   ),
                 );
               },

@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:kidcol/app/utils/api_config.dart';
+import 'package:kidcol/i18n/translations.g.dart';
 
 class CardImage extends StatelessWidget {
   const CardImage({super.key, required this.imageUrl});
@@ -73,7 +74,7 @@ class CardImage extends StatelessWidget {
                         ),
                         SizedBox(height: 4),
                         Text(
-                          'Failed to load',
+                          t.error.failed_to_load_images,
                           style: TextStyle(
                             color: Colors.grey[600],
                             fontSize: 12,
@@ -103,7 +104,7 @@ class CardImage extends StatelessWidget {
                     ),
                     SizedBox(height: 4),
                     Text(
-                      'No image',
+                      t.images.empty,
                       style: TextStyle(
                         color: Colors.grey[600],
                         fontSize: 12,

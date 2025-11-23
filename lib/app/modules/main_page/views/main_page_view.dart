@@ -6,7 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:kidcol/app/utils/colors.dart';
 import 'package:kidcol/app/utils/navbot_style.dart';
-import 'package:kidcol/i18n/strings.g.dart';
+import 'package:kidcol/i18n/translations.g.dart';
 
 import '../controllers/main_page_controller.dart';
 

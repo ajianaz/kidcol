@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
-import 'package:kidcol/i18n/strings.g.dart';
+import 'package:kidcol/i18n/translations.g.dart';
 
 import '../controllers/profile_controller.dart';
 
