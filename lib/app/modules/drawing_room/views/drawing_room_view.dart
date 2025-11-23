@@ -3,100 +3,154 @@
 import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
-import 'package:photo_view/photo_view.dart';
+
 import 'package:kidcol/i18n/translations.g.dart';
 
 import '../../../utils/drawing_painter.dart';
+import '../../../utils/app_dialogs.dart';
 import '../controllers/drawing_room_controller.dart';
 
 class DrawingRoomView extends GetView<DrawingRoomController> {
   const DrawingRoomView({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text(t.drawing.title),
-      ),
-      // backgroundColor: Color(0xFF34495e),
-      body: GetBuilder(
+    return PopScope(
+      canPop: false,
+      onPopInvokedWithResult: (didPop, result) async {
+        if (didPop) return;
+
+        final shouldPop = await AppDialogs.showConfirmation(
+          title: t.common.warning,
+          message:
+              'Are you sure you want to exit? Unsaved changes will be lost.',
+          confirmText: t.common.yes,
+          cancelText: t.common.cancel,
+          isDestructive: true,
+        );
+
+        if (shouldPop == true) {
+          Get.back();
+        }
+      },
+      child: Scaffold(
+        appBar: AppBar(
+          title: Text(t.drawing.title),
+          leading: IconButton(
+            icon: const Icon(Icons.arrow_back),
+            onPressed: () async {
+              final shouldPop = await AppDialogs.showConfirmation(
+                title: t.common.warning,
+                message:
+                    'Are you sure you want to exit? Unsaved changes will be lost.',
+                confirmText: t.common.yes,
+                cancelText: t.common.cancel,
+                isDestructive: true,
+              );
+
+              if (shouldPop == true) {
+                Get.back();
+              }
+            },
+          ),
+        ),
+        // backgroundColor: Color(0xFF34495e),
+        body: GetBuilder<DrawingRoomController>(
           init: DrawingRoomController(),
           builder: (_) {
             return Stack(
               children: [
-                // Image.network(
-                //   controller.urlImage.toString(),
-                //   height: 1024,
-                //   width: 1024,
-                // ),
+                /// Zoomable Image & Canvas Area
+                InteractiveViewer(
+                  minScale: 0.1,
+                  maxScale: 5.0,
+                  boundaryMargin: const EdgeInsets.all(double.infinity),
+                  child: Center(
+                    child: Stack(
+                      alignment: Alignment.center,
+                      children: [
+                        if (controller.urlImage != null)
+                          Container(
+                            color: Colors
+                                .white, // Ensure white background for transparent images
+                            child: Image.network(
+                              controller.urlImage!,
+                              fit: BoxFit.contain,
+                              loadingBuilder:
+                                  (context, child, loadingProgress) {
+                                if (loadingProgress == null) return child;
+                                return const Center(
+                                  child: CircularProgressIndicator(),
+                                );
+                              },
+                              errorBuilder: (context, error, stackTrace) {
+                                return const Center(
+                                  child: Icon(Icons.error, color: Colors.red),
+                                );
+                              },
+                            ),
+                          ),
 
-                PhotoView(
-                  imageProvider: NetworkImage(
-                    controller.urlImage.toString(),
-                  ),
-                  // Contained = the smallest possible size to fit one dimension of the screen
-                  minScale: PhotoViewComputedScale.contained * 0.8,
-                  // Covered = the smallest possible size to fit the whole screen
-                  maxScale: PhotoViewComputedScale.covered * 2,
-                  enableRotation: true,
-                  // Set the background color to the "classic white"
-                  backgroundDecoration: BoxDecoration(
-                    color: Theme.of(context).canvasColor,
+                        /// Drawing Canvas (Overlay)
+                        Positioned.fill(
+                          child: GestureDetector(
+                            onPanStart: controller.onPanStart,
+                            onPanUpdate: controller.onPanUpdate,
+                            onPanEnd: (_) => controller.onPanEnd(),
+                            child: CustomPaint(
+                              painter: DrawingPainter(
+                                drawingPoints: controller.drawingPoints,
+                              ),
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
 
-                /// Canvas
-                GestureDetector(
-                  onPanStart: (details) {
-                    controller.onPanStart(details);
-                  },
-                  onPanUpdate: (details) {
-                    controller.onPanUpdate(details);
-                  },
-                  onPanEnd: (_) {
-                    controller.onPanEnd();
-                  },
-                  child: CustomPaint(
-                    size: Size(1024, 1024),
-                    painter: DrawingPainter(
-                      drawingPoints: controller.drawingPoints,
-                    ),
-                    child: SizedBox(
-                      height: 1024,
-                      width: 1024,
-                      // width: MediaQuery.of(context).size.width,
-                      // height: MediaQuery.of(context).size.height,
-                    ),
-                  ),
-                ),
-
-                /// color pallet
+                /// Color Palette
                 Align(
                   alignment: Alignment.topCenter,
-                  child: SizedBox(
+                  child: Container(
                     height: 80,
+                    padding: const EdgeInsets.all(12),
+                    decoration: BoxDecoration(
+                      color: Colors.white.withValues(alpha: 0.8),
+                      borderRadius: const BorderRadius.vertical(
+                        bottom: Radius.circular(20),
+                      ),
+                      boxShadow: [
+                        BoxShadow(
+                          color: Colors.black.withValues(alpha: 0.1),
+                          blurRadius: 10,
+                        ),
+                      ],
+                    ),
                     child: ListView.separated(
                       scrollDirection: Axis.horizontal,
                       itemCount: controller.avaiableColor.length,
-                      separatorBuilder: (_, __) {
-                        return const SizedBox(width: 8);
-                      },
+                      separatorBuilder: (_, __) => const SizedBox(width: 12),
                       itemBuilder: (context, index) {
                         return GestureDetector(
-                          onTap: () {
-                            controller.updateSelectedColor(index);
-                          },
+                          onTap: () => controller.updateSelectedColor(index),
                           child: Container(
                             width: 32,
                             height: 32,
                             decoration: BoxDecoration(
                               color: controller.avaiableColor[index],
                               shape: BoxShape.circle,
+                              border: Border.all(
+                                color: Colors.grey.shade300,
+                                width: 1,
+                              ),
                             ),
                             foregroundDecoration: BoxDecoration(
                               border: controller.selectedColor ==
                                       controller.avaiableColor[index]
                                   ? Border.all(
-                                      color: Color(0xFF1C3E66), width: 4)
+                                      color: Theme.of(context).primaryColor,
+                                      width: 3,
+                                    )
                                   : null,
                               shape: BoxShape.circle,
                             ),
@@ -107,45 +161,66 @@ class DrawingRoomView extends GetView<DrawingRoomController> {
                   ),
                 ),
 
-                /// pencil size
+                /// Pencil Size Slider
                 Positioned(
-                  top: MediaQuery.of(context).padding.top + 80,
+                  top: 100,
                   right: 0,
-                  bottom: 150,
-                  child: RotatedBox(
-                    quarterTurns: 3, // 270 degree
-                    child: Slider(
-                      value: controller.selectedWidth,
-                      min: 1,
-                      max: 20,
-                      onChanged: (value) {
-                        controller.updateSelectedWidth(value);
-                      },
+                  bottom: 100,
+                  child: Center(
+                    child: Container(
+                      height: 300,
+                      padding: const EdgeInsets.symmetric(horizontal: 8),
+                      decoration: BoxDecoration(
+                        color: Colors.white.withValues(alpha: 0.8),
+                        borderRadius: const BorderRadius.horizontal(
+                          left: Radius.circular(20),
+                        ),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black.withValues(alpha: 0.1),
+                            blurRadius: 10,
+                          ),
+                        ],
+                      ),
+                      child: RotatedBox(
+                        quarterTurns: 3,
+                        child: Slider(
+                          value: controller.selectedWidth,
+                          min: 1,
+                          max: 20,
+                          activeColor: controller.selectedColor,
+                          onChanged: (value) {
+                            controller.updateSelectedWidth(value);
+                          },
+                        ),
+                      ),
                     ),
                   ),
                 ),
               ],
             );
-          }),
-      floatingActionButton: Row(
-        mainAxisAlignment: MainAxisAlignment.end,
-        children: [
-          FloatingActionButton(
-            heroTag: "Undo",
-            onPressed: () {
-              controller.undo();
-            },
-            child: const Icon(Icons.undo),
-          ),
-          const SizedBox(width: 16),
-          FloatingActionButton(
-            heroTag: "Redo",
-            onPressed: () {
-              controller.redo();
-            },
-            child: const Icon(Icons.redo),
-          ),
-        ],
+          },
+        ),
+        floatingActionButton: Row(
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: [
+            FloatingActionButton(
+              heroTag: "Undo",
+              onPressed: () {
+                controller.undo();
+              },
+              child: const Icon(Icons.undo),
+            ),
+            const SizedBox(width: 16),
+            FloatingActionButton(
+              heroTag: "Redo",
+              onPressed: () {
+                controller.redo();
+              },
+              child: const Icon(Icons.redo),
+            ),
+          ],
+        ),
       ),
     );
   }

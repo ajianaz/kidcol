@@ -6,12 +6,26 @@ import '../../../data/models/drawing_point.dart';
 
 class DrawingRoomController extends GetxController {
   final dio = Dio();
+
   var avaiableColor = [
     Colors.black,
+    Colors.grey,
     Colors.red,
+    Colors.redAccent,
+    Colors.orange,
     Colors.amber,
-    Colors.blue,
+    Colors.yellow,
+    Colors.lime,
     Colors.green,
+    Colors.lightGreen,
+    Colors.teal,
+    Colors.cyan,
+    Colors.blue,
+    Colors.lightBlue,
+    Colors.indigo,
+    Colors.purple,
+    Colors.deepPurple,
+    Colors.pink,
     Colors.brown,
   ];
 

@@ -78,17 +78,21 @@ class AppDialogs {
   }
 
   /// Show a confirmation dialog
-  static void showConfirmation({
+  static Future<bool?> showConfirmation({
     required String title,
     required String message,
     String? confirmText,
     String? cancelText,
-    required VoidCallback onConfirm,
+    VoidCallback? onConfirm,
     VoidCallback? onCancel,
     Color? confirmColor,
     IconData? icon,
+    bool isDestructive = false,
   }) {
-    Get.defaultDialog(
+    final effectiveConfirmColor =
+        isDestructive ? AppColors.error : (confirmColor ?? AppColors.primary);
+
+    return Get.defaultDialog<bool>(
       title: title,
       titleStyle: TextStyle(
         color: AppColors.textPrimary,
@@ -103,13 +107,12 @@ class AppDialogs {
               width: 60,
               height: 60,
               decoration: BoxDecoration(
-                color:
-                    (confirmColor ?? AppColors.primary).withValues(alpha: 0.1),
+                color: effectiveConfirmColor.withValues(alpha: 0.1),
                 shape: BoxShape.circle,
               ),
               child: Icon(
                 icon,
-                color: confirmColor ?? AppColors.primary,
+                color: effectiveConfirmColor,
                 size: 30,
               ),
             ),
@@ -129,11 +132,11 @@ class AppDialogs {
       radius: 20,
       confirm: ElevatedButton(
         onPressed: () {
-          Get.back();
-          onConfirm();
+          Get.back(result: true);
+          onConfirm?.call();
         },
         style: ElevatedButton.styleFrom(
-          backgroundColor: confirmColor ?? AppColors.primary,
+          backgroundColor: effectiveConfirmColor,
           foregroundColor: AppColors.white,
           padding: EdgeInsets.symmetric(horizontal: 24, vertical: 12),
           shape: RoundedRectangleBorder(
@@ -143,7 +146,10 @@ class AppDialogs {
         child: Text(confirmText ?? 'Confirm'),
       ),
       cancel: TextButton(
-        onPressed: onCancel ?? () => Get.back(),
+        onPressed: () {
+          Get.back(result: false);
+          onCancel?.call();
+        },
         style: TextButton.styleFrom(
           foregroundColor: AppColors.textSecondary,
           padding: EdgeInsets.symmetric(horizontal: 24, vertical: 12),
