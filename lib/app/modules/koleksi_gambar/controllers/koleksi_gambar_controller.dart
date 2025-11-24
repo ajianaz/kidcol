@@ -77,8 +77,7 @@ class KoleksiGambarController extends GetxController {
 
   @override
   void onClose() {
-    // Close database connection when controller is disposed
-    service.close();
+    // Don't close database - singleton instance is shared across all controllers
     super.onClose();
   }
 }

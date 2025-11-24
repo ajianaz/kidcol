@@ -1,4 +1,5 @@
 import 'package:get/get.dart';
+import 'package:kidcol/app/modules/profile/controllers/profile_controller.dart';
 
 import '../controllers/main_page_controller.dart';
 import '../../home/controllers/home_controller.dart';
@@ -19,6 +20,10 @@ class MainPageBinding extends Bindings {
     );
     Get.lazyPut<KoleksiController>(
       () => KoleksiController(),
+      fenix: true,
+    );
+    Get.lazyPut<ProfileController>(
+      () => ProfileController(),
       fenix: true,
     );
   }

@@ -366,12 +366,13 @@ class HomeController extends GetxController {
   //Get All Koleksi dari local DB
   getAllKoleksi() async {
     try {
+      debugPrint('🔍 HomeController: Loading all koleksis...');
       var result = await service.getAllKoleksis();
       koleksis = result;
       update();
-      debugPrint("Total data : ${koleksis.length}");
+      debugPrint("✅ HomeController: Loaded ${koleksis.length} koleksis");
     } catch (e) {
-      debugPrint("Error getting all koleksis: $e");
+      debugPrint("❌ HomeController: Error getting all koleksis: $e");
       // Show error to user if needed
     }
   }
@@ -457,8 +458,7 @@ class HomeController extends GetxController {
     }
     scrollController.dispose();
 
-    // Close database connection when controller is disposed
-    service.close();
+    // Don't close database - singleton instance is shared across all controllers
     super.onClose();
   }
 }

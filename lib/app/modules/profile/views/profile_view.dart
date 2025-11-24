@@ -16,7 +16,14 @@ class ProfileView extends GetView<ProfileController> {
 
     return Scaffold(
       appBar: AppBar(
-        title: Text(t.settings.title),
+        title: Text(
+          t.settings.title,
+          style: TextStyle(
+            fontWeight: FontWeight.bold,
+            fontSize: 24,
+          ),
+        ),
+        elevation: 1,
         centerTitle: true,
       ),
       body: ConstrainedBox(
@@ -129,8 +136,8 @@ class ProfileView extends GetView<ProfileController> {
               ],
             ),
           ),
-        ),
-      ),
-    );
+        ), // SingleChildScrollView closing
+      ), // ConstrainedBox closing
+    ); // Scaffold closing
   }
 }

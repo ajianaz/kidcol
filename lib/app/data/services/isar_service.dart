@@ -12,8 +12,19 @@ class IsarService {
   bool _isInitialized = false;
   Isar? _cachedInstance;
 
-  IsarService() {
+  // Private constructor for singleton pattern
+  IsarService._internal() {
+    debugPrint('🔧 IsarService singleton instance created');
     db = openDB();
+  }
+
+  // Singleton instance
+  static final IsarService _instance = IsarService._internal();
+
+  // Factory constructor returns singleton
+  factory IsarService() {
+    debugPrint('📦 IsarService factory called - returning singleton instance');
+    return _instance;
   }
 
   //TODO : Save koleksi
@@ -23,7 +34,9 @@ class IsarService {
       await isar.writeTxn(() async {
         await isar.koleksis.put(newKoleksi);
       });
+      debugPrint('✅ Koleksi saved: ${newKoleksi.title} (ID: ${newKoleksi.id})');
     } catch (e) {
+      debugPrint('❌ Error saving koleksi: $e');
       throw Exception('Failed to save koleksi: $e');
     }
   }
@@ -77,8 +90,14 @@ class IsarService {
   Future<List<Koleksi>> getAllKoleksis() async {
     try {
       final isar = await db;
-      return await isar.koleksis.where().sortByTitle().findAll();
+      final koleksis = await isar.koleksis.where().sortByTitle().findAll();
+      debugPrint('📚 getAllKoleksis: Found ${koleksis.length} collections');
+      for (var k in koleksis) {
+        debugPrint('  - ${k.title} (ID: ${k.id})');
+      }
+      return koleksis;
     } catch (e) {
+      debugPrint('❌ Error in getAllKoleksis: $e');
       throw Exception('Failed to get koleksis: $e');
     }
   }

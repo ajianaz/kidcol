@@ -203,61 +203,68 @@ class MainPageView extends GetView<MainPageController> {
     final colorScheme = theme.colorScheme;
     final t = i18n.Translations.of(context);
 
-    return NavigationRail(
-      backgroundColor: colorScheme.surface,
-      selectedIndex: controller.activeIndex.value,
-      onDestinationSelected: (int index) => controller.navigateToPage(index),
-      labelType: NavigationRailLabelType.all,
-      leading: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Icon(
-          Icons.palette,
-          color: colorScheme.primary,
-          size: 32,
-        ),
-      ),
-      destinations: [
-        NavigationRailDestination(
-          icon: Obx(() => Icon(
-                Icons.home_outlined,
-                color: controller.activeIndex.value == 0
-                    ? colorScheme.primary
-                    : colorScheme.onSurface.withValues(alpha: 0.6),
-              )),
-          selectedIcon: Icon(
-            Icons.home,
+    return Obx(() {
+      debugPrint(
+          'NavigationRail: Building with activeIndex: ${controller.activeIndex.value}');
+      return NavigationRail(
+        backgroundColor: colorScheme.surface,
+        selectedIndex: controller.activeIndex.value,
+        onDestinationSelected: (int index) {
+          debugPrint('NavigationRail: Destination selected with index: $index');
+          controller.navigateToPage(index);
+        },
+        labelType: NavigationRailLabelType.all,
+        leading: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Icon(
+            Icons.palette,
             color: colorScheme.primary,
+            size: 32,
           ),
-          label: Text(t.app.home),
         ),
-        NavigationRailDestination(
-          icon: Obx(() => Icon(
-                Icons.featured_play_list_outlined,
-                color: controller.activeIndex.value == 1
-                    ? colorScheme.primary
-                    : colorScheme.onSurface.withValues(alpha: 0.6),
-              )),
-          selectedIcon: Icon(
-            Icons.featured_play_list,
-            color: colorScheme.primary,
+        destinations: [
+          NavigationRailDestination(
+            icon: Icon(
+              Icons.home_outlined,
+              color: controller.activeIndex.value == 0
+                  ? colorScheme.primary
+                  : colorScheme.onSurface.withValues(alpha: 0.6),
+            ),
+            selectedIcon: Icon(
+              Icons.home,
+              color: colorScheme.primary,
+            ),
+            label: Text(t.app.home),
           ),
-          label: Text(t.app.collections),
-        ),
-        NavigationRailDestination(
-          icon: Obx(() => Icon(
-                Icons.settings_outlined,
-                color: controller.activeIndex.value == 2
-                    ? colorScheme.primary
-                    : colorScheme.onSurface.withValues(alpha: 0.6),
-              )),
-          selectedIcon: Icon(
-            Icons.settings,
-            color: colorScheme.primary,
+          NavigationRailDestination(
+            icon: Icon(
+              Icons.featured_play_list_outlined,
+              color: controller.activeIndex.value == 1
+                  ? colorScheme.primary
+                  : colorScheme.onSurface.withValues(alpha: 0.6),
+            ),
+            selectedIcon: Icon(
+              Icons.featured_play_list,
+              color: colorScheme.primary,
+            ),
+            label: Text(t.app.collections),
           ),
-          label: Text(t.app.settings),
-        ),
-      ],
-    );
+          NavigationRailDestination(
+            icon: Icon(
+              Icons.settings_outlined,
+              color: controller.activeIndex.value == 2
+                  ? colorScheme.primary
+                  : colorScheme.onSurface.withValues(alpha: 0.6),
+            ),
+            selectedIcon: Icon(
+              Icons.settings,
+              color: colorScheme.primary,
+            ),
+            label: Text(t.app.settings),
+          ),
+        ],
+      );
+    });
   }
 
   Widget _buildModernBottomNavBar(BuildContext context) {
