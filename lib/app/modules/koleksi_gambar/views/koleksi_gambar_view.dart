@@ -21,7 +21,7 @@ class KoleksiGambarView extends GetView<KoleksiGambarController> {
   Widget build(BuildContext context) {
     return GetBuilder<KoleksiGambarController>(
       init: KoleksiGambarController(),
-      builder: (context) {
+      builder: (controllerContext) {
         return Scaffold(
           appBar: AppBar(
             title: Text(
@@ -56,21 +56,25 @@ class KoleksiGambarView extends GetView<KoleksiGambarController> {
               )
             ],
           ),
-          body: StreamBuilder(
-            stream: controller.service.listenToGambars(controller.koleksi),
-            builder: (context, snapshot) {
-              if (snapshot.hasError) {
-                return _buildErrorState(snapshot.error.toString());
-              } else if (snapshot.hasData) {
-                final items = snapshot.data;
-                if (items!.isNotEmpty) {
-                  return _buildImageGrid(items);
-                } else {
-                  return _buildEmptyState();
+          body: ConstrainedBox(
+            constraints:
+                ResponsiveHelper.getResponsiveContainerConstraints(context),
+            child: StreamBuilder(
+              stream: controller.service.listenToGambars(controller.koleksi),
+              builder: (context, snapshot) {
+                if (snapshot.hasError) {
+                  return _buildErrorState(snapshot.error.toString());
+                } else if (snapshot.hasData) {
+                  final items = snapshot.data;
+                  if (items!.isNotEmpty) {
+                    return _buildImageGrid(items);
+                  } else {
+                    return _buildEmptyState();
+                  }
                 }
-              }
-              return _buildLoadingState();
-            },
+                return _buildLoadingState();
+              },
+            ),
           ),
         );
       },
@@ -114,12 +118,13 @@ class KoleksiGambarView extends GetView<KoleksiGambarController> {
     return LayoutBuilder(
       builder: (context, constraints) {
         return Padding(
-          padding: AppPadding.getResponsiveAllPadding(context),
+          padding: ResponsiveHelper.getCenteredContentPadding(context),
           child: GridView.builder(
+            padding: const EdgeInsets.only(bottom: 16),
             gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
               crossAxisCount: ResponsiveHelper.getCrossAxisCount(context),
-              crossAxisSpacing: AppSpacing.gridCrossAxisSpacing,
-              mainAxisSpacing: AppSpacing.gridMainAxisSpacing,
+              crossAxisSpacing: 16,
+              mainAxisSpacing: 16,
               childAspectRatio: 0.8,
             ),
             itemCount: items.length,
@@ -172,45 +177,50 @@ class KoleksiGambarView extends GetView<KoleksiGambarController> {
       shape: RoundedRectangleBorder(
         borderRadius: BorderRadius.vertical(top: Radius.circular(20)),
       ),
-      builder: (context) => Container(
-        padding: EdgeInsets.all(AppPadding.md),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            Container(
-              width: 40,
-              height: 4,
-              decoration: BoxDecoration(
-                color: Colors.grey[300],
-                borderRadius: BorderRadius.circular(2),
+      builder: (context) => ConstrainedBox(
+        constraints: BoxConstraints(
+          maxWidth: ResponsiveHelper.getResponsiveDialogWidth(context),
+        ),
+        child: Container(
+          padding: EdgeInsets.all(16),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
+            children: [
+              Container(
+                width: 40,
+                height: 4,
+                decoration: BoxDecoration(
+                  color: Colors.grey[300],
+                  borderRadius: BorderRadius.circular(2),
+                ),
               ),
-            ),
-            SizedBox(height: AppPadding.md),
-            Text(
-              t.common.confirm,
-              style: TextStyle(
-                fontSize: 18,
-                fontWeight: FontWeight.bold,
+              SizedBox(height: 16),
+              Text(
+                t.common.confirm,
+                style: TextStyle(
+                  fontSize: 18,
+                  fontWeight: FontWeight.bold,
+                ),
               ),
-            ),
-            SizedBox(height: AppPadding.md),
-            ListTile(
-              leading: Icon(Icons.preview, color: Colors.blue),
-              title: Text(t.images.view),
-              onTap: () {
-                Get.back();
-                _showImagePreview(gambar, 0);
-              },
-            ),
-            ListTile(
-              leading: Icon(Icons.delete, color: Colors.red),
-              title: Text(t.common.delete),
-              onTap: () {
-                Get.back();
-                _confirmDeleteImage(gambar);
-              },
-            ),
-          ],
+              SizedBox(height: 16),
+              ListTile(
+                leading: Icon(Icons.preview, color: Colors.blue),
+                title: Text(t.images.view),
+                onTap: () {
+                  Get.back();
+                  _showImagePreview(gambar, 0);
+                },
+              ),
+              ListTile(
+                leading: Icon(Icons.delete, color: Colors.red),
+                title: Text(t.common.delete),
+                onTap: () {
+                  Get.back();
+                  _confirmDeleteImage(gambar);
+                },
+              ),
+            ],
+          ),
         ),
       ),
     );
@@ -408,6 +418,8 @@ class _ImagePreviewPage extends StatelessWidget {
                 onCancel: () => Get.back(),
                 backgroundColor: Colors.grey[800],
                 radius: 12,
+                titlePadding: EdgeInsets.all(16),
+                contentPadding: EdgeInsets.all(16),
               );
             },
           ),

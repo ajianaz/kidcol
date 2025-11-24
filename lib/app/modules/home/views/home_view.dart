@@ -151,30 +151,46 @@ BoxDecoration _buildBackgroundDecoration() {
 
 // Loading state with shimmer effect
 Widget _buildLoadingState() {
-  return SliverPadding(
-    padding: AppPadding.getResponsiveAllPadding(Get.context!),
-    sliver: SliverGrid(
-      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount: ResponsiveHelper.getCrossAxisCount(Get.context!),
-        crossAxisSpacing: AppSpacing.gridCrossAxisSpacing,
-        mainAxisSpacing: AppSpacing.gridMainAxisSpacing,
-        childAspectRatio: 0.8,
-      ),
-      delegate: SliverChildBuilderDelegate(
-        (context, index) {
-          return _CustomShimmer(
-            child: Container(
-              decoration: BoxDecoration(
-                borderRadius: BorderRadius.circular(12),
-                color: Colors.white,
+  try {
+    final context = Get.context;
+    if (context == null || !ResponsiveHelper.isContextValid(context)) {
+      debugPrint(
+          'Context is invalid in _buildLoadingState, returning empty widget');
+      return const SliverToBoxAdapter(child: SizedBox());
+    }
+
+    return SliverPadding(
+      padding: AppPadding.getResponsiveAllPadding(context),
+      sliver: SliverGrid(
+        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount: ResponsiveHelper.getCrossAxisCount(context),
+          crossAxisSpacing: AppSpacing.gridCrossAxisSpacing,
+          mainAxisSpacing: AppSpacing.gridMainAxisSpacing,
+          childAspectRatio: 0.8,
+        ),
+        delegate: SliverChildBuilderDelegate(
+          (context, index) {
+            return _CustomShimmer(
+              child: Container(
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(12),
+                  color: Colors.white,
+                ),
               ),
-            ),
-          );
-        },
-        childCount: 12, // Show 12 shimmer placeholders
+            );
+          },
+          childCount: 12, // Show 12 shimmer placeholders
+        ),
       ),
-    ),
-  );
+    );
+  } catch (e) {
+    debugPrint('Error in _buildLoadingState: $e');
+    return const SliverToBoxAdapter(
+      child: Center(
+        child: CircularProgressIndicator(),
+      ),
+    );
+  }
 }
 
 // Empty state with engaging animation
@@ -245,30 +261,83 @@ Widget _buildImageGrid(
   HomeController controller,
   Function(String) showImagePreviewDialog,
 ) {
-  return SliverPadding(
-    padding: AppPadding.getResponsiveAllPadding(context),
-    sliver: SliverGrid(
-      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount: ResponsiveHelper.getCrossAxisCount(context),
-        crossAxisSpacing: AppSpacing.gridCrossAxisSpacing + 8,
-        mainAxisSpacing: AppSpacing.gridMainAxisSpacing + 8,
-        childAspectRatio: 0.8,
+  try {
+    if (!ResponsiveHelper.isContextValid(context)) {
+      debugPrint(
+          'Context is invalid in _buildImageGrid, returning empty widget');
+      return const SliverToBoxAdapter(child: SizedBox());
+    }
+
+    final crossAxisCount = ResponsiveHelper.getCrossAxisCount(context);
+    final screenSize = ResponsiveHelper.getScreenSize(context);
+
+    debugPrint(
+        'Building image grid with $crossAxisCount columns for screen size: $screenSize');
+
+    return SliverPadding(
+      padding: AppPadding.getResponsiveAllPadding(context),
+      sliver: SliverGrid(
+        gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+          crossAxisCount: crossAxisCount,
+          crossAxisSpacing: AppSpacing.gridCrossAxisSpacing + 8,
+          mainAxisSpacing: AppSpacing.gridMainAxisSpacing + 8,
+          childAspectRatio: 0.8,
+        ),
+        delegate: SliverChildBuilderDelegate(
+          (context, index) {
+            try {
+              if (index >= controller.assets.length) {
+                debugPrint(
+                    'Index $index is out of bounds for assets list with ${controller.assets.length} items');
+                return const SizedBox.shrink();
+              }
+
+              var asset = controller.assets[index];
+              return _AnimatedGridItem(
+                index: index,
+                child: _EnhancedImageCard(
+                  imageUrl: "${asset.imageUrl}",
+                  onTap: () => showImagePreviewDialog("${asset.imageUrl}"),
+                ),
+              );
+            } catch (e) {
+              debugPrint('Error building grid item at index $index: $e');
+              return const SizedBox.shrink();
+            }
+          },
+          childCount: controller.assets.length,
+        ),
       ),
-      delegate: SliverChildBuilderDelegate(
-        (context, index) {
-          var asset = controller.assets[index];
-          return _AnimatedGridItem(
-            index: index,
-            child: _EnhancedImageCard(
-              imageUrl: "${asset.imageUrl}",
-              onTap: () => showImagePreviewDialog("${asset.imageUrl}"),
+    );
+  } catch (e) {
+    debugPrint('Error in _buildImageGrid: $e');
+    return SliverToBoxAdapter(
+      child: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            const Icon(Icons.error_outline, size: 48, color: Colors.grey),
+            const SizedBox(height: 16),
+            Text(
+              'Error loading images',
+              style: TextStyle(
+                color: Colors.grey[600],
+                fontSize: 16,
+              ),
             ),
-          );
-        },
-        childCount: controller.assets.length,
+            const SizedBox(height: 16),
+            ElevatedButton(
+              onPressed: () {
+                controller.resetData();
+                controller.requestData();
+              },
+              child: const Text('Retry'),
+            ),
+          ],
+        ),
       ),
-    ),
-  );
+    );
+  }
 }
 
 // Custom shimmer effect
@@ -562,36 +631,74 @@ class _EnhancedCardImage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final processedUrl = ApiConfig.getImageUrl(imageUrl);
+    try {
+      if (!ResponsiveHelper.isContextValid(context)) {
+        debugPrint(
+            'Context is invalid in _EnhancedImageCard, returning placeholder');
+        return Container(
+          color: AppColors.surfaceLight,
+          child: const Center(
+            child: Icon(Icons.image, color: Colors.grey),
+          ),
+        );
+      }
 
-    return processedUrl.isNotEmpty
-        ? CachedNetworkImage(
-            imageUrl: processedUrl,
-            fit: BoxFit.cover,
-            width: double.infinity,
-            height: double.infinity,
-            placeholder: (context, url) => Container(
-              color: AppColors.surfaceLight,
-              child: Center(
-                child: CircularProgressIndicator(
-                  strokeWidth: 2,
-                  valueColor: AlwaysStoppedAnimation<Color>(AppColors.primary),
+      final processedUrl = ApiConfig.getImageUrl(imageUrl);
+
+      return processedUrl.isNotEmpty
+          ? CachedNetworkImage(
+              imageUrl: processedUrl,
+              fit: BoxFit.cover,
+              width: double.infinity,
+              height: double.infinity,
+              placeholder: (context, url) => Container(
+                color: AppColors.surfaceLight,
+                child: Center(
+                  child: CircularProgressIndicator(
+                    strokeWidth: 2,
+                    valueColor:
+                        AlwaysStoppedAnimation<Color>(AppColors.primary),
+                  ),
                 ),
               ),
-            ),
-            errorWidget: (context, url, error) => Container(
+              errorWidget: (context, url, error) => Container(
+                color: AppColors.surfaceLight,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Icon(
+                      Icons.broken_image_outlined,
+                      color: AppColors.grey400,
+                      size: 32,
+                    ),
+                    const SizedBox(height: 4),
+                    Text(
+                      t.error.failed_to_load_images,
+                      style: TextStyle(
+                        color: AppColors.textSecondary,
+                        fontSize: 12,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              fadeInDuration: const Duration(milliseconds: 300),
+              memCacheWidth: 300,
+              memCacheHeight: 300,
+            )
+          : Container(
               color: AppColors.surfaceLight,
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Icon(
-                    Icons.broken_image_outlined,
+                    Icons.image_not_supported_outlined,
                     color: AppColors.grey400,
                     size: 32,
                   ),
                   const SizedBox(height: 4),
                   Text(
-                    t.error.failed_to_load_images,
+                    t.images.empty,
                     style: TextStyle(
                       color: AppColors.textSecondary,
                       fontSize: 12,
@@ -599,32 +706,16 @@ class _EnhancedCardImage extends StatelessWidget {
                   ),
                 ],
               ),
-            ),
-            fadeInDuration: const Duration(milliseconds: 300),
-            memCacheWidth: 300,
-            memCacheHeight: 300,
-          )
-        : Container(
-            color: AppColors.surfaceLight,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Icon(
-                  Icons.image_not_supported_outlined,
-                  color: AppColors.grey400,
-                  size: 32,
-                ),
-                const SizedBox(height: 4),
-                Text(
-                  t.images.empty,
-                  style: TextStyle(
-                    color: AppColors.textSecondary,
-                    fontSize: 12,
-                  ),
-                ),
-              ],
-            ),
-          );
+            );
+    } catch (e) {
+      debugPrint('Error in _EnhancedImageCard build: $e');
+      return Container(
+        color: AppColors.surfaceLight,
+        child: const Center(
+          child: Icon(Icons.error_outline, color: Colors.grey),
+        ),
+      );
+    }
   }
 }
 

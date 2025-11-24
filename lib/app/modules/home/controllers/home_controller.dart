@@ -6,7 +6,6 @@ import 'package:kidcol/app/data/models/asset.dart';
 import 'package:kidcol/app/data/models/assets_response.dart';
 import 'package:kidcol/app/data/services/isar_service.dart';
 import 'package:kidcol/app/data/services/account_service.dart';
-import 'package:kidcol/app/utils/app_string.dart';
 import 'package:kidcol/app/utils/api_config.dart';
 import 'package:kidcol/app/utils/env_config.dart';
 import 'package:kidcol/app/widgets/dialogs/whatsapp_verification.dart';
@@ -18,11 +17,13 @@ class HomeController extends GetxController {
 
   // bool isLoaded = false;
 
-  final dio = Dio(BaseOptions(baseUrl: ApiConfig.baseUrl));
+  final dio = Dio(ApiConfig.defaultOptions);
 
   RxInt page = RxInt(1);
   RxInt limit = RxInt(30);
   RxInt totalPage = RxInt(1);
+  RxInt retryCount = RxInt(0);
+  static const int maxRetries = 3;
 
   late ScrollController scrollController;
   RxBool isLoading = RxBool(true);
@@ -165,7 +166,7 @@ class HomeController extends GetxController {
     );
   }
 
-  requestData() async {
+  requestData({bool isRetry = false}) async {
     // Check account verification before proceeding
     await _checkAccountVerification();
 
@@ -185,6 +186,7 @@ class HomeController extends GetxController {
       debugPrint('Making API request to: ${ApiConfig.baseUrl}$url');
       debugPrint(
           'Using gateway key: ${ApiConfig.gatewayKey.isNotEmpty ? "Yes" : "No"}');
+      debugPrint('Retry count: ${retryCount.value}');
 
       var response = await dio.get(url,
           options: ApiConfig.gatewayKey.isNotEmpty
@@ -200,6 +202,7 @@ class HomeController extends GetxController {
         assets.addAll(result.assets as List<Asset>);
         totalPage.value = result.totalPages as int;
         isLoading.value = false;
+        retryCount.value = 0; // Reset retry count on success
         update();
       } else {
         throw Exception(
@@ -209,6 +212,7 @@ class HomeController extends GetxController {
       debugPrint('Dio error: ${e.message}');
       debugPrint('Response data: ${e.response?.data}');
       debugPrint('Status code: ${e.response?.statusCode}');
+      debugPrint('Error type: ${e.type}');
 
       String errorMessage = t.error.failed_to_load_images;
 
@@ -218,6 +222,15 @@ class HomeController extends GetxController {
         errorMessage = t.error.server_response_timeout;
       } else if (e.type == DioExceptionType.connectionError) {
         errorMessage = t.error.no_internet_connection;
+      } else if (e.type == DioExceptionType.unknown) {
+        // Handle SSL/TLS errors and other network issues
+        if (e.error?.toString().contains('SSL') == true ||
+            e.error?.toString().contains('certificate') == true) {
+          errorMessage =
+              'SSL/TLS connection error. Please check your network settings.';
+        } else {
+          errorMessage = t.error.no_internet_connection;
+        }
       } else if (e.response?.statusCode == 401) {
         errorMessage = t.error.authentication_failed;
       } else if (e.response?.statusCode == 403) {
@@ -228,28 +241,48 @@ class HomeController extends GetxController {
         errorMessage = t.error.server_error;
       }
 
-      Get.snackbar(
-        t.error.error_loading_data,
-        errorMessage,
-        backgroundColor: Colors.red,
-        colorText: Colors.white,
-        duration: const Duration(seconds: 5),
-        snackPosition: SnackPosition.BOTTOM,
-      );
+      // Show error with retry option for connection errors
+      if (ApiConfig.isRetryableError(e)) {
+        _handleNetworkError(errorMessage);
+      } else {
+        Get.snackbar(
+          t.error.error_loading_data,
+          errorMessage,
+          backgroundColor: Colors.red,
+          colorText: Colors.white,
+          duration: const Duration(seconds: 5),
+          snackPosition: SnackPosition.BOTTOM,
+          icon: const Icon(Icons.error_outline, color: Colors.white),
+        );
+      }
 
       isLoading.value = false;
       update();
     } catch (e) {
       debugPrint('Unexpected error: $e');
+      debugPrint('Error type: ${e.runtimeType}');
 
-      Get.snackbar(
-        t.common.error,
-        t.error.unexpected_error,
-        backgroundColor: Colors.red,
-        colorText: Colors.white,
-        duration: const Duration(seconds: 3),
-        snackPosition: SnackPosition.BOTTOM,
-      );
+      String errorMessage = t.error.unexpected_error;
+
+      // Handle specific error types
+      if (e.toString().contains('Network') || e.toString().contains('Socket')) {
+        errorMessage = t.error.no_internet_connection;
+      }
+
+      // Show error with retry option for network errors
+      if (errorMessage.contains('Network') || errorMessage.contains('Socket')) {
+        _handleNetworkError(errorMessage);
+      } else {
+        Get.snackbar(
+          t.common.error,
+          errorMessage,
+          backgroundColor: Colors.red,
+          colorText: Colors.white,
+          duration: const Duration(seconds: 3),
+          snackPosition: SnackPosition.BOTTOM,
+          icon: const Icon(Icons.error_outline, color: Colors.white),
+        );
+      }
 
       isLoading.value = false;
       update();
@@ -277,6 +310,7 @@ class HomeController extends GetxController {
   resetData() {
     assets.clear();
     page.value = 1;
+    retryCount.value = 0; // Reset retry count
     // Reset scroll position to top when refreshing data
     if (scrollController.hasClients) {
       scrollController.animateTo(
@@ -284,6 +318,48 @@ class HomeController extends GetxController {
         duration: const Duration(milliseconds: 300),
         curve: Curves.easeInOut,
       );
+    }
+  }
+
+  /// Retry failed request with exponential backoff
+  Future<void> retryRequest() async {
+    if (retryCount.value >= maxRetries) {
+      debugPrint('Max retries reached, giving up');
+      Get.snackbar(
+        'Error',
+        'Failed to load data after $maxRetries attempts. Please check your connection.',
+        backgroundColor: Colors.red,
+        colorText: Colors.white,
+        duration: const Duration(seconds: 5),
+      );
+      return;
+    }
+
+    retryCount.value++;
+    debugPrint('Retrying request, attempt ${retryCount.value}/$maxRetries');
+
+    // Exponential backoff: 1s, 2s, 4s
+    final delay = Duration(seconds: (1 << (retryCount.value - 1)));
+    await Future.delayed(delay);
+
+    await requestData(isRetry: true);
+  }
+
+  /// Check if network is available
+  Future<bool> _checkNetworkConnectivity() async {
+    try {
+      // Try to connect to a reliable endpoint
+      final response = await dio.head(
+        '${ApiConfig.baseUrl}/health',
+        options: Options(
+          receiveTimeout: const Duration(seconds: 5),
+          sendTimeout: const Duration(seconds: 5),
+        ),
+      );
+      return response.statusCode == 200;
+    } catch (e) {
+      debugPrint('Network connectivity check failed: $e');
+      return false;
     }
   }
 
@@ -330,6 +406,25 @@ class HomeController extends GetxController {
     } catch (e) {
       debugPrint("Error in scrollListener: $e");
     }
+  }
+
+  /// Handle network errors with appropriate actions
+  void _handleNetworkError(String errorMessage) {
+    Get.snackbar(
+      'Network Error',
+      errorMessage,
+      backgroundColor: Colors.orange,
+      colorText: Colors.white,
+      duration: const Duration(seconds: 5),
+      mainButton: TextButton(
+        onPressed: () {
+          Get.back();
+          retryRequest();
+        },
+        child: const Text('Retry', style: TextStyle(color: Colors.white)),
+      ),
+      icon: const Icon(Icons.refresh, color: Colors.white),
+    );
   }
 
   @override

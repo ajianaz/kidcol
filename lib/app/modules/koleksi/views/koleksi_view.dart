@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:kidcol/app/routes/app_pages.dart';
 import 'package:kidcol/app/utils/colors.dart';
+import 'package:kidcol/app/utils/responsive_helper.dart';
 import 'package:kidcol/i18n/translations.g.dart';
 import 'package:kidcol/app/widgets/dialogs/add_koleksi.dart';
 import '../controllers/koleksi_controller.dart';
@@ -30,54 +31,59 @@ class KoleksiView extends GetView<KoleksiController> {
             ),
             floatingActionButton: _buildFloatingActionButton(),
             floatingActionButtonLocation: FloatingActionButtonLocation.endFloat,
-            body: Container(
-              padding: const EdgeInsets.symmetric(horizontal: 16),
-              child: StreamBuilder(
-                stream: controller.service.listenToKoleksis(),
-                builder: (context, snapshot) {
-                  if (snapshot.hasError) {
-                    return _buildErrorState(snapshot.error.toString());
-                  } else if (snapshot.hasData) {
-                    final items = snapshot.data;
-                    if (items!.isNotEmpty) {
-                      return RefreshIndicator(
-                        onRefresh: () async {
-                          // Refresh functionality if needed
-                        },
-                        child: AnimationLimiter(
-                          child: GridView.builder(
-                            padding: const EdgeInsets.only(bottom: 100),
-                            gridDelegate:
-                                SliverGridDelegateWithFixedCrossAxisCount(
-                              crossAxisCount: 2,
-                              crossAxisSpacing: 16,
-                              mainAxisSpacing: 16,
-                              childAspectRatio: 0.85,
-                            ),
-                            itemCount: items.length,
-                            itemBuilder: (context, index) {
-                              final koleksi = items[index];
-                              return AnimationConfiguration.staggeredGrid(
-                                position: index,
-                                duration: const Duration(milliseconds: 375),
-                                columnCount: 2,
-                                child: ScaleAnimation(
-                                  child: FadeInAnimation(
-                                    child:
-                                        _buildCollectionCard(koleksi, context),
+            body: ConstrainedBox(
+              constraints:
+                  ResponsiveHelper.getResponsiveContainerConstraints(context),
+              child: Container(
+                padding: ResponsiveHelper.getCenteredContentPadding(context),
+                child: StreamBuilder(
+                  stream: controller.service.listenToKoleksis(),
+                  builder: (context, snapshot) {
+                    if (snapshot.hasError) {
+                      return _buildErrorState(snapshot.error.toString());
+                    } else if (snapshot.hasData) {
+                      final items = snapshot.data;
+                      if (items!.isNotEmpty) {
+                        return RefreshIndicator(
+                          onRefresh: () async {
+                            // Refresh functionality if needed
+                          },
+                          child: AnimationLimiter(
+                            child: GridView.builder(
+                              padding: const EdgeInsets.only(bottom: 100),
+                              gridDelegate:
+                                  SliverGridDelegateWithFixedCrossAxisCount(
+                                crossAxisCount:
+                                    ResponsiveHelper.getCrossAxisCount(context),
+                                crossAxisSpacing: 16,
+                                mainAxisSpacing: 16,
+                                childAspectRatio: 0.85,
+                              ),
+                              itemCount: items.length,
+                              itemBuilder: (context, index) {
+                                final koleksi = items[index];
+                                return AnimationConfiguration.staggeredGrid(
+                                  position: index,
+                                  duration: const Duration(milliseconds: 375),
+                                  columnCount: 2,
+                                  child: ScaleAnimation(
+                                    child: FadeInAnimation(
+                                      child: _buildCollectionCard(
+                                          koleksi, context),
+                                    ),
                                   ),
-                                ),
-                              );
-                            },
+                                );
+                              },
+                            ),
                           ),
-                        ),
-                      );
-                    } else {
-                      return _buildEmptyState();
+                        );
+                      } else {
+                        return _buildEmptyState();
+                      }
                     }
-                  }
-                  return _buildLoadingState();
-                },
+                    return _buildLoadingState();
+                  },
+                ),
               ),
             ),
           );
