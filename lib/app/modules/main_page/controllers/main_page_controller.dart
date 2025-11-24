@@ -2,12 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:kidcol/app/modules/home/views/home_view.dart';
 import 'package:kidcol/app/modules/koleksi/views/koleksi_view.dart';
-import 'package:kidcol/app/modules/profile/views/profile_view.dart';
+import 'package:kidcol/app/modules/setting/views/setting_view.dart';
 
 class MainPageController extends GetxController {
   // Use getter instead of final list to ensure controllers are available
   List<Widget> get mainContents =>
-      [const HomeView(), KoleksiView(), const ProfileView()];
+      [const HomeView(), KoleksiView(), const SettingView()];
 
   RxInt activeIndex = RxInt(0);
 

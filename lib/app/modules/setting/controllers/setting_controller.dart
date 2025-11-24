@@ -6,7 +6,7 @@ import 'package:url_launcher/url_launcher.dart';
 import 'package:device_info_plus/device_info_plus.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-class ProfileController extends GetxController {
+class SettingController extends GetxController {
   final isEnglish = true.obs;
   final deviceId = ''.obs;
   static const String _deviceIdKey = 'kidcol_device_id';

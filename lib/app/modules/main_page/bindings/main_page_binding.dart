@@ -1,5 +1,5 @@
 import 'package:get/get.dart';
-import 'package:kidcol/app/modules/profile/controllers/profile_controller.dart';
+import 'package:kidcol/app/modules/setting/controllers/setting_controller.dart';
 
 import '../controllers/main_page_controller.dart';
 import '../../home/controllers/home_controller.dart';
@@ -22,8 +22,8 @@ class MainPageBinding extends Bindings {
       () => KoleksiController(),
       fenix: true,
     );
-    Get.lazyPut<ProfileController>(
-      () => ProfileController(),
+    Get.lazyPut<SettingController>(
+      () => SettingController(),
       fenix: true,
     );
   }

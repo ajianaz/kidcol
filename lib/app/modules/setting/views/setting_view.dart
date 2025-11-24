@@ -6,10 +6,10 @@ import 'package:kidcol/app/utils/app_version.dart';
 import 'package:kidcol/app/utils/responsive_helper.dart';
 import 'package:kidcol/i18n/translations.g.dart';
 
-import '../controllers/profile_controller.dart';
+import '../controllers/setting_controller.dart';
 
-class ProfileView extends GetView<ProfileController> {
-  const ProfileView({Key? key}) : super(key: key);
+class SettingView extends GetView<SettingController> {
+  const SettingView({Key? key}) : super(key: key);
   @override
   Widget build(BuildContext context) {
     final themeController = Get.find<ThemeController>();

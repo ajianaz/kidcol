@@ -14,8 +14,8 @@ import '../modules/main_page/bindings/main_page_binding.dart';
 import '../modules/main_page/views/main_page_view.dart';
 import '../modules/printing_pdf/bindings/printing_pdf_binding.dart';
 import '../modules/printing_pdf/views/printing_pdf_view.dart';
-import '../modules/profile/bindings/profile_binding.dart';
-import '../modules/profile/views/profile_view.dart';
+import '../modules/setting/bindings/setting_binding.dart';
+import '../modules/setting/views/setting_view.dart';
 
 part 'app_routes.dart';
 
@@ -36,9 +36,9 @@ class AppPages {
       binding: KoleksiBinding(),
     ),
     GetPage(
-      name: _Paths.PROFILE,
-      page: () => const ProfileView(),
-      binding: ProfileBinding(),
+      name: _Paths.SETTING,
+      page: () => const SettingView(),
+      binding: SettingBinding(),
     ),
     GetPage(
       name: _Paths.MAIN_PAGE,
