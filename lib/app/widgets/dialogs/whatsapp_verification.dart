@@ -201,9 +201,10 @@ class _WhatsAppVerificationDialogState extends State<WhatsAppVerificationDialog>
     Get.snackbar(
       title,
       message,
-      backgroundColor: Colors.green,
-      colorText: Colors.white,
-      icon: const Icon(Icons.check_circle, color: Colors.white),
+      backgroundColor: Theme.of(context).colorScheme.primary,
+      colorText: Theme.of(context).colorScheme.onPrimary,
+      icon: Icon(Icons.check_circle,
+          color: Theme.of(context).colorScheme.onPrimary),
       duration: const Duration(seconds: 3),
       snackStyle: SnackStyle.FLOATING,
       margin: const EdgeInsets.all(16),
@@ -215,9 +216,9 @@ class _WhatsAppVerificationDialogState extends State<WhatsAppVerificationDialog>
     Get.snackbar(
       title,
       message,
-      backgroundColor: Colors.red,
-      colorText: Colors.white,
-      icon: const Icon(Icons.error, color: Colors.white),
+      backgroundColor: Theme.of(context).colorScheme.error,
+      colorText: Theme.of(context).colorScheme.onError,
+      icon: Icon(Icons.error, color: Theme.of(context).colorScheme.onError),
       duration: const Duration(seconds: 3),
       snackStyle: SnackStyle.FLOATING,
       margin: const EdgeInsets.all(16),
@@ -253,8 +254,11 @@ class _WhatsAppVerificationDialogState extends State<WhatsAppVerificationDialog>
                     begin: Alignment.topLeft,
                     end: Alignment.bottomRight,
                     colors: [
-                      Colors.white,
-                      Colors.green.shade50,
+                      Theme.of(context).colorScheme.surface,
+                      Theme.of(context)
+                          .colorScheme
+                          .primary
+                          .withValues(alpha: 0.05),
                     ],
                   ),
                 ),
@@ -285,8 +289,8 @@ class _WhatsAppVerificationDialogState extends State<WhatsAppVerificationDialog>
         ),
         gradient: LinearGradient(
           colors: [
-            Colors.green.shade400,
-            Colors.green.shade600,
+            Theme.of(context).colorScheme.primary,
+            Theme.of(context).colorScheme.primary.withValues(alpha: 0.8),
           ],
         ),
       ),
@@ -296,13 +300,16 @@ class _WhatsAppVerificationDialogState extends State<WhatsAppVerificationDialog>
             width: 70,
             height: 70,
             decoration: BoxDecoration(
-              color: Colors.white.withOpacity(0.2),
+              color: Theme.of(context)
+                  .colorScheme
+                  .onPrimary
+                  .withValues(alpha: 0.2),
               shape: BoxShape.circle,
             ),
             child: Icon(
               _isCodeSent ? Icons.verified_user : Icons.message,
               size: 35,
-              color: Colors.white,
+              color: Theme.of(context).colorScheme.onPrimary,
             ),
           ),
           const SizedBox(height: 16),
@@ -310,10 +317,10 @@ class _WhatsAppVerificationDialogState extends State<WhatsAppVerificationDialog>
             _isCodeSent
                 ? t.dialog.whatsapp_verification.verify_whatsapp_number
                 : t.dialog.whatsapp_verification.enter_whatsapp_number,
-            style: const TextStyle(
+            style: TextStyle(
               fontSize: 22,
-              fontWeight: FontWeight.bold,
-              color: Colors.white,
+              fontWeight: FontWeight.w600,
+              color: Theme.of(context).colorScheme.onPrimary,
             ),
             textAlign: TextAlign.center,
           ),
@@ -343,20 +350,26 @@ class _WhatsAppVerificationDialogState extends State<WhatsAppVerificationDialog>
         Container(
           padding: const EdgeInsets.all(16),
           decoration: BoxDecoration(
-            color: Colors.green.shade50,
+            color: Theme.of(context).colorScheme.primaryContainer,
             borderRadius: BorderRadius.circular(12),
-            border: Border.all(color: Colors.green.shade200),
+            border: Border.all(
+                color: Theme.of(context)
+                    .colorScheme
+                    .primary
+                    .withValues(alpha: 0.3)),
           ),
           child: Row(
             children: [
-              Icon(Icons.info_outline, color: Colors.green.shade600),
+              Icon(Icons.info_outline,
+                  color: Theme.of(context).colorScheme.primary),
               const SizedBox(width: 12),
               Expanded(
                 child: Text(
                   t.dialog.whatsapp_verification.enter_whatsapp_message,
                   style: TextStyle(
                     fontSize: 14,
-                    color: Colors.green.shade800,
+                    color: Theme.of(context).colorScheme.onPrimaryContainer,
+                    fontWeight: FontWeight.w500,
                   ),
                 ),
               ),
@@ -377,7 +390,8 @@ class _WhatsAppVerificationDialogState extends State<WhatsAppVerificationDialog>
           countries: const ['ID'],
           ignoreBlank: false,
           autoValidateMode: AutovalidateMode.onUserInteraction,
-          selectorTextStyle: const TextStyle(color: Colors.black),
+          selectorTextStyle:
+              TextStyle(color: Theme.of(context).colorScheme.onSurface),
           textFieldController: _phoneController,
           focusNode: _phoneFocusNode,
           formatInput: true,
@@ -386,20 +400,23 @@ class _WhatsAppVerificationDialogState extends State<WhatsAppVerificationDialog>
           inputDecoration: InputDecoration(
             labelText: 'Phone Number',
             hintText: 'Enter your WhatsApp number',
-            prefixIcon: const Icon(Icons.phone, color: Colors.green),
+            prefixIcon:
+                Icon(Icons.phone, color: Theme.of(context).colorScheme.primary),
             border: OutlineInputBorder(
               borderRadius: BorderRadius.circular(12),
             ),
             enabledBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(12),
-              borderSide: BorderSide(color: Colors.grey.shade300),
+              borderSide:
+                  BorderSide(color: Theme.of(context).colorScheme.outline),
             ),
             focusedBorder: OutlineInputBorder(
               borderRadius: BorderRadius.circular(12),
-              borderSide: const BorderSide(color: Colors.green, width: 2),
+              borderSide: BorderSide(
+                  color: Theme.of(context).colorScheme.primary, width: 2),
             ),
             filled: true,
-            fillColor: Colors.white,
+            fillColor: Theme.of(context).colorScheme.surface,
           ),
           validator: (value) {
             if (value == null || value.isEmpty) {
@@ -422,23 +439,31 @@ class _WhatsAppVerificationDialogState extends State<WhatsAppVerificationDialog>
           Container(
             padding: const EdgeInsets.all(16),
             decoration: BoxDecoration(
-              color: Colors.blue.shade50,
+              color: Theme.of(context).colorScheme.secondaryContainer,
               borderRadius: BorderRadius.circular(12),
-              border: Border.all(color: Colors.blue.shade200),
+              border: Border.all(
+                  color: Theme.of(context)
+                      .colorScheme
+                      .secondary
+                      .withValues(alpha: 0.3)),
             ),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Row(
                   children: [
-                    Icon(Icons.message, color: Colors.blue.shade600),
+                    Icon(Icons.message,
+                        color: Theme.of(context).colorScheme.secondary),
                     const SizedBox(width: 12),
                     Expanded(
                       child: Text(
                         '${t.dialog.whatsapp_verification.verification_code_sent} $_completePhoneNumber',
                         style: TextStyle(
                           fontSize: 14,
-                          color: Colors.blue.shade800,
+                          color: Theme.of(context)
+                              .colorScheme
+                              .onSecondaryContainer,
+                          fontWeight: FontWeight.w500,
                         ),
                       ),
                     ),
@@ -457,20 +482,23 @@ class _WhatsAppVerificationDialogState extends State<WhatsAppVerificationDialog>
             decoration: InputDecoration(
               labelText: t.dialog.whatsapp_verification.verification_code,
               hintText: t.dialog.whatsapp_verification.enter_6_digit_code,
-              prefixIcon: const Icon(Icons.sms, color: Colors.blue),
+              prefixIcon: Icon(Icons.sms,
+                  color: Theme.of(context).colorScheme.secondary),
               border: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(12),
               ),
               enabledBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(12),
-                borderSide: BorderSide(color: Colors.grey.shade300),
+                borderSide:
+                    BorderSide(color: Theme.of(context).colorScheme.outline),
               ),
               focusedBorder: OutlineInputBorder(
                 borderRadius: BorderRadius.circular(12),
-                borderSide: const BorderSide(color: Colors.blue, width: 2),
+                borderSide: BorderSide(
+                    color: Theme.of(context).colorScheme.secondary, width: 2),
               ),
               filled: true,
-              fillColor: Colors.white,
+              fillColor: Theme.of(context).colorScheme.surface,
               counterText: '',
             ),
             validator: (value) {
@@ -500,13 +528,17 @@ class _WhatsAppVerificationDialogState extends State<WhatsAppVerificationDialog>
                       height: 16,
                       child: CircularProgressIndicator(
                         strokeWidth: 2,
-                        valueColor: AlwaysStoppedAnimation<Color>(Colors.green),
+                        valueColor: AlwaysStoppedAnimation<Color>(
+                            Theme.of(context).colorScheme.primary),
                       ),
                     )
                   : const Icon(Icons.refresh),
               label: Text(
                 t.dialog.whatsapp_verification.resend_code,
-                style: const TextStyle(color: Colors.green),
+                style: TextStyle(
+                  color: Theme.of(context).colorScheme.primary,
+                  fontWeight: FontWeight.w600,
+                ),
               ),
             ),
           ),
@@ -532,8 +564,11 @@ class _WhatsAppVerificationDialogState extends State<WhatsAppVerificationDialog>
             child: Text(
               t.common.cancel,
               style: TextStyle(
-                color: Colors.grey.shade600,
-                fontWeight: FontWeight.w500,
+                color: Theme.of(context)
+                    .colorScheme
+                    .onSurface
+                    .withValues(alpha: 0.7),
+                fontWeight: FontWeight.w600,
               ),
             ),
           ),
@@ -545,8 +580,12 @@ class _WhatsAppVerificationDialogState extends State<WhatsAppVerificationDialog>
                     ? _verifyCode
                     : _sendVerificationCode,
             style: ElevatedButton.styleFrom(
-              backgroundColor: _isCodeSent ? Colors.blue : Colors.green,
-              foregroundColor: Colors.white,
+              backgroundColor: _isCodeSent
+                  ? Theme.of(context).colorScheme.secondary
+                  : Theme.of(context).colorScheme.primary,
+              foregroundColor: _isCodeSent
+                  ? Theme.of(context).colorScheme.onSecondary
+                  : Theme.of(context).colorScheme.onPrimary,
               padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(8),
@@ -559,7 +598,9 @@ class _WhatsAppVerificationDialogState extends State<WhatsAppVerificationDialog>
                     height: 20,
                     child: CircularProgressIndicator(
                       strokeWidth: 2,
-                      valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                      valueColor: AlwaysStoppedAnimation<Color>(_isCodeSent
+                          ? Theme.of(context).colorScheme.onSecondary
+                          : Theme.of(context).colorScheme.onPrimary),
                     ),
                   )
                 : Row(
@@ -574,7 +615,7 @@ class _WhatsAppVerificationDialogState extends State<WhatsAppVerificationDialog>
                         _isCodeSent
                             ? t.dialog.whatsapp_verification.verify
                             : t.dialog.whatsapp_verification.send_code,
-                        style: const TextStyle(fontWeight: FontWeight.w500),
+                        style: const TextStyle(fontWeight: FontWeight.w600),
                       ),
                     ],
                   ),

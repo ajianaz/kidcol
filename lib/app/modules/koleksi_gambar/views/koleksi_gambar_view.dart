@@ -34,7 +34,7 @@ class KoleksiGambarView extends GetView<KoleksiGambarController> {
             centerTitle: true,
             elevation: 0,
             backgroundColor: Colors.transparent,
-            foregroundColor: Colors.black87,
+            foregroundColor: Theme.of(Get.context!).colorScheme.onSurface,
             actions: [
               Padding(
                 padding: const EdgeInsets.only(right: 16.0),
@@ -85,11 +85,14 @@ class KoleksiGambarView extends GetView<KoleksiGambarController> {
       {required IconData icon, required VoidCallback onTap}) {
     return Container(
       decoration: BoxDecoration(
-        color: Colors.white,
+        color: Theme.of(Get.context!).colorScheme.surface,
         borderRadius: BorderRadius.circular(12),
         boxShadow: [
           BoxShadow(
-            color: Colors.black.withOpacity(0.1),
+            color: Theme.of(Get.context!)
+                .colorScheme
+                .shadow
+                .withValues(alpha: 0.2),
             spreadRadius: 1,
             blurRadius: 3,
             offset: Offset(0, 1),
@@ -105,7 +108,7 @@ class KoleksiGambarView extends GetView<KoleksiGambarController> {
             padding: EdgeInsets.all(8.0),
             child: Icon(
               icon,
-              color: Colors.black87,
+              color: Theme.of(Get.context!).colorScheme.onSurface,
               size: 20,
             ),
           ),
@@ -190,7 +193,10 @@ class KoleksiGambarView extends GetView<KoleksiGambarController> {
                 width: 40,
                 height: 4,
                 decoration: BoxDecoration(
-                  color: Colors.grey[300],
+                  color: Theme.of(Get.context!)
+                      .colorScheme
+                      .onSurface
+                      .withValues(alpha: 0.3),
                   borderRadius: BorderRadius.circular(2),
                 ),
               ),
@@ -204,7 +210,8 @@ class KoleksiGambarView extends GetView<KoleksiGambarController> {
               ),
               SizedBox(height: 16),
               ListTile(
-                leading: Icon(Icons.preview, color: Colors.blue),
+                leading: Icon(Icons.preview,
+                    color: Theme.of(Get.context!).colorScheme.primary),
                 title: Text(t.images.view),
                 onTap: () {
                   Get.back();
@@ -212,7 +219,8 @@ class KoleksiGambarView extends GetView<KoleksiGambarController> {
                 },
               ),
               ListTile(
-                leading: Icon(Icons.delete, color: Colors.red),
+                leading: Icon(Icons.delete,
+                    color: Theme.of(Get.context!).colorScheme.error),
                 title: Text(t.common.delete),
                 onTap: () {
                   Get.back();
@@ -256,13 +264,16 @@ class KoleksiGambarView extends GetView<KoleksiGambarController> {
             width: 200,
             height: 200,
             decoration: BoxDecoration(
-              color: Colors.grey[100],
+              color: Theme.of(Get.context!).colorScheme.surface,
               borderRadius: BorderRadius.circular(100),
             ),
             child: Icon(
               Icons.photo_library_outlined,
               size: 100,
-              color: Colors.grey[400],
+              color: Theme.of(Get.context!)
+                  .colorScheme
+                  .onSurface
+                  .withValues(alpha: 0.5),
             ),
           ),
           SizedBox(height: AppPadding.lg),
@@ -271,7 +282,10 @@ class KoleksiGambarView extends GetView<KoleksiGambarController> {
             style: TextStyle(
               fontSize: 20,
               fontWeight: FontWeight.bold,
-              color: Colors.grey[600],
+              color: Theme.of(Get.context!)
+                  .colorScheme
+                  .onSurface
+                  .withValues(alpha: 0.7),
             ),
           ),
           SizedBox(height: AppPadding.sm),
@@ -279,7 +293,10 @@ class KoleksiGambarView extends GetView<KoleksiGambarController> {
             "Start adding images to this collection",
             style: TextStyle(
               fontSize: 14,
-              color: Colors.grey[500],
+              color: Theme.of(Get.context!)
+                  .colorScheme
+                  .onSurface
+                  .withValues(alpha: 0.6),
             ),
           ),
         ],
@@ -295,7 +312,7 @@ class KoleksiGambarView extends GetView<KoleksiGambarController> {
           CircularProgressIndicator(
             strokeWidth: 3,
             valueColor: AlwaysStoppedAnimation<Color>(
-              Colors.blue,
+              Theme.of(Get.context!).colorScheme.primary,
             ),
           ),
           SizedBox(height: AppPadding.md),
@@ -303,7 +320,10 @@ class KoleksiGambarView extends GetView<KoleksiGambarController> {
             t.common.loading,
             style: TextStyle(
               fontSize: 16,
-              color: Colors.grey[600],
+              color: Theme.of(Get.context!)
+                  .colorScheme
+                  .onSurface
+                  .withValues(alpha: 0.7),
             ),
           ),
         ],
@@ -320,13 +340,16 @@ class KoleksiGambarView extends GetView<KoleksiGambarController> {
             width: 120,
             height: 120,
             decoration: BoxDecoration(
-              color: Colors.red[50],
+              color: Theme.of(Get.context!)
+                  .colorScheme
+                  .error
+                  .withValues(alpha: 0.1),
               borderRadius: BorderRadius.circular(60),
             ),
             child: Icon(
               Icons.error_outline,
               size: 60,
-              color: Colors.red[400],
+              color: Theme.of(Get.context!).colorScheme.error,
             ),
           ),
           SizedBox(height: AppPadding.lg),
@@ -335,7 +358,10 @@ class KoleksiGambarView extends GetView<KoleksiGambarController> {
             style: TextStyle(
               fontSize: 20,
               fontWeight: FontWeight.bold,
-              color: Colors.grey[600],
+              color: Theme.of(Get.context!)
+                  .colorScheme
+                  .onSurface
+                  .withValues(alpha: 0.7),
             ),
           ),
           SizedBox(height: AppPadding.sm),
@@ -345,7 +371,10 @@ class KoleksiGambarView extends GetView<KoleksiGambarController> {
               error,
               style: TextStyle(
                 fontSize: 14,
-                color: Colors.grey[500],
+                color: Theme.of(Get.context!)
+                    .colorScheme
+                    .onSurface
+                    .withValues(alpha: 0.6),
               ),
               textAlign: TextAlign.center,
             ),
@@ -354,8 +383,8 @@ class KoleksiGambarView extends GetView<KoleksiGambarController> {
           ElevatedButton(
             onPressed: () => Get.back(),
             style: ElevatedButton.styleFrom(
-              backgroundColor: Colors.blue,
-              foregroundColor: Colors.white,
+              backgroundColor: Theme.of(Get.context!).colorScheme.primary,
+              foregroundColor: Theme.of(Get.context!).colorScheme.onPrimary,
               padding: EdgeInsets.symmetric(
                   horizontal: AppPadding.lg, vertical: AppPadding.sm),
               shape: RoundedRectangleBorder(
@@ -384,10 +413,10 @@ class _ImagePreviewPage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.black,
+      backgroundColor: Theme.of(context).colorScheme.surface,
       appBar: AppBar(
-        backgroundColor: Colors.black,
-        foregroundColor: Colors.white,
+        backgroundColor: Theme.of(context).colorScheme.surface,
+        foregroundColor: Theme.of(context).colorScheme.onSurface,
         elevation: 0,
         leading: IconButton(
           icon: Icon(Icons.close),
@@ -399,24 +428,30 @@ class _ImagePreviewPage extends StatelessWidget {
             onPressed: () {
               Get.defaultDialog(
                 title: "Delete Image",
-                titleStyle: TextStyle(color: Colors.white),
-                middleTextStyle: TextStyle(color: Colors.white),
+                titleStyle:
+                    TextStyle(color: Theme.of(context).colorScheme.onSurface),
+                middleTextStyle:
+                    TextStyle(color: Theme.of(context).colorScheme.onSurface),
                 content: Text(
                   "Are you sure you want to delete this image?",
-                  style: TextStyle(color: Colors.white70),
+                  style: TextStyle(
+                      color: Theme.of(context)
+                          .colorScheme
+                          .onSurface
+                          .withValues(alpha: 0.7)),
                 ),
                 textConfirm: "Delete",
                 textCancel: "Cancel",
-                confirmTextColor: Colors.white,
-                cancelTextColor: Colors.white,
-                buttonColor: Colors.red,
+                confirmTextColor: Theme.of(context).colorScheme.onPrimary,
+                cancelTextColor: Theme.of(context).colorScheme.onPrimary,
+                buttonColor: Theme.of(context).colorScheme.error,
                 onConfirm: () {
                   Get.back();
                   Get.back();
                   onDelete();
                 },
                 onCancel: () => Get.back(),
-                backgroundColor: Colors.grey[800],
+                backgroundColor: Theme.of(context).colorScheme.surface,
                 radius: 12,
                 titlePadding: EdgeInsets.all(16),
                 contentPadding: EdgeInsets.all(16),
@@ -438,12 +473,12 @@ class _ImagePreviewPage extends StatelessWidget {
               fit: BoxFit.contain,
               placeholder: (context, url) => Center(
                 child: CircularProgressIndicator(
-                  color: Colors.white,
+                  color: Theme.of(context).colorScheme.onSurface,
                 ),
               ),
               errorWidget: (context, url, error) => Icon(
                 Icons.error,
-                color: Colors.white,
+                color: Theme.of(context).colorScheme.onSurface,
                 size: 50,
               ),
             ),

@@ -74,8 +74,7 @@ class DrawingRoomView extends GetView<DrawingRoomController> {
                         children: [
                           if (controller.urlImage != null)
                             Container(
-                              color: Colors
-                                  .white, // Ensure white background for transparent images
+                              color: Theme.of(context).colorScheme.surface,
                               child: Image.network(
                                 controller.urlImage!,
                                 fit: BoxFit.contain,
@@ -87,8 +86,11 @@ class DrawingRoomView extends GetView<DrawingRoomController> {
                                   );
                                 },
                                 errorBuilder: (context, error, stackTrace) {
-                                  return const Center(
-                                    child: Icon(Icons.error, color: Colors.red),
+                                  return Center(
+                                    child: Icon(Icons.error,
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .error),
                                   );
                                 },
                               ),
@@ -128,13 +130,19 @@ class DrawingRoomView extends GetView<DrawingRoomController> {
                                   2)
                           : EdgeInsets.zero,
                       decoration: BoxDecoration(
-                        color: Colors.white.withValues(alpha: 0.8),
+                        color: Theme.of(context)
+                            .colorScheme
+                            .surface
+                            .withValues(alpha: 0.9),
                         borderRadius: const BorderRadius.vertical(
                           bottom: Radius.circular(20),
                         ),
                         boxShadow: [
                           BoxShadow(
-                            color: Colors.black.withValues(alpha: 0.1),
+                            color: Theme.of(context)
+                                .colorScheme
+                                .shadow
+                                .withValues(alpha: 0.2),
                             blurRadius: 10,
                           ),
                         ],
@@ -157,7 +165,10 @@ class DrawingRoomView extends GetView<DrawingRoomController> {
                                 color: controller.avaiableColor[index],
                                 shape: BoxShape.circle,
                                 border: Border.all(
-                                  color: Colors.grey.shade300,
+                                  color: Theme.of(context)
+                                      .colorScheme
+                                      .onSurface
+                                      .withValues(alpha: 0.3),
                                   width: 1,
                                 ),
                               ),
@@ -165,7 +176,9 @@ class DrawingRoomView extends GetView<DrawingRoomController> {
                                 border: controller.selectedColor ==
                                         controller.avaiableColor[index]
                                     ? Border.all(
-                                        color: Theme.of(context).primaryColor,
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .primary,
                                         width: 3,
                                       )
                                     : null,
@@ -188,13 +201,19 @@ class DrawingRoomView extends GetView<DrawingRoomController> {
                         height: ResponsiveHelper.isTablet(context) ? 350 : 300,
                         padding: const EdgeInsets.symmetric(horizontal: 8),
                         decoration: BoxDecoration(
-                          color: Colors.white.withValues(alpha: 0.8),
+                          color: Theme.of(context)
+                              .colorScheme
+                              .surface
+                              .withValues(alpha: 0.9),
                           borderRadius: const BorderRadius.horizontal(
                             left: Radius.circular(20),
                           ),
                           boxShadow: [
                             BoxShadow(
-                              color: Colors.black.withValues(alpha: 0.1),
+                              color: Theme.of(context)
+                                  .colorScheme
+                                  .shadow
+                                  .withValues(alpha: 0.2),
                               blurRadius: 10,
                             ),
                           ],

@@ -41,16 +41,20 @@ class PrintingPdfView extends GetView<PrintingPdfController> {
                         const SizedBox(height: 8),
                         LinearProgressIndicator(
                           value: controller.imageProcessingProgress.value,
-                          backgroundColor: Colors.grey[300],
-                          valueColor:
-                              const AlwaysStoppedAnimation<Color>(Colors.blue),
+                          backgroundColor: Theme.of(Get.context!)
+                              .colorScheme
+                              .onSurface
+                              .withValues(alpha: 0.3),
+                          valueColor: AlwaysStoppedAnimation<Color>(
+                              Theme.of(Get.context!).colorScheme.primary),
                         ),
                         const SizedBox(height: 8),
                         if (controller.processingError.value.isNotEmpty)
                           Text(
                             controller.processingError.value,
-                            style: const TextStyle(
-                                color: Colors.red, fontSize: 12),
+                            style: TextStyle(
+                                color: Theme.of(Get.context!).colorScheme.error,
+                                fontSize: 12),
                             textAlign: TextAlign.center,
                           ),
                       ],

@@ -98,7 +98,7 @@ class HomeView extends GetView<HomeController> {
               controller.resetData();
               await controller.requestData();
             },
-            color: AppColors.primary,
+            color: Theme.of(context).colorScheme.primary,
             displacement: 40,
             child: Container(
               decoration: _buildBackgroundDecoration(),
@@ -173,7 +173,7 @@ Widget _buildLoadingState() {
               child: Container(
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(12),
-                  color: Colors.white,
+                  color: Theme.of(context).colorScheme.surface,
                 ),
               ),
             );
@@ -217,8 +217,8 @@ Widget _buildEmptyState(BuildContext context) {
           t.images.empty,
           style: TextStyle(
             fontSize: ResponsiveHelper.isMobile(context) ? 20 : 24,
-            fontWeight: FontWeight.bold,
-            color: Colors.grey.shade700,
+            fontWeight: FontWeight.w600,
+            color: Theme.of(context).colorScheme.onSurface,
           ),
         ),
         const SizedBox(height: 10),
@@ -226,7 +226,8 @@ Widget _buildEmptyState(BuildContext context) {
           "Pull down to refresh or check your connection",
           style: TextStyle(
             fontSize: ResponsiveHelper.isMobile(context) ? 14 : 16,
-            color: Colors.grey.shade500,
+            color:
+                Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.7),
           ),
           textAlign: TextAlign.center,
         ),
@@ -240,8 +241,8 @@ Widget _buildEmptyState(BuildContext context) {
           icon: const Icon(Icons.refresh),
           label: Text(t.common.loading),
           style: ElevatedButton.styleFrom(
-            backgroundColor: AppColors.primary,
-            foregroundColor: Colors.white,
+            backgroundColor: Theme.of(context).colorScheme.primary,
+            foregroundColor: Theme.of(context).colorScheme.onPrimary,
             padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(25),
@@ -315,12 +316,20 @@ Widget _buildImageGrid(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            const Icon(Icons.error_outline, size: 48, color: Colors.grey),
+            Icon(Icons.error_outline,
+                size: 48,
+                color: Theme.of(context)
+                    .colorScheme
+                    .onSurface
+                    .withValues(alpha: 0.6)),
             const SizedBox(height: 16),
             Text(
               'Error loading images',
               style: TextStyle(
-                color: Colors.grey[600],
+                color: Theme.of(context)
+                    .colorScheme
+                    .onSurface
+                    .withValues(alpha: 0.7),
                 fontSize: 16,
               ),
             ),
@@ -390,9 +399,9 @@ class _CustomShimmerState extends State<_CustomShimmer>
               begin: Alignment.centerLeft,
               end: Alignment.centerRight,
               colors: [
-                Colors.grey[300]!,
-                Colors.grey[100]!,
-                Colors.grey[300]!,
+                Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.3),
+                Theme.of(context).colorScheme.surface,
+                Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.3),
               ],
               stops: const [
                 0.0,
@@ -607,7 +616,7 @@ class _EnhancedImageCardState extends State<_EnhancedImageCard>
                         style: TextStyle(
                           color: Colors.white.withValues(alpha: 0.9),
                           fontSize: 10,
-                          fontWeight: FontWeight.w500,
+                          fontWeight: FontWeight.w600,
                         ),
                       ),
                     ),
@@ -636,8 +645,12 @@ class _EnhancedCardImage extends StatelessWidget {
             'Context is invalid in _EnhancedImageCard, returning placeholder');
         return Container(
           color: AppColors.surfaceLight,
-          child: const Center(
-            child: Icon(Icons.image, color: Colors.grey),
+          child: Center(
+            child: Icon(Icons.image,
+                color: Theme.of(context)
+                    .colorScheme
+                    .onSurface
+                    .withValues(alpha: 0.5)),
           ),
         );
       }
@@ -655,8 +668,8 @@ class _EnhancedCardImage extends StatelessWidget {
                 child: Center(
                   child: CircularProgressIndicator(
                     strokeWidth: 2,
-                    valueColor:
-                        AlwaysStoppedAnimation<Color>(AppColors.primary),
+                    valueColor: AlwaysStoppedAnimation<Color>(
+                        Theme.of(context).colorScheme.primary),
                   ),
                 ),
               ),
@@ -710,8 +723,12 @@ class _EnhancedCardImage extends StatelessWidget {
       debugPrint('Error in _EnhancedImageCard build: $e');
       return Container(
         color: AppColors.surfaceLight,
-        child: const Center(
-          child: Icon(Icons.error_outline, color: Colors.grey),
+        child: Center(
+          child: Icon(Icons.error_outline,
+              color: Theme.of(context)
+                  .colorScheme
+                  .onSurface
+                  .withValues(alpha: 0.5)),
         ),
       );
     }

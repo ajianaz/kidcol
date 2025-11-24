@@ -262,8 +262,8 @@ class _ModernConfirmationDialogState extends State<_ModernConfirmationDialog>
                     begin: Alignment.topLeft,
                     end: Alignment.bottomRight,
                     colors: [
-                      Colors.white,
-                      Colors.grey.shade50,
+                      Theme.of(context).colorScheme.surface,
+                      Theme.of(context).colorScheme.surface,
                     ],
                   ),
                 ),
@@ -290,13 +290,13 @@ class _ModernConfirmationDialogState extends State<_ModernConfirmationDialog>
       width: 60,
       height: 60,
       decoration: BoxDecoration(
-        color: widget.iconColor.withValues(alpha: 0.1),
+        color: Theme.of(context).colorScheme.primary.withValues(alpha: 0.1),
         shape: BoxShape.circle,
       ),
       child: Icon(
         widget.icon,
         size: 30,
-        color: widget.iconColor,
+        color: Theme.of(context).colorScheme.primary,
       ),
     );
   }
@@ -309,7 +309,7 @@ class _ModernConfirmationDialogState extends State<_ModernConfirmationDialog>
           style: TextStyle(
             fontSize: 20,
             fontWeight: FontWeight.bold,
-            color: Colors.grey.shade800,
+            color: Theme.of(context).colorScheme.onSurface,
           ),
           textAlign: TextAlign.center,
         ),
@@ -319,7 +319,10 @@ class _ModernConfirmationDialogState extends State<_ModernConfirmationDialog>
             widget.subtitle,
             style: TextStyle(
               fontSize: 14,
-              color: Colors.grey.shade600,
+              color: Theme.of(context)
+                  .colorScheme
+                  .onSurface
+                  .withValues(alpha: 0.7),
             ),
             textAlign: TextAlign.center,
           ),
@@ -343,8 +346,11 @@ class _ModernConfirmationDialogState extends State<_ModernConfirmationDialog>
           child: Text(
             widget.textCancel,
             style: TextStyle(
-              color: Colors.grey.shade600,
-              fontWeight: FontWeight.w500,
+              color: Theme.of(context)
+                  .colorScheme
+                  .onSurface
+                  .withValues(alpha: 0.7),
+              fontWeight: FontWeight.w600,
             ),
           ),
         ),
@@ -352,8 +358,8 @@ class _ModernConfirmationDialogState extends State<_ModernConfirmationDialog>
         ElevatedButton(
           onPressed: widget.onConfirm ?? () => Navigator.of(context).pop(true),
           style: ElevatedButton.styleFrom(
-            backgroundColor: widget.iconColor,
-            foregroundColor: Colors.white,
+            backgroundColor: Theme.of(context).colorScheme.primary,
+            foregroundColor: Theme.of(context).colorScheme.onPrimary,
             padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
             shape: RoundedRectangleBorder(
               borderRadius: BorderRadius.circular(8),
@@ -362,7 +368,7 @@ class _ModernConfirmationDialogState extends State<_ModernConfirmationDialog>
           ),
           child: Text(
             widget.textConfirm,
-            style: const TextStyle(fontWeight: FontWeight.w500),
+            style: const TextStyle(fontWeight: FontWeight.w600),
           ),
         ),
       ],
@@ -463,8 +469,11 @@ class _ModernPopupDialogState extends State<_ModernPopupDialog>
                     begin: Alignment.topLeft,
                     end: Alignment.bottomRight,
                     colors: [
-                      Colors.white,
-                      widget.iconColor.withValues(alpha: 0.05),
+                      Theme.of(context).colorScheme.surface,
+                      Theme.of(context)
+                          .colorScheme
+                          .primary
+                          .withValues(alpha: 0.05),
                     ],
                   ),
                 ),
@@ -491,13 +500,13 @@ class _ModernPopupDialogState extends State<_ModernPopupDialog>
       width: 60,
       height: 60,
       decoration: BoxDecoration(
-        color: widget.iconColor.withValues(alpha: 0.1),
+        color: Theme.of(context).colorScheme.primary.withValues(alpha: 0.1),
         shape: BoxShape.circle,
       ),
       child: Icon(
         widget.icon,
         size: 30,
-        color: widget.iconColor,
+        color: Theme.of(context).colorScheme.primary,
       ),
     );
   }
@@ -510,7 +519,7 @@ class _ModernPopupDialogState extends State<_ModernPopupDialog>
           style: TextStyle(
             fontSize: 20,
             fontWeight: FontWeight.bold,
-            color: Colors.grey.shade800,
+            color: Theme.of(context).colorScheme.onSurface,
           ),
           textAlign: TextAlign.center,
         ),
@@ -520,7 +529,10 @@ class _ModernPopupDialogState extends State<_ModernPopupDialog>
             widget.subtitle,
             style: TextStyle(
               fontSize: 14,
-              color: Colors.grey.shade600,
+              color: Theme.of(context)
+                  .colorScheme
+                  .onSurface
+                  .withValues(alpha: 0.7),
             ),
             textAlign: TextAlign.center,
           ),
@@ -535,8 +547,8 @@ class _ModernPopupDialogState extends State<_ModernPopupDialog>
       child: ElevatedButton(
         onPressed: widget.onConfirm ?? () => Navigator.of(context).pop(),
         style: ElevatedButton.styleFrom(
-          backgroundColor: widget.iconColor,
-          foregroundColor: Colors.white,
+          backgroundColor: Theme.of(context).colorScheme.primary,
+          foregroundColor: Theme.of(context).colorScheme.onPrimary,
           padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(8),
@@ -545,7 +557,7 @@ class _ModernPopupDialogState extends State<_ModernPopupDialog>
         ),
         child: Text(
           widget.buttonText,
-          style: const TextStyle(fontWeight: FontWeight.w500),
+          style: const TextStyle(fontWeight: FontWeight.w600),
         ),
       ),
     );
@@ -635,8 +647,11 @@ class _ModernLoadingDialogState extends State<_ModernLoadingDialog>
                     begin: Alignment.topLeft,
                     end: Alignment.bottomRight,
                     colors: [
-                      Colors.white,
-                      cornFlower.withValues(alpha: 0.05),
+                      Theme.of(context).colorScheme.surface,
+                      Theme.of(context)
+                          .colorScheme
+                          .primary
+                          .withValues(alpha: 0.05),
                     ],
                   ),
                 ),
@@ -647,7 +662,10 @@ class _ModernLoadingDialogState extends State<_ModernLoadingDialog>
                       width: 60,
                       height: 60,
                       decoration: BoxDecoration(
-                        color: cornFlower.withValues(alpha: 0.1),
+                        color: Theme.of(context)
+                            .colorScheme
+                            .primary
+                            .withValues(alpha: 0.1),
                         shape: BoxShape.circle,
                       ),
                       child: Center(
@@ -656,8 +674,8 @@ class _ModernLoadingDialogState extends State<_ModernLoadingDialog>
                           height: 30,
                           child: CircularProgressIndicator(
                             strokeWidth: 3,
-                            valueColor:
-                                AlwaysStoppedAnimation<Color>(cornFlower),
+                            valueColor: AlwaysStoppedAnimation<Color>(
+                                Theme.of(context).colorScheme.primary),
                           ),
                         ),
                       ),
@@ -668,7 +686,7 @@ class _ModernLoadingDialogState extends State<_ModernLoadingDialog>
                       style: TextStyle(
                         fontSize: 18,
                         fontWeight: FontWeight.bold,
-                        color: Colors.grey.shade800,
+                        color: Theme.of(context).colorScheme.onSurface,
                       ),
                       textAlign: TextAlign.center,
                     ),
@@ -678,7 +696,10 @@ class _ModernLoadingDialogState extends State<_ModernLoadingDialog>
                         widget.subtitle!,
                         style: TextStyle(
                           fontSize: 14,
-                          color: Colors.grey.shade600,
+                          color: Theme.of(context)
+                              .colorScheme
+                              .onSurface
+                              .withValues(alpha: 0.7),
                         ),
                         textAlign: TextAlign.center,
                       ),
@@ -779,8 +800,8 @@ class _ModernCustomDialogState extends State<_ModernCustomDialog>
                     begin: Alignment.topLeft,
                     end: Alignment.bottomRight,
                     colors: [
-                      Colors.white,
-                      Colors.grey.shade50,
+                      Theme.of(context).colorScheme.surface,
+                      Theme.of(context).colorScheme.surface,
                     ],
                   ),
                 ),
@@ -793,7 +814,7 @@ class _ModernCustomDialogState extends State<_ModernCustomDialog>
                         style: TextStyle(
                           fontSize: 20,
                           fontWeight: FontWeight.bold,
-                          color: Colors.grey.shade800,
+                          color: Theme.of(context).colorScheme.onSurface,
                         ),
                         textAlign: TextAlign.center,
                       ),

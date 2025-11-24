@@ -103,8 +103,8 @@ class KoleksiView extends GetView<KoleksiController> {
         ],
       ),
       child: FloatingActionButton.extended(
-        backgroundColor: AppColors.primary,
-        foregroundColor: AppColors.textOnPrimary,
+        backgroundColor: Theme.of(Get.context!).colorScheme.primary,
+        foregroundColor: Theme.of(Get.context!).colorScheme.onPrimary,
         elevation: 0,
         onPressed: () {
           Get.dialog(
@@ -174,7 +174,7 @@ class KoleksiView extends GetView<KoleksiController> {
                   child: Icon(
                     Icons.collections_bookmark_outlined,
                     size: 100,
-                    color: Colors.white.withValues(alpha: 0.1),
+                    color: Colors.white.withValues(alpha: 0.15),
                   ),
                 ),
                 // Content
@@ -189,15 +189,15 @@ class KoleksiView extends GetView<KoleksiController> {
                         padding: const EdgeInsets.symmetric(
                             horizontal: 12, vertical: 6),
                         decoration: BoxDecoration(
-                          color: Colors.white.withValues(alpha: 0.2),
+                          color: Colors.white.withValues(alpha: 0.25),
                           borderRadius: BorderRadius.circular(20),
                         ),
                         child: Text(
                           "${koleksi.gambars.length} ${koleksi.gambars.length == 1 ? 'item' : 'items'}",
                           style: TextStyle(
-                            color: Colors.white,
+                            color: Colors.white.withValues(alpha: 0.9),
                             fontSize: 12,
-                            fontWeight: FontWeight.w500,
+                            fontWeight: FontWeight.w600,
                           ),
                         ),
                       ),
@@ -205,10 +205,10 @@ class KoleksiView extends GetView<KoleksiController> {
                       // Collection title
                       Text(
                         koleksi.title,
-                        style: const TextStyle(
-                          color: Colors.white,
+                        style: TextStyle(
+                          color: Colors.white.withValues(alpha: 0.95),
                           fontSize: 18,
-                          fontWeight: FontWeight.bold,
+                          fontWeight: FontWeight.w700,
                         ),
                         maxLines: 2,
                         overflow: TextOverflow.ellipsis,
@@ -221,16 +221,16 @@ class KoleksiView extends GetView<KoleksiController> {
                           Text(
                             'View',
                             style: TextStyle(
-                              color: Colors.white.withValues(alpha: 0.8),
+                              color: Colors.white.withValues(alpha: 0.85),
                               fontSize: 12,
-                              fontWeight: FontWeight.w500,
+                              fontWeight: FontWeight.w600,
                             ),
                           ),
                           const SizedBox(width: 4),
                           Icon(
                             Icons.arrow_forward_ios,
                             size: 10,
-                            color: Colors.white.withValues(alpha: 0.8),
+                            color: Colors.white.withValues(alpha: 0.85),
                           ),
                         ],
                       ),
@@ -309,8 +309,8 @@ class KoleksiView extends GetView<KoleksiController> {
               icon: const Icon(Icons.refresh),
               label: const Text('Try Again'),
               style: ElevatedButton.styleFrom(
-                backgroundColor: AppColors.primary,
-                foregroundColor: AppColors.textOnPrimary,
+                backgroundColor: Theme.of(Get.context!).colorScheme.primary,
+                foregroundColor: Theme.of(Get.context!).colorScheme.onPrimary,
                 padding:
                     const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
                 shape: RoundedRectangleBorder(
@@ -374,8 +374,8 @@ class KoleksiView extends GetView<KoleksiController> {
             icon: const Icon(Icons.add),
             label: Text(t.collections.create_new),
             style: ElevatedButton.styleFrom(
-              backgroundColor: AppColors.primary,
-              foregroundColor: AppColors.textOnPrimary,
+              backgroundColor: Theme.of(Get.context!).colorScheme.primary,
+              foregroundColor: Theme.of(Get.context!).colorScheme.onPrimary,
               padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(8),

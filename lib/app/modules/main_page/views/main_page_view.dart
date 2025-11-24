@@ -81,12 +81,20 @@ class MainPageView extends GetView<MainPageController> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              const Icon(Icons.error_outline, size: 48, color: Colors.grey),
+              Icon(Icons.error_outline,
+                  size: 48,
+                  color: Theme.of(context)
+                      .colorScheme
+                      .onSurface
+                      .withValues(alpha: 0.6)),
               const SizedBox(height: 16),
               Text(
                 'Error loading interface',
                 style: TextStyle(
-                  color: Colors.grey[600],
+                  color: Theme.of(context)
+                      .colorScheme
+                      .onSurface
+                      .withValues(alpha: 0.7),
                   fontSize: 16,
                 ),
               ),

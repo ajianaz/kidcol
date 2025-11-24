@@ -154,8 +154,11 @@ class _AddKoleksiDialogState extends State<AddKoleksiDialog>
                     begin: Alignment.topLeft,
                     end: Alignment.bottomRight,
                     colors: [
-                      AppColors.surface,
-                      AppColors.primary.withValues(alpha: 0.05),
+                      Theme.of(context).colorScheme.surface,
+                      Theme.of(context)
+                          .colorScheme
+                          .primary
+                          .withValues(alpha: 0.05),
                     ],
                   ),
                 ),
@@ -184,13 +187,13 @@ class _AddKoleksiDialogState extends State<AddKoleksiDialog>
           width: 60,
           height: 60,
           decoration: BoxDecoration(
-            color: AppColors.primary.withValues(alpha: 0.1),
+            color: Theme.of(context).colorScheme.primary.withValues(alpha: 0.1),
             shape: BoxShape.circle,
           ),
           child: Icon(
             Icons.collections_bookmark,
             size: 30,
-            color: AppColors.primary,
+            color: Theme.of(context).colorScheme.primary,
           ),
         ),
         const SizedBox(height: 16),
@@ -198,8 +201,8 @@ class _AddKoleksiDialogState extends State<AddKoleksiDialog>
           t.collections.create_new,
           style: TextStyle(
             fontSize: 24,
-            fontWeight: FontWeight.bold,
-            color: AppColors.textPrimary,
+            fontWeight: FontWeight.w600,
+            color: Theme.of(context).colorScheme.onSurface,
           ),
         ),
         const SizedBox(height: 8),
@@ -207,7 +210,8 @@ class _AddKoleksiDialogState extends State<AddKoleksiDialog>
           t.collections.name_hint,
           style: TextStyle(
             fontSize: 14,
-            color: AppColors.textSecondary,
+            color:
+                Theme.of(context).colorScheme.onSurface.withValues(alpha: 0.7),
           ),
         ),
       ],
@@ -228,32 +232,36 @@ class _AddKoleksiDialogState extends State<AddKoleksiDialog>
           hintText: t.collections.name_hint,
           prefixIcon: Icon(
             Icons.bookmark,
-            color: AppColors.primary,
+            color: Theme.of(context).colorScheme.primary,
           ),
           suffixIcon: _isFormValid && !_isLoading
               ? Icon(
                   Icons.check_circle,
-                  color: AppColors.success,
+                  color: Theme.of(context).colorScheme.primary,
                 )
               : null,
           border: OutlineInputBorder(
             borderRadius: BorderRadius.circular(12),
-            borderSide: BorderSide(color: AppColors.border),
+            borderSide:
+                BorderSide(color: Theme.of(context).colorScheme.outline),
           ),
           enabledBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(12),
-            borderSide: BorderSide(color: AppColors.border),
+            borderSide:
+                BorderSide(color: Theme.of(context).colorScheme.outline),
           ),
           focusedBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(12),
-            borderSide: const BorderSide(color: AppColors.primary, width: 2),
+            borderSide: BorderSide(
+                color: Theme.of(context).colorScheme.primary, width: 2),
           ),
           errorBorder: OutlineInputBorder(
             borderRadius: BorderRadius.circular(12),
-            borderSide: const BorderSide(color: AppColors.error, width: 2),
+            borderSide: BorderSide(
+                color: Theme.of(context).colorScheme.error, width: 2),
           ),
           filled: true,
-          fillColor: AppColors.surface,
+          fillColor: Theme.of(context).colorScheme.surface,
           contentPadding: const EdgeInsets.symmetric(
             horizontal: 16,
             vertical: 16,
@@ -295,8 +303,11 @@ class _AddKoleksiDialogState extends State<AddKoleksiDialog>
           child: Text(
             t.common.cancel,
             style: TextStyle(
-              color: AppColors.textSecondary,
-              fontWeight: FontWeight.w500,
+              color: Theme.of(context)
+                  .colorScheme
+                  .onSurface
+                  .withValues(alpha: 0.7),
+              fontWeight: FontWeight.w600,
             ),
           ),
         ),
@@ -306,8 +317,8 @@ class _AddKoleksiDialogState extends State<AddKoleksiDialog>
           child: ElevatedButton(
             onPressed: _isLoading || !_isFormValid ? null : _createCollection,
             style: ElevatedButton.styleFrom(
-              backgroundColor: AppColors.primary,
-              foregroundColor: AppColors.textOnPrimary,
+              backgroundColor: Theme.of(context).colorScheme.primary,
+              foregroundColor: Theme.of(context).colorScheme.onPrimary,
               padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
               shape: RoundedRectangleBorder(
                 borderRadius: BorderRadius.circular(8),
@@ -321,7 +332,7 @@ class _AddKoleksiDialogState extends State<AddKoleksiDialog>
                     child: CircularProgressIndicator(
                       strokeWidth: 2,
                       valueColor: AlwaysStoppedAnimation<Color>(
-                          AppColors.textOnPrimary),
+                          Theme.of(context).colorScheme.onPrimary),
                     ),
                   )
                 : Row(
@@ -334,7 +345,7 @@ class _AddKoleksiDialogState extends State<AddKoleksiDialog>
                       const SizedBox(width: 8),
                       Text(
                         t.collections.save,
-                        style: TextStyle(fontWeight: FontWeight.w500),
+                        style: TextStyle(fontWeight: FontWeight.w600),
                       ),
                     ],
                   ),

@@ -15,16 +15,17 @@ class AppDialogs {
     Get.defaultDialog(
       title: title,
       titleStyle: TextStyle(
-        color: AppColors.textPrimary,
+        color: Theme.of(Get.context!).colorScheme.onSurface,
         fontSize: 20,
-        fontWeight: FontWeight.bold,
+        fontWeight: FontWeight.w600,
       ),
       middleText: message,
       middleTextStyle: TextStyle(
-        color: AppColors.textSecondary,
+        color:
+            Theme.of(Get.context!).colorScheme.onSurface.withValues(alpha: 0.7),
         fontSize: 14,
       ),
-      backgroundColor: AppColors.surface,
+      backgroundColor: Theme.of(Get.context!).colorScheme.surface,
       radius: 20,
       confirm: ElevatedButton(
         onPressed: onConfirm ?? () => Get.back(),
@@ -51,16 +52,17 @@ class AppDialogs {
     Get.defaultDialog(
       title: title,
       titleStyle: TextStyle(
-        color: AppColors.error,
+        color: Theme.of(Get.context!).colorScheme.error,
         fontSize: 20,
-        fontWeight: FontWeight.bold,
+        fontWeight: FontWeight.w600,
       ),
       middleText: message,
       middleTextStyle: TextStyle(
-        color: AppColors.textSecondary,
+        color:
+            Theme.of(Get.context!).colorScheme.onSurface.withValues(alpha: 0.7),
         fontSize: 14,
       ),
-      backgroundColor: AppColors.surface,
+      backgroundColor: Theme.of(Get.context!).colorScheme.surface,
       radius: 20,
       confirm: ElevatedButton(
         onPressed: onConfirm ?? () => Get.back(),
@@ -95,9 +97,9 @@ class AppDialogs {
     return Get.defaultDialog<bool>(
       title: title,
       titleStyle: TextStyle(
-        color: AppColors.textPrimary,
+        color: Theme.of(Get.context!).colorScheme.onSurface,
         fontSize: 20,
-        fontWeight: FontWeight.bold,
+        fontWeight: FontWeight.w600,
       ),
       content: Column(
         mainAxisSize: MainAxisSize.min,
@@ -107,12 +109,15 @@ class AppDialogs {
               width: 60,
               height: 60,
               decoration: BoxDecoration(
-                color: effectiveConfirmColor.withValues(alpha: 0.1),
+                color: Theme.of(Get.context!)
+                    .colorScheme
+                    .primary
+                    .withValues(alpha: 0.1),
                 shape: BoxShape.circle,
               ),
               child: Icon(
                 icon,
-                color: effectiveConfirmColor,
+                color: Theme.of(Get.context!).colorScheme.primary,
                 size: 30,
               ),
             ),
@@ -121,14 +126,17 @@ class AppDialogs {
           Text(
             message,
             style: TextStyle(
-              color: AppColors.textSecondary,
+              color: Theme.of(Get.context!)
+                  .colorScheme
+                  .onSurface
+                  .withValues(alpha: 0.7),
               fontSize: 14,
             ),
             textAlign: TextAlign.center,
           ),
         ],
       ),
-      backgroundColor: AppColors.surface,
+      backgroundColor: Theme.of(Get.context!).colorScheme.surface,
       radius: 20,
       confirm: ElevatedButton(
         onPressed: () {
@@ -136,8 +144,8 @@ class AppDialogs {
           onConfirm?.call();
         },
         style: ElevatedButton.styleFrom(
-          backgroundColor: effectiveConfirmColor,
-          foregroundColor: AppColors.white,
+          backgroundColor: Theme.of(Get.context!).colorScheme.primary,
+          foregroundColor: Theme.of(Get.context!).colorScheme.onPrimary,
           padding: EdgeInsets.symmetric(horizontal: 24, vertical: 12),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(12),
@@ -151,7 +159,10 @@ class AppDialogs {
           onCancel?.call();
         },
         style: TextButton.styleFrom(
-          foregroundColor: AppColors.textSecondary,
+          foregroundColor: Theme.of(Get.context!)
+              .colorScheme
+              .onSurface
+              .withValues(alpha: 0.7),
           padding: EdgeInsets.symmetric(horizontal: 24, vertical: 12),
         ),
         child: Text(cancelText ?? 'Cancel'),
@@ -172,9 +183,9 @@ class AppDialogs {
     Get.defaultDialog(
       title: title,
       titleStyle: TextStyle(
-        color: AppColors.error,
+        color: Theme.of(Get.context!).colorScheme.error,
         fontSize: 20,
-        fontWeight: FontWeight.bold,
+        fontWeight: FontWeight.w600,
       ),
       content: Column(
         mainAxisSize: MainAxisSize.min,
@@ -187,12 +198,15 @@ class AppDialogs {
             width: 60,
             height: 60,
             decoration: BoxDecoration(
-              color: AppColors.error.withValues(alpha: 0.1),
+              color: Theme.of(Get.context!)
+                  .colorScheme
+                  .error
+                  .withValues(alpha: 0.1),
               shape: BoxShape.circle,
             ),
             child: Icon(
               Icons.delete_outline,
-              color: AppColors.error,
+              color: Theme.of(Get.context!).colorScheme.error,
               size: 30,
             ),
           ),
@@ -200,14 +214,17 @@ class AppDialogs {
           Text(
             message,
             style: TextStyle(
-              color: AppColors.textSecondary,
+              color: Theme.of(Get.context!)
+                  .colorScheme
+                  .onSurface
+                  .withValues(alpha: 0.7),
               fontSize: 14,
             ),
             textAlign: TextAlign.center,
           ),
         ],
       ),
-      backgroundColor: AppColors.surface,
+      backgroundColor: Theme.of(Get.context!).colorScheme.surface,
       radius: 20,
       confirm: ElevatedButton(
         onPressed: () {
@@ -227,7 +244,10 @@ class AppDialogs {
       cancel: TextButton(
         onPressed: onCancel ?? () => Get.back(),
         style: TextButton.styleFrom(
-          foregroundColor: AppColors.textSecondary,
+          foregroundColor: Theme.of(Get.context!)
+              .colorScheme
+              .onSurface
+              .withValues(alpha: 0.7),
           padding: EdgeInsets.symmetric(horizontal: 24, vertical: 12),
         ),
         child: Text(cancelText ?? 'Cancel'),
@@ -245,22 +265,23 @@ class AppDialogs {
     Get.defaultDialog(
       title: title,
       titleStyle: TextStyle(
-        color: AppColors.info,
+        color: Theme.of(Get.context!).colorScheme.primary,
         fontSize: 20,
-        fontWeight: FontWeight.bold,
+        fontWeight: FontWeight.w600,
       ),
       middleText: message,
       middleTextStyle: TextStyle(
-        color: AppColors.textSecondary,
+        color:
+            Theme.of(Get.context!).colorScheme.onSurface.withValues(alpha: 0.7),
         fontSize: 14,
       ),
-      backgroundColor: AppColors.surface,
+      backgroundColor: Theme.of(Get.context!).colorScheme.surface,
       radius: 20,
       confirm: ElevatedButton(
         onPressed: onConfirm ?? () => Get.back(),
         style: ElevatedButton.styleFrom(
-          backgroundColor: AppColors.info,
-          foregroundColor: AppColors.white,
+          backgroundColor: Theme.of(Get.context!).colorScheme.primary,
+          foregroundColor: Theme.of(Get.context!).colorScheme.onPrimary,
           padding: EdgeInsets.symmetric(horizontal: 24, vertical: 12),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(12),
@@ -281,22 +302,23 @@ class AppDialogs {
     Get.defaultDialog(
       title: title,
       titleStyle: TextStyle(
-        color: AppColors.warning,
+        color: Theme.of(Get.context!).colorScheme.primary,
         fontSize: 20,
-        fontWeight: FontWeight.bold,
+        fontWeight: FontWeight.w600,
       ),
       middleText: message,
       middleTextStyle: TextStyle(
-        color: AppColors.textSecondary,
+        color:
+            Theme.of(Get.context!).colorScheme.onSurface.withValues(alpha: 0.7),
         fontSize: 14,
       ),
-      backgroundColor: AppColors.surface,
+      backgroundColor: Theme.of(Get.context!).colorScheme.surface,
       radius: 20,
       confirm: ElevatedButton(
         onPressed: onConfirm ?? () => Get.back(),
         style: ElevatedButton.styleFrom(
-          backgroundColor: AppColors.warning,
-          foregroundColor: AppColors.textPrimary,
+          backgroundColor: Theme.of(Get.context!).colorScheme.primary,
+          foregroundColor: Theme.of(Get.context!).colorScheme.onPrimary,
           padding: EdgeInsets.symmetric(horizontal: 24, vertical: 12),
           shape: RoundedRectangleBorder(
             borderRadius: BorderRadius.circular(12),
@@ -315,9 +337,10 @@ class AppSnackbars {
     Get.snackbar(
       title ?? 'Success',
       message,
-      backgroundColor: AppColors.success,
-      colorText: AppColors.white,
-      icon: Icon(Icons.check_circle, color: AppColors.white),
+      backgroundColor: Theme.of(Get.context!).colorScheme.primary,
+      colorText: Theme.of(Get.context!).colorScheme.onPrimary,
+      icon: Icon(Icons.check_circle,
+          color: Theme.of(Get.context!).colorScheme.onPrimary),
       snackPosition: SnackPosition.BOTTOM,
       margin: EdgeInsets.all(16),
       borderRadius: 12,
@@ -330,9 +353,10 @@ class AppSnackbars {
     Get.snackbar(
       title ?? 'Error',
       message,
-      backgroundColor: AppColors.error,
-      colorText: AppColors.white,
-      icon: Icon(Icons.error, color: AppColors.white),
+      backgroundColor: Theme.of(Get.context!).colorScheme.error,
+      colorText: Theme.of(Get.context!).colorScheme.onError,
+      icon:
+          Icon(Icons.error, color: Theme.of(Get.context!).colorScheme.onError),
       snackPosition: SnackPosition.BOTTOM,
       margin: EdgeInsets.all(16),
       borderRadius: 12,
@@ -345,9 +369,10 @@ class AppSnackbars {
     Get.snackbar(
       title ?? 'Info',
       message,
-      backgroundColor: AppColors.info,
-      colorText: AppColors.white,
-      icon: Icon(Icons.info, color: AppColors.white),
+      backgroundColor: Theme.of(Get.context!).colorScheme.primary,
+      colorText: Theme.of(Get.context!).colorScheme.onPrimary,
+      icon:
+          Icon(Icons.info, color: Theme.of(Get.context!).colorScheme.onPrimary),
       snackPosition: SnackPosition.BOTTOM,
       margin: EdgeInsets.all(16),
       borderRadius: 12,
@@ -360,9 +385,10 @@ class AppSnackbars {
     Get.snackbar(
       title ?? 'Warning',
       message,
-      backgroundColor: AppColors.warning,
-      colorText: AppColors.textPrimary,
-      icon: Icon(Icons.warning, color: AppColors.textPrimary),
+      backgroundColor: Theme.of(Get.context!).colorScheme.primary,
+      colorText: Theme.of(Get.context!).colorScheme.onPrimary,
+      icon: Icon(Icons.warning,
+          color: Theme.of(Get.context!).colorScheme.onPrimary),
       snackPosition: SnackPosition.BOTTOM,
       margin: EdgeInsets.all(16),
       borderRadius: 12,
