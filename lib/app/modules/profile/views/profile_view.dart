@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
 import 'package:kidcol/app/controllers/theme_controller.dart';
+import 'package:kidcol/app/utils/app_version.dart';
 import 'package:kidcol/app/utils/responsive_helper.dart';
 import 'package:kidcol/i18n/translations.g.dart';
 
@@ -116,7 +117,13 @@ class ProfileView extends GetView<ProfileController> {
                   child: ListTile(
                     leading: const Icon(Icons.info_outline),
                     title: Text(t.settings.about),
-                    subtitle: Text('${t.settings.version} 1.1.0+3-b'),
+                    subtitle: FutureBuilder<String>(
+                      future: AppVersion.getAppVersion(),
+                      builder: (context, snapshot) {
+                        final version = snapshot.data ?? 'Loading...';
+                        return Text('${t.settings.version} $version');
+                      },
+                    ),
                   ),
                 ),
               ],
