@@ -5,7 +5,8 @@ import 'package:kidcol/app/modules/koleksi/views/koleksi_view.dart';
 import 'package:kidcol/app/routes/app_pages.dart';
 
 class MainPageController extends GetxController {
-  final List<Widget> mainContents = [HomeView(), KoleksiView()];
+  // Use getter instead of final list to ensure controllers are available
+  List<Widget> get mainContents => [const HomeView(), KoleksiView()];
 
   RxInt activeIndex = RxInt(0);
 

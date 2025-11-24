@@ -81,7 +81,6 @@ class HomeView extends GetView<HomeController> {
     }
 
     return GetBuilder<HomeController>(
-      init: HomeController(),
       builder: (val) {
         return Scaffold(
           appBar: AppBar(
