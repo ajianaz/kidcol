@@ -83,29 +83,16 @@ class ProfileController extends GetxController {
     isEnglish.toggle();
   }
 
-  void openFAQ() async {
-    const url = 'https://example.com/faq';
-    if (await canLaunchUrl(Uri.parse(url))) {
-      await launchUrl(Uri.parse(url));
-    } else {
-      Get.snackbar(t.common.error, t.messages.error_occurred);
-    }
-  }
-
   void openTermsOfService() async {
-    const url = 'https://example.com/terms';
-    if (await canLaunchUrl(Uri.parse(url))) {
-      await launchUrl(Uri.parse(url));
-    } else {
+    const url = 'https://ajianaz.dev/kidcol-terms-of-service/';
+    if (!await launchUrl(Uri.parse(url))) {
       Get.snackbar(t.common.error, t.messages.error_occurred);
     }
   }
 
   void openPrivacyPolicy() async {
-    const url = 'https://example.com/privacy';
-    if (await canLaunchUrl(Uri.parse(url))) {
-      await launchUrl(Uri.parse(url));
-    } else {
+    const url = 'https://ajianaz.dev/kidcol-privacy-policy/';
+    if (!await launchUrl(Uri.parse(url))) {
       Get.snackbar(t.common.error, t.messages.error_occurred);
     }
   }

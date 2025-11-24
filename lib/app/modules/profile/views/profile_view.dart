@@ -66,13 +66,6 @@ class ProfileView extends GetView<ProfileController> {
             child: Column(
               children: [
                 ListTile(
-                  leading: const Icon(Icons.help_outline),
-                  title: Text(t.settings.faq),
-                  trailing: const Icon(Icons.arrow_forward_ios),
-                  onTap: () => controller.openFAQ(),
-                ),
-                const Divider(),
-                ListTile(
                   leading: const Icon(Icons.description),
                   title: Text(t.settings.terms_of_service),
                   trailing: const Icon(Icons.arrow_forward_ios),
