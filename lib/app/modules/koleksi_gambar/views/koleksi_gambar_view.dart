@@ -9,6 +9,7 @@ import 'package:kidcol/app/routes/app_pages.dart';
 import 'package:kidcol/app/utils/app_dialogs.dart';
 import 'package:kidcol/app/utils/constants.dart';
 import 'package:kidcol/app/utils/responsive_helper.dart';
+import 'package:kidcol/app/utils/image_preview_helper.dart';
 import 'package:kidcol/app/widgets/cards/card_image.dart';
 import 'package:kidcol/i18n/translations.g.dart';
 
@@ -30,6 +31,9 @@ class KoleksiGambarView extends GetView<KoleksiGambarController> {
                 fontWeight: FontWeight.bold,
                 fontSize: ResponsiveHelper.isMobile(Get.context!) ? 18 : 20,
               ),
+              overflow: TextOverflow.fade,
+              softWrap: false,
+              maxLines: 1,
             ),
             centerTitle: true,
             elevation: 0,
@@ -163,14 +167,15 @@ class KoleksiGambarView extends GetView<KoleksiGambarController> {
   }
 
   void _showImagePreview(gambar, int index) {
-    Get.to(
-      () => _ImagePreviewPage(
+    ImagePreviewHelper.showImagePreview(
+      context: Get.context!,
+      imageUrl: "${gambar.endpoint}",
+      tag: 'image_${gambar.id ?? index}',
+      actions: ImagePreviewHelper.getKoleksiGambarActions(
+        context: Get.context!,
         imageUrl: "${gambar.endpoint}",
-        tag: 'image_${gambar.id ?? index}',
         onDelete: () => controller.deleteGambarKoleksi(gambar),
       ),
-      transition: Transition.fadeIn,
-      duration: Duration(milliseconds: 300),
     );
   }
 
@@ -394,96 +399,6 @@ class KoleksiGambarView extends GetView<KoleksiGambarController> {
             child: Text("Go Back"),
           ),
         ],
-      ),
-    );
-  }
-}
-
-class _ImagePreviewPage extends StatelessWidget {
-  final String imageUrl;
-  final String tag;
-  final VoidCallback onDelete;
-
-  const _ImagePreviewPage({
-    required this.imageUrl,
-    required this.tag,
-    required this.onDelete,
-  });
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Theme.of(context).colorScheme.surface,
-      appBar: AppBar(
-        backgroundColor: Theme.of(context).colorScheme.surface,
-        foregroundColor: Theme.of(context).colorScheme.onSurface,
-        elevation: 0,
-        leading: IconButton(
-          icon: Icon(Icons.close),
-          onPressed: () => Get.back(),
-        ),
-        actions: [
-          IconButton(
-            icon: Icon(Icons.delete),
-            onPressed: () {
-              Get.defaultDialog(
-                title: "Delete Image",
-                titleStyle:
-                    TextStyle(color: Theme.of(context).colorScheme.onSurface),
-                middleTextStyle:
-                    TextStyle(color: Theme.of(context).colorScheme.onSurface),
-                content: Text(
-                  "Are you sure you want to delete this image?",
-                  style: TextStyle(
-                      color: Theme.of(context)
-                          .colorScheme
-                          .onSurface
-                          .withValues(alpha: 0.7)),
-                ),
-                textConfirm: "Delete",
-                textCancel: "Cancel",
-                confirmTextColor: Theme.of(context).colorScheme.onPrimary,
-                cancelTextColor: Theme.of(context).colorScheme.onPrimary,
-                buttonColor: Theme.of(context).colorScheme.error,
-                onConfirm: () {
-                  Get.back();
-                  Get.back();
-                  onDelete();
-                },
-                onCancel: () => Get.back(),
-                backgroundColor: Theme.of(context).colorScheme.surface,
-                radius: 12,
-                titlePadding: EdgeInsets.all(16),
-                contentPadding: EdgeInsets.all(16),
-              );
-            },
-          ),
-        ],
-      ),
-      body: Center(
-        child: Hero(
-          tag: tag,
-          child: InteractiveViewer(
-            panEnabled: true,
-            boundaryMargin: EdgeInsets.all(20),
-            minScale: 0.5,
-            maxScale: 4,
-            child: CachedNetworkImage(
-              imageUrl: imageUrl,
-              fit: BoxFit.contain,
-              placeholder: (context, url) => Center(
-                child: CircularProgressIndicator(
-                  color: Theme.of(context).colorScheme.onSurface,
-                ),
-              ),
-              errorWidget: (context, url, error) => Icon(
-                Icons.error,
-                color: Theme.of(context).colorScheme.onSurface,
-                size: 50,
-              ),
-            ),
-          ),
-        ),
       ),
     );
   }

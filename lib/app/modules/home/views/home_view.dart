@@ -3,11 +3,13 @@ import 'package:cached_network_image/cached_network_image.dart';
 
 import 'package:get/get.dart';
 import 'package:kidcol/app/data/entities/gambar.dart';
+import 'package:kidcol/app/data/models/asset.dart';
 import 'package:kidcol/app/utils/constants.dart';
 import 'package:kidcol/app/utils/colors.dart';
 import 'package:kidcol/app/utils/app_dialogs.dart';
 import 'package:kidcol/app/utils/responsive_helper.dart';
 import 'package:kidcol/app/utils/api_config.dart';
+import 'package:kidcol/app/utils/image_preview_helper.dart';
 import 'package:kidcol/i18n/translations.g.dart';
 
 import '../../../routes/app_pages.dart';
@@ -61,22 +63,16 @@ class HomeView extends GetView<HomeController> {
 
     // Image preview dialog with zoom and pan functionality
     void showImagePreviewDialog(String imageUrl) {
-      showDialog(
+      ImagePreviewHelper.showImagePreview(
         context: context,
-        barrierDismissible: true,
-        builder: (BuildContext context) {
-          return _ImagePreviewDialog(
-            imageUrl: imageUrl,
-            onAddToCollection: () {
-              Navigator.of(context).pop();
-              showCollectionDialog(imageUrl);
-            },
-            onOpenDrawingRoom: () {
-              Navigator.of(context).pop();
-              Get.toNamed(Routes.DRAWING_ROOM, arguments: imageUrl);
-            },
-          );
-        },
+        imageUrl: imageUrl,
+        actions: ImagePreviewHelper.getHomeViewActions(
+          context: context,
+          imageUrl: imageUrl,
+          onAddToCollection: () => showCollectionDialog(imageUrl),
+          onOpenDrawingRoom: () =>
+              Get.toNamed(Routes.DRAWING_ROOM, arguments: imageUrl),
+        ),
       );
     }
 
@@ -296,7 +292,7 @@ Widget _buildImageGrid(
               return _AnimatedGridItem(
                 index: index,
                 child: _EnhancedImageCard(
-                  imageUrl: "${asset.imageUrl}",
+                  asset: asset,
                   onTap: () => showImagePreviewDialog("${asset.imageUrl}"),
                 ),
               );
@@ -487,11 +483,11 @@ class _AnimatedGridItemState extends State<_AnimatedGridItem>
 
 // Enhanced image card with better styling and animations
 class _EnhancedImageCard extends StatefulWidget {
-  final String imageUrl;
+  final Asset asset;
   final VoidCallback onTap;
 
   const _EnhancedImageCard({
-    required this.imageUrl,
+    required this.asset,
     required this.onTap,
   });
 
@@ -579,7 +575,7 @@ class _EnhancedImageCardState extends State<_EnhancedImageCard>
                 child: Stack(
                   children: [
                     // Image
-                    _EnhancedCardImage(imageUrl: widget.imageUrl),
+                    _EnhancedCardImage(imageUrl: widget.asset.imageUrl ?? ''),
 
                     // Gradient overlay for better text visibility
                     Positioned(
@@ -605,13 +601,13 @@ class _EnhancedImageCardState extends State<_EnhancedImageCard>
                       ),
                     ),
 
-                    // Hint text
+                    // Object name text
                     Positioned(
                       bottom: 8,
                       left: 8,
                       right: 8,
                       child: Text(
-                        t.ui.tap_to_view,
+                        ImagePreviewHelper.truncateText(widget.asset.object),
                         textAlign: TextAlign.center,
                         style: TextStyle(
                           color: Colors.white.withValues(alpha: 0.9),
@@ -978,283 +974,6 @@ class _ModernCollectionDialogState extends State<_ModernCollectionDialog>
             fontWeight: FontWeight.w500,
           ),
         ),
-      ),
-    );
-  }
-}
-
-/// Modern image preview dialog with zoom and pan functionality
-class _ImagePreviewDialog extends StatefulWidget {
-  final String imageUrl;
-  final VoidCallback onAddToCollection;
-  final VoidCallback onOpenDrawingRoom;
-
-  const _ImagePreviewDialog({
-    required this.imageUrl,
-    required this.onAddToCollection,
-    required this.onOpenDrawingRoom,
-  });
-
-  @override
-  State<_ImagePreviewDialog> createState() => _ImagePreviewDialogState();
-}
-
-class _ImagePreviewDialogState extends State<_ImagePreviewDialog>
-    with SingleTickerProviderStateMixin {
-  late AnimationController _animationController;
-  late Animation<double> _fadeAnimation;
-  late Animation<double> _scaleAnimation;
-
-  @override
-  void initState() {
-    super.initState();
-    _setupAnimations();
-  }
-
-  void _setupAnimations() {
-    _animationController = AnimationController(
-      duration: const Duration(milliseconds: 300),
-      vsync: this,
-    );
-
-    _fadeAnimation = Tween<double>(
-      begin: 0.0,
-      end: 1.0,
-    ).animate(CurvedAnimation(
-      parent: _animationController,
-      curve: Curves.easeInOut,
-    ));
-
-    _scaleAnimation = Tween<double>(
-      begin: 0.9,
-      end: 1.0,
-    ).animate(CurvedAnimation(
-      parent: _animationController,
-      curve: Curves.elasticOut,
-    ));
-
-    _animationController.forward();
-  }
-
-  @override
-  void dispose() {
-    _animationController.dispose();
-    super.dispose();
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return AnimatedBuilder(
-      animation: _animationController,
-      builder: (context, child) {
-        return FadeTransition(
-          opacity: _fadeAnimation,
-          child: ScaleTransition(
-            scale: _scaleAnimation,
-            child: Dialog(
-              backgroundColor: Colors.transparent,
-              insetPadding: EdgeInsets.zero,
-              child: Container(
-                width: MediaQuery.of(context).size.width * 0.95,
-                height: MediaQuery.of(context).size.height * 0.85,
-                decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(20),
-                  color: AppColors.surface,
-                  boxShadow: [
-                    BoxShadow(
-                      color: AppColors.shadow.withValues(alpha: 0.3),
-                      spreadRadius: 5,
-                      blurRadius: 15,
-                      offset: const Offset(0, 5),
-                    ),
-                  ],
-                ),
-                child: Column(
-                  children: [
-                    _buildHeader(),
-                    Expanded(
-                      child: _buildImagePreview(),
-                    ),
-                    _buildActionButtons(),
-                  ],
-                ),
-              ),
-            ),
-          ),
-        );
-      },
-    );
-  }
-
-  Widget _buildHeader() {
-    return Container(
-      width: double.infinity,
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        borderRadius: const BorderRadius.only(
-          topLeft: Radius.circular(20),
-          topRight: Radius.circular(20),
-        ),
-        gradient: LinearGradient(
-          begin: Alignment.topLeft,
-          end: Alignment.bottomRight,
-          colors: [
-            AppColors.primary,
-            AppColors.primary.withValues(alpha: 0.8),
-          ],
-        ),
-      ),
-      child: Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          Text(
-            t.collections.image_preview,
-            style: TextStyle(
-              fontSize: 18,
-              fontWeight: FontWeight.bold,
-              color: AppColors.textOnPrimary,
-            ),
-          ),
-          IconButton(
-            onPressed: () => Navigator.of(context).pop(),
-            icon: Icon(
-              Icons.close,
-              color: AppColors.textOnPrimary,
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildImagePreview() {
-    final processedUrl = ApiConfig.getImageUrl(widget.imageUrl);
-
-    return Container(
-      margin: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(12),
-        color: AppColors.surfaceLight,
-      ),
-      child: ClipRRect(
-        borderRadius: BorderRadius.circular(12),
-        child: InteractiveViewer(
-          minScale: 0.5,
-          maxScale: 4.0,
-          boundaryMargin: const EdgeInsets.all(20),
-          child: processedUrl.isNotEmpty
-              ? CachedNetworkImage(
-                  imageUrl: processedUrl,
-                  fit: BoxFit.contain,
-                  width: double.infinity,
-                  height: double.infinity,
-                  placeholder: (context, url) => Center(
-                    child: CircularProgressIndicator(
-                      strokeWidth: 2,
-                      valueColor:
-                          AlwaysStoppedAnimation<Color>(AppColors.primary),
-                    ),
-                  ),
-                  errorWidget: (context, url, error) => Center(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Icon(
-                          Icons.broken_image_outlined,
-                          color: AppColors.grey400,
-                          size: 48,
-                        ),
-                        const SizedBox(height: 8),
-                        Text(
-                          t.collections.failed_to_load_image,
-                          style: TextStyle(
-                            color: AppColors.textSecondary,
-                            fontSize: 14,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ),
-                )
-              : Center(
-                  child: Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Icon(
-                        Icons.image_not_supported_outlined,
-                        color: AppColors.grey400,
-                        size: 48,
-                      ),
-                      const SizedBox(height: 8),
-                      Text(
-                        t.collections.no_image_available,
-                        style: TextStyle(
-                          color: AppColors.textSecondary,
-                          fontSize: 14,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-        ),
-      ),
-    );
-  }
-
-  Widget _buildActionButtons() {
-    return Container(
-      padding: const EdgeInsets.all(16),
-      decoration: BoxDecoration(
-        color: AppColors.surface,
-        borderRadius: const BorderRadius.only(
-          bottomLeft: Radius.circular(20),
-          bottomRight: Radius.circular(20),
-        ),
-        boxShadow: [
-          BoxShadow(
-            color: AppColors.shadow.withValues(alpha: 0.2),
-            spreadRadius: 1,
-            blurRadius: 5,
-            offset: const Offset(0, -2),
-          ),
-        ],
-      ),
-      child: Row(
-        children: [
-          Expanded(
-            child: ElevatedButton.icon(
-              onPressed: widget.onAddToCollection,
-              icon: const Icon(Icons.bookmark_border),
-              label: Text(t.collections.add_to_collection),
-              style: ElevatedButton.styleFrom(
-                backgroundColor: AppColors.primary,
-                foregroundColor: AppColors.textOnPrimary,
-                padding: const EdgeInsets.symmetric(vertical: 12),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                elevation: 2,
-              ),
-            ),
-          ),
-          const SizedBox(width: 12),
-          Expanded(
-            child: ElevatedButton.icon(
-              onPressed: widget.onOpenDrawingRoom,
-              icon: const Icon(Icons.brush),
-              label: Text(t.collections.draw),
-              style: ElevatedButton.styleFrom(
-                backgroundColor: AppColors.success,
-                foregroundColor: AppColors.white,
-                padding: const EdgeInsets.symmetric(vertical: 12),
-                shape: RoundedRectangleBorder(
-                  borderRadius: BorderRadius.circular(12),
-                ),
-                elevation: 2,
-              ),
-            ),
-          ),
-        ],
       ),
     );
   }
