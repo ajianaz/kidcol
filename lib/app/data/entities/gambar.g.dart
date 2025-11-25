@@ -21,6 +21,11 @@ const GambarSchema = CollectionSchema(
       id: 0,
       name: r'endpoint',
       type: IsarType.string,
+    ),
+    r'object': PropertySchema(
+      id: 1,
+      name: r'object',
+      type: IsarType.string,
     )
   },
   estimateSize: _gambarEstimateSize,
@@ -66,6 +71,12 @@ int _gambarEstimateSize(
 ) {
   var bytesCount = offsets.last;
   bytesCount += 3 + object.endpoint.length * 3;
+  {
+    final value = object.object;
+    if (value != null) {
+      bytesCount += 3 + value.length * 3;
+    }
+  }
   return bytesCount;
 }
 
@@ -76,6 +87,7 @@ void _gambarSerialize(
   Map<Type, List<int>> allOffsets,
 ) {
   writer.writeString(offsets[0], object.endpoint);
+  writer.writeString(offsets[1], object.object);
 }
 
 Gambar _gambarDeserialize(
@@ -87,6 +99,7 @@ Gambar _gambarDeserialize(
   final object = Gambar();
   object.endpoint = reader.readString(offsets[0]);
   object.id = id;
+  object.object = reader.readStringOrNull(offsets[1]);
   return object;
 }
 
@@ -99,6 +112,8 @@ P _gambarDeserializeProp<P>(
   switch (propertyId) {
     case 0:
       return (reader.readString(offset)) as P;
+    case 1:
+      return (reader.readStringOrNull(offset)) as P;
     default:
       throw IsarError('Unknown property with id $propertyId');
   }
@@ -419,6 +434,152 @@ extension GambarQueryFilter on QueryBuilder<Gambar, Gambar, QFilterCondition> {
       ));
     });
   }
+
+  QueryBuilder<Gambar, Gambar, QAfterFilterCondition> objectIsNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNull(
+        property: r'object',
+      ));
+    });
+  }
+
+  QueryBuilder<Gambar, Gambar, QAfterFilterCondition> objectIsNotNull() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(const FilterCondition.isNotNull(
+        property: r'object',
+      ));
+    });
+  }
+
+  QueryBuilder<Gambar, Gambar, QAfterFilterCondition> objectEqualTo(
+    String? value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'object',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Gambar, Gambar, QAfterFilterCondition> objectGreaterThan(
+    String? value, {
+    bool include = false,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        include: include,
+        property: r'object',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Gambar, Gambar, QAfterFilterCondition> objectLessThan(
+    String? value, {
+    bool include = false,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.lessThan(
+        include: include,
+        property: r'object',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Gambar, Gambar, QAfterFilterCondition> objectBetween(
+    String? lower,
+    String? upper, {
+    bool includeLower = true,
+    bool includeUpper = true,
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.between(
+        property: r'object',
+        lower: lower,
+        includeLower: includeLower,
+        upper: upper,
+        includeUpper: includeUpper,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Gambar, Gambar, QAfterFilterCondition> objectStartsWith(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.startsWith(
+        property: r'object',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Gambar, Gambar, QAfterFilterCondition> objectEndsWith(
+    String value, {
+    bool caseSensitive = true,
+  }) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.endsWith(
+        property: r'object',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Gambar, Gambar, QAfterFilterCondition> objectContains(
+      String value,
+      {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.contains(
+        property: r'object',
+        value: value,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Gambar, Gambar, QAfterFilterCondition> objectMatches(
+      String pattern,
+      {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.matches(
+        property: r'object',
+        wildcard: pattern,
+        caseSensitive: caseSensitive,
+      ));
+    });
+  }
+
+  QueryBuilder<Gambar, Gambar, QAfterFilterCondition> objectIsEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.equalTo(
+        property: r'object',
+        value: '',
+      ));
+    });
+  }
+
+  QueryBuilder<Gambar, Gambar, QAfterFilterCondition> objectIsNotEmpty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addFilterCondition(FilterCondition.greaterThan(
+        property: r'object',
+        value: '',
+      ));
+    });
+  }
 }
 
 extension GambarQueryObject on QueryBuilder<Gambar, Gambar, QFilterCondition> {}
@@ -493,6 +654,18 @@ extension GambarQuerySortBy on QueryBuilder<Gambar, Gambar, QSortBy> {
       return query.addSortBy(r'endpoint', Sort.desc);
     });
   }
+
+  QueryBuilder<Gambar, Gambar, QAfterSortBy> sortByObject() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'object', Sort.asc);
+    });
+  }
+
+  QueryBuilder<Gambar, Gambar, QAfterSortBy> sortByObjectDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'object', Sort.desc);
+    });
+  }
 }
 
 extension GambarQuerySortThenBy on QueryBuilder<Gambar, Gambar, QSortThenBy> {
@@ -519,6 +692,18 @@ extension GambarQuerySortThenBy on QueryBuilder<Gambar, Gambar, QSortThenBy> {
       return query.addSortBy(r'id', Sort.desc);
     });
   }
+
+  QueryBuilder<Gambar, Gambar, QAfterSortBy> thenByObject() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'object', Sort.asc);
+    });
+  }
+
+  QueryBuilder<Gambar, Gambar, QAfterSortBy> thenByObjectDesc() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addSortBy(r'object', Sort.desc);
+    });
+  }
 }
 
 extension GambarQueryWhereDistinct on QueryBuilder<Gambar, Gambar, QDistinct> {
@@ -526,6 +711,13 @@ extension GambarQueryWhereDistinct on QueryBuilder<Gambar, Gambar, QDistinct> {
       {bool caseSensitive = true}) {
     return QueryBuilder.apply(this, (query) {
       return query.addDistinctBy(r'endpoint', caseSensitive: caseSensitive);
+    });
+  }
+
+  QueryBuilder<Gambar, Gambar, QDistinct> distinctByObject(
+      {bool caseSensitive = true}) {
+    return QueryBuilder.apply(this, (query) {
+      return query.addDistinctBy(r'object', caseSensitive: caseSensitive);
     });
   }
 }
@@ -540,6 +732,12 @@ extension GambarQueryProperty on QueryBuilder<Gambar, Gambar, QQueryProperty> {
   QueryBuilder<Gambar, String, QQueryOperations> endpointProperty() {
     return QueryBuilder.apply(this, (query) {
       return query.addPropertyName(r'endpoint');
+    });
+  }
+
+  QueryBuilder<Gambar, String?, QQueryOperations> objectProperty() {
+    return QueryBuilder.apply(this, (query) {
+      return query.addPropertyName(r'object');
     });
   }
 }

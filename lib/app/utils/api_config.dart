@@ -34,8 +34,7 @@ class ApiConfig {
     if (gatewayKey.isNotEmpty &&
         gatewayKey != 'REPLACE_WITH_ACTUAL_GATEWAY_KEY') {
       return {
-        'authorization': 'Bearer $gatewayKey',
-        'X-API-Key': gatewayKey, // Alternative header for better compatibility
+        'Authorization': 'Bearer $gatewayKey',
       };
     }
     return {};

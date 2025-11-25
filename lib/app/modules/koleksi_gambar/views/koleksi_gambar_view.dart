@@ -171,6 +171,7 @@ class KoleksiGambarView extends GetView<KoleksiGambarController> {
       context: Get.context!,
       imageUrl: "${gambar.endpoint}",
       tag: 'image_${gambar.id ?? index}',
+      title: gambar.object,
       actions: ImagePreviewHelper.getKoleksiGambarActions(
         context: Get.context!,
         imageUrl: "${gambar.endpoint}",

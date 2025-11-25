@@ -10,6 +10,8 @@ class Gambar {
   @Index()
   late String endpoint;
 
+  String? object;
+
   @Backlink(to: "gambars")
   final koleksis = IsarLinks<Koleksi>();
 }

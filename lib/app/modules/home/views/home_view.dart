@@ -36,6 +36,12 @@ class HomeView extends GetView<HomeController> {
             onSave: (koleksi) async {
               try {
                 var data = Gambar()..endpoint = imageUrl;
+                // Find the corresponding asset to get the object name
+                var asset = controller.assets
+                    .firstWhereOrNull((a) => a.imageUrl == imageUrl);
+                if (asset != null) {
+                  data.object = asset.object;
+                }
                 // Pass koleksi as parameter instead of adding to backlink
                 await controller.service.saveGambar(data, koleksis: [koleksi]);
                 Get.back();
@@ -62,10 +68,11 @@ class HomeView extends GetView<HomeController> {
     }
 
     // Image preview dialog with zoom and pan functionality
-    void showImagePreviewDialog(String imageUrl) {
+    void showImagePreviewDialog(String imageUrl, String? objectName) {
       ImagePreviewHelper.showImagePreview(
         context: context,
         imageUrl: imageUrl,
+        title: objectName,
         actions: ImagePreviewHelper.getHomeViewActions(
           context: context,
           imageUrl: imageUrl,
@@ -255,7 +262,7 @@ Widget _buildEmptyState(BuildContext context) {
 Widget _buildImageGrid(
   BuildContext context,
   HomeController controller,
-  Function(String) showImagePreviewDialog,
+  Function(String, String?) showImagePreviewDialog,
 ) {
   try {
     if (!ResponsiveHelper.isContextValid(context)) {
@@ -293,7 +300,8 @@ Widget _buildImageGrid(
                 index: index,
                 child: _EnhancedImageCard(
                   asset: asset,
-                  onTap: () => showImagePreviewDialog("${asset.imageUrl}"),
+                  onTap: () =>
+                      showImagePreviewDialog("${asset.imageUrl}", asset.object),
                 ),
               );
             } catch (e) {
