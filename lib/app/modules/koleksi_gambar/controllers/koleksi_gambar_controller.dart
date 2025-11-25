@@ -1,9 +1,9 @@
-import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:kidcol/app/data/entities/gambar.dart';
 import 'package:kidcol/app/data/entities/koleksi.dart';
 import 'package:kidcol/app/data/services/isar_service.dart';
 import 'package:kidcol/app/utils/app_dialogs.dart';
+import 'package:kidcol/app/utils/error_handler.dart';
 import 'package:kidcol/app/utils/logger.dart';
 import 'package:kidcol/i18n/translations.g.dart';
 
@@ -23,9 +23,8 @@ class KoleksiGambarController extends GetxController {
       await service.deleteGambar(gambar);
       // getGambarKoleksi(koleksi);
     } catch (e) {
-      Logger.error("Error deleting gambar: $e",
-          tag: 'KoleksiGambarController', error: e);
-      // Show error to user
+      AppErrorHandler.handleError(e,
+          context: 'KoleksiGambarController.deleteGambarKoleksi');
     }
   }
 
@@ -52,14 +51,8 @@ class KoleksiGambarController extends GetxController {
         },
       );
     } catch (e) {
-      Logger.error("Error deleting koleksi: $e",
-          tag: 'KoleksiGambarController', error: e);
-
-      // Show error to user
-      AppDialogs.showError(
-        title: t.common.error,
-        message: 'Failed to delete collection',
-      );
+      AppErrorHandler.handleError(e,
+          context: 'KoleksiGambarController.deleteKoleksiData');
     }
   }
 

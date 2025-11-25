@@ -8,6 +8,7 @@ import 'package:kidcol/app/data/services/isar_service.dart';
 import 'package:kidcol/app/data/services/account_service.dart';
 import 'package:kidcol/app/utils/api_config.dart';
 import 'package:kidcol/app/utils/env_config.dart';
+import 'package:kidcol/app/utils/error_handler.dart';
 import 'package:kidcol/app/utils/logger.dart';
 import 'package:kidcol/app/widgets/dialogs/whatsapp_verification.dart';
 import 'package:kidcol/i18n/translations.g.dart';
@@ -220,46 +221,11 @@ class HomeController extends GetxController {
           tag: 'HomeController');
       Logger.error('Error type: ${e.type}', tag: 'HomeController');
 
-      String errorMessage = t.error.failed_to_load_images;
-
-      if (e.type == DioExceptionType.connectionTimeout) {
-        errorMessage = t.error.connection_timeout;
-      } else if (e.type == DioExceptionType.receiveTimeout) {
-        errorMessage = t.error.server_response_timeout;
-      } else if (e.type == DioExceptionType.connectionError) {
-        errorMessage = t.error.no_internet_connection;
-      } else if (e.type == DioExceptionType.unknown) {
-        // Handle SSL/TLS errors and other network issues
-        if (e.error?.toString().contains('SSL') == true ||
-            e.error?.toString().contains('certificate') == true) {
-          errorMessage =
-              'SSL/TLS connection error. Please check your network settings.';
-        } else {
-          errorMessage = t.error.no_internet_connection;
-        }
-      } else if (e.response?.statusCode == 401) {
-        errorMessage = t.error.authentication_failed;
-      } else if (e.response?.statusCode == 403) {
-        errorMessage = t.error.access_forbidden;
-      } else if (e.response?.statusCode == 404) {
-        errorMessage = t.error.api_endpoint_not_found;
-      } else if (e.response?.statusCode == 500) {
-        errorMessage = t.error.server_error;
-      }
-
       // Show error with retry option for connection errors
       if (ApiConfig.isRetryableError(e)) {
-        _handleNetworkError(errorMessage);
+        _handleNetworkErrorWithRetry(e);
       } else {
-        Get.snackbar(
-          t.error.error_loading_data,
-          errorMessage,
-          backgroundColor: Colors.red,
-          colorText: Colors.white,
-          duration: const Duration(seconds: 5),
-          snackPosition: SnackPosition.BOTTOM,
-          icon: const Icon(Icons.error_outline, color: Colors.white),
-        );
+        AppErrorHandler.handleError(e, context: 'HomeController.requestData');
       }
 
       isLoading.value = false;
@@ -268,26 +234,11 @@ class HomeController extends GetxController {
       Logger.error('Unexpected error: $e', tag: 'HomeController', error: e);
       Logger.error('Error type: ${e.runtimeType}', tag: 'HomeController');
 
-      String errorMessage = t.error.unexpected_error;
-
       // Handle specific error types
       if (e.toString().contains('Network') || e.toString().contains('Socket')) {
-        errorMessage = t.error.no_internet_connection;
-      }
-
-      // Show error with retry option for network errors
-      if (errorMessage.contains('Network') || errorMessage.contains('Socket')) {
-        _handleNetworkError(errorMessage);
+        _handleNetworkErrorWithRetry(e);
       } else {
-        Get.snackbar(
-          t.common.error,
-          errorMessage,
-          backgroundColor: Colors.red,
-          colorText: Colors.white,
-          duration: const Duration(seconds: 3),
-          snackPosition: SnackPosition.BOTTOM,
-          icon: const Icon(Icons.error_outline, color: Colors.white),
-        );
+        AppErrorHandler.handleError(e, context: 'HomeController.requestData');
       }
 
       isLoading.value = false;
@@ -302,8 +253,8 @@ class HomeController extends GetxController {
       result = data.isEmpty;
       return result;
     } catch (e) {
-      Logger.error("Error checking if koleksi is empty: $e",
-          tag: 'HomeController', error: e);
+      AppErrorHandler.handleErrorWithoutSnackbar(e,
+          context: 'HomeController.isKoleksiEmpty');
       return true; // Assume empty on error
     }
   }
@@ -366,8 +317,8 @@ class HomeController extends GetxController {
       );
       return response.statusCode == 200;
     } catch (e) {
-      Logger.error('Network connectivity check failed: $e',
-          tag: 'HomeController', error: e);
+      AppErrorHandler.handleErrorWithoutSnackbar(e,
+          context: 'HomeController._checkNetworkConnectivity');
       return false;
     }
   }
@@ -381,9 +332,7 @@ class HomeController extends GetxController {
       update();
       Logger.log("Loaded ${koleksis.length} koleksis", tag: 'HomeController');
     } catch (e) {
-      Logger.error("Error getting all koleksis: $e",
-          tag: 'HomeController', error: e);
-      // Show error to user if needed
+      AppErrorHandler.handleError(e, context: 'HomeController.getAllKoleksi');
     }
   }
 
@@ -415,13 +364,16 @@ class HomeController extends GetxController {
         // }
       }
     } catch (e) {
-      Logger.error("Error in scrollListener: $e",
-          tag: 'HomeController', error: e);
+      AppErrorHandler.handleErrorWithoutSnackbar(e,
+          context: 'HomeController.scrollListener');
     }
   }
 
   /// Handle network errors with appropriate actions
-  void _handleNetworkError(String errorMessage) {
+  void _handleNetworkErrorWithRetry(dynamic error) {
+    String errorMessage = AppErrorHandler.getUserFriendlyMessage(error,
+        context: 'HomeController._handleNetworkErrorWithRetry');
+
     Get.snackbar(
       'Network Error',
       errorMessage,

@@ -1,9 +1,9 @@
 import 'dart:async';
-import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:kidcol/app/data/entities/gambar.dart';
 import 'package:kidcol/app/data/entities/koleksi.dart';
 import 'package:kidcol/app/data/services/isar_service.dart';
+import 'package:kidcol/app/utils/error_handler.dart';
 import 'package:kidcol/app/utils/logger.dart';
 import 'package:kidcol/i18n/translations.g.dart';
 import 'package:pdf/widgets.dart' as pw;
@@ -32,10 +32,10 @@ class PrintingPdfController extends GetxController {
       addImage();
       update();
     } catch (e) {
-      Logger.error("Error getting gambar koleksi: $e",
-          tag: 'PrintingPdfController', error: e);
-      processingError.value =
-          "${t.error.failed_to_load_images}: ${e.toString()}";
+      AppErrorHandler.handleError(e,
+          context: 'PrintingPdfController.getGambarKoleksi');
+      processingError.value = AppErrorHandler.getUserFriendlyMessage(e,
+          context: 'PrintingPdfController.getGambarKoleksi');
       update();
     }
   }
@@ -77,10 +77,10 @@ class PrintingPdfController extends GetxController {
         // Update UI after each image is processed
         update();
       } catch (e) {
-        Logger.error("Error processing image ${i + 1}: $e",
-            tag: 'PrintingPdfController', error: e);
+        AppErrorHandler.handleErrorWithoutSnackbar(e,
+            context: 'PrintingPdfController.addImage.processImage${i + 1}');
         processingError.value =
-            "${t.error.failed_to_load_images} ${i + 1}: ${e.toString()}";
+            "${t.error.failed_to_load_images} ${i + 1}: ${AppErrorHandler.getUserFriendlyMessage(e, context: 'PrintingPdfController.addImage.processImage${i + 1}')}";
         // Continue processing other images even if one fails
       }
     }

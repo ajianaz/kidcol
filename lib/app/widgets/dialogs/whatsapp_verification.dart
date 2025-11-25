@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:intl_phone_number_input/intl_phone_number_input.dart';
 import '../../data/services/account_service.dart';
+import '../../../app/utils/error_handler.dart';
 import '../../../i18n/translations.g.dart';
 import '../../../app/utils/responsive_helper.dart';
 
@@ -140,7 +141,10 @@ class _WhatsAppVerificationDialogState extends State<WhatsAppVerificationDialog>
         _isResending = false;
       });
 
-      _showErrorSnackBar(t.common.error, t.messages.error_occurred);
+      _showErrorSnackBar(
+          t.common.error,
+          AppErrorHandler.getUserFriendlyMessage(e,
+              context: 'WhatsAppVerificationDialog._sendVerificationCode'));
     }
   }
 
@@ -193,7 +197,10 @@ class _WhatsAppVerificationDialogState extends State<WhatsAppVerificationDialog>
         _isLoading = false;
       });
 
-      _showErrorSnackBar(t.common.error, t.messages.error_occurred);
+      _showErrorSnackBar(
+          t.common.error,
+          AppErrorHandler.getUserFriendlyMessage(e,
+              context: 'WhatsAppVerificationDialog._verifyCode'));
     }
   }
 

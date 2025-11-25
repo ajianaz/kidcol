@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
-import 'package:kidcol/app/utils/logger.dart';
+import 'package:kidcol/app/utils/error_handler.dart';
 
 /// Theme Controller
 /// Manages app theme (light/dark mode) with persistent storage
@@ -32,8 +32,8 @@ class ThemeController extends GetxController {
         Get.changeThemeMode(_themeMode.value);
       }
     } catch (e) {
-      Logger.error('Error loading theme mode: $e',
-          tag: 'ThemeController', error: e);
+      AppErrorHandler.handleErrorWithoutSnackbar(e,
+          context: 'ThemeController._loadThemeMode');
     }
   }
 
@@ -57,8 +57,8 @@ class ThemeController extends GetxController {
       final prefs = await SharedPreferences.getInstance();
       await prefs.setString(_themeKey, isDarkMode ? 'dark' : 'light');
     } catch (e) {
-      Logger.error('Error saving theme mode: $e',
-          tag: 'ThemeController', error: e);
+      AppErrorHandler.handleErrorWithoutSnackbar(e,
+          context: 'ThemeController._saveThemeMode');
     }
   }
 }

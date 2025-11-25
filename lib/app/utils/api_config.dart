@@ -1,6 +1,6 @@
 import 'env_config.dart';
 import 'package:dio/dio.dart';
-import 'package:flutter/foundation.dart';
+import 'error_handler.dart';
 import 'logger.dart';
 
 class ApiConfig {
@@ -118,31 +118,8 @@ class ApiConfig {
 
   /// Get error message from DioException
   static String getErrorMessage(dynamic error) {
-    if (error is DioException) {
-      switch (error.type) {
-        case DioExceptionType.connectionTimeout:
-          return 'Connection timeout. Please check your internet connection.';
-        case DioExceptionType.sendTimeout:
-          return 'Request timeout. Please try again.';
-        case DioExceptionType.receiveTimeout:
-          return 'Server response timeout. Please try again.';
-        case DioExceptionType.badResponse:
-          return 'Server error: ${error.response?.statusCode}';
-        case DioExceptionType.cancel:
-          return 'Request was cancelled.';
-        case DioExceptionType.connectionError:
-          return 'No internet connection. Please check your network.';
-        case DioExceptionType.unknown:
-          if (error.error?.toString().contains('SSL') == true ||
-              error.error?.toString().contains('certificate') == true) {
-            return 'SSL/TLS connection error. Please check your network settings.';
-          }
-          return 'Unknown network error occurred.';
-        default:
-          return 'Network error occurred.';
-      }
-    }
-    return 'An error occurred.';
+    return AppErrorHandler.getUserFriendlyMessage(error,
+        context: 'ApiConfig.getErrorMessage');
   }
 
   /// Check if error is retryable

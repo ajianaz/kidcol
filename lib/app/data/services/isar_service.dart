@@ -3,6 +3,7 @@ import 'package:flutter/foundation.dart';
 import 'package:isar_community/isar.dart';
 import 'package:kidcol/app/data/entities/gambar.dart';
 import 'package:kidcol/app/data/entities/koleksi.dart';
+import 'package:kidcol/app/utils/error_handler.dart';
 import 'package:kidcol/app/utils/logger.dart';
 import 'package:path_provider/path_provider.dart';
 
@@ -39,8 +40,9 @@ class IsarService {
       Logger.log('Koleksi saved: ${newKoleksi.title} (ID: ${newKoleksi.id})',
           tag: 'IsarService');
     } catch (e) {
-      Logger.error('Error saving koleksi: $e', tag: 'IsarService', error: e);
-      throw Exception('Failed to save koleksi: $e');
+      AppErrorHandler.handleErrorWithoutSnackbar(e,
+          context: 'IsarService.saveKoleksi');
+      rethrow;
     }
   }
 
@@ -87,8 +89,9 @@ class IsarService {
       Logger.log('All done! Gambar and relationships saved.',
           tag: 'IsarService');
     } catch (e) {
-      Logger.error('Error in saveGambar: $e', tag: 'IsarService', error: e);
-      throw Exception('Failed to save gambar: $e');
+      AppErrorHandler.handleErrorWithoutSnackbar(e,
+          context: 'IsarService.saveGambar');
+      rethrow;
     }
   }
 
@@ -104,8 +107,9 @@ class IsarService {
       }
       return koleksis;
     } catch (e) {
-      Logger.error('Error in getAllKoleksis: $e', tag: 'IsarService', error: e);
-      throw Exception('Failed to get koleksis: $e');
+      AppErrorHandler.handleErrorWithoutSnackbar(e,
+          context: 'IsarService.getAllKoleksis');
+      rethrow;
     }
   }
 
@@ -115,7 +119,9 @@ class IsarService {
       final isar = await db;
       yield* isar.koleksis.where().sortByTitle().watch(fireImmediately: true);
     } catch (e) {
-      throw Exception('Failed to listen to koleksis: $e');
+      AppErrorHandler.handleErrorWithoutSnackbar(e,
+          context: 'IsarService.listenToKoleksis');
+      rethrow;
     }
   }
 
@@ -133,7 +139,9 @@ class IsarService {
       }
       return [];
     } catch (e) {
-      throw Exception('Failed to get gambar koleksi: $e');
+      AppErrorHandler.handleErrorWithoutSnackbar(e,
+          context: 'IsarService.getGambarKoleksi');
+      rethrow;
     }
   }
 
@@ -147,9 +155,9 @@ class IsarService {
           .koleksis((q) => q.idEqualTo(koleksi.id))
           .watch(fireImmediately: true);
     } catch (e) {
-      Logger.error('Error in listenToGambars: $e',
-          tag: 'IsarService', error: e);
-      throw Exception('Failed to listen to gambars: $e');
+      AppErrorHandler.handleErrorWithoutSnackbar(e,
+          context: 'IsarService.listenToGambars');
+      rethrow;
     }
   }
 
@@ -161,7 +169,9 @@ class IsarService {
         await isar.koleksis.delete(koleksi.id);
       });
     } catch (e) {
-      throw Exception('Failed to delete koleksi: $e');
+      AppErrorHandler.handleErrorWithoutSnackbar(e,
+          context: 'IsarService.deleteKoleksi');
+      rethrow;
     }
   }
 
@@ -173,7 +183,9 @@ class IsarService {
         await isar.gambars.delete(gambar.id);
       });
     } catch (e) {
-      throw Exception('Failed to delete gambar: $e');
+      AppErrorHandler.handleErrorWithoutSnackbar(e,
+          context: 'IsarService.deleteGambar');
+      rethrow;
     }
   }
 
@@ -213,7 +225,9 @@ class IsarService {
       _isInitialized = true;
       return _cachedInstance!;
     } catch (e) {
-      throw Exception('Failed to open database: $e');
+      AppErrorHandler.handleErrorWithoutSnackbar(e,
+          context: 'IsarService.openDB');
+      rethrow;
     }
   }
 
@@ -234,7 +248,8 @@ class IsarService {
       _isInitialized = false;
     } catch (e) {
       // Log the error but don't throw to prevent crashes
-      Logger.error('Error closing database: $e', tag: 'IsarService', error: e);
+      AppErrorHandler.handleErrorWithoutSnackbar(e,
+          context: 'IsarService.close');
       // Ensure state is reset even if close fails
       _cachedInstance = null;
       _isInitialized = false;
@@ -252,7 +267,9 @@ class IsarService {
       // depending on the platform and Isar implementation
       return 0; // Placeholder - Isar doesn't expose direct size info
     } catch (e) {
-      throw Exception('Failed to get database size: $e');
+      AppErrorHandler.handleErrorWithoutSnackbar(e,
+          context: 'IsarService.getDatabaseSize');
+      rethrow;
     }
   }
 
@@ -265,7 +282,9 @@ class IsarService {
         // This is a placeholder for explicit compaction if needed
       });
     } catch (e) {
-      throw Exception('Failed to compact database: $e');
+      AppErrorHandler.handleErrorWithoutSnackbar(e,
+          context: 'IsarService.compactDatabase');
+      rethrow;
     }
   }
 }

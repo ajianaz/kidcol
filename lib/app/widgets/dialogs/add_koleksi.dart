@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../../../app/utils/error_handler.dart';
 import '../../../i18n/translations.g.dart';
-import '../../../app/utils/colors.dart';
 import '../../../app/utils/app_dialogs.dart';
 import '../../../app/utils/responsive_helper.dart';
 
@@ -96,7 +96,7 @@ class _AddKoleksiDialogState extends State<AddKoleksiDialog>
       }
     } catch (e) {
       // Show error feedback
-      _showErrorFeedback();
+      _showErrorFeedback(e);
     } finally {
       if (mounted) {
         setState(() {
@@ -113,9 +113,10 @@ class _AddKoleksiDialogState extends State<AddKoleksiDialog>
     );
   }
 
-  void _showErrorFeedback() {
+  void _showErrorFeedback(dynamic error) {
     AppSnackbars.showError(
-      t.messages.error_occurred,
+      AppErrorHandler.getUserFriendlyMessage(error,
+          context: 'AddKoleksiDialog._createCollection'),
       title: t.common.error,
     );
   }

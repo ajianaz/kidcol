@@ -2,6 +2,7 @@ import 'package:get/get.dart';
 import 'package:device_info_plus/device_info_plus.dart';
 import '../models/account_status.dart';
 import '../../utils/env_config.dart';
+import '../../utils/error_handler.dart';
 import '../../utils/logger.dart';
 
 /// Service for managing account status and providing global access to account information
@@ -48,8 +49,8 @@ class AccountService extends GetxService {
       } catch (e) {
         deviceInfo = 'Unknown Device';
         deviceId = 'error_${DateTime.now().millisecondsSinceEpoch}';
-        Logger.error('Error getting device info: $e',
-            tag: 'AccountService', error: e);
+        AppErrorHandler.handleErrorWithoutSnackbar(e,
+            context: 'AccountService._initializeAccountStatus.getDeviceInfo');
       }
 
       // Initialize the account status
@@ -67,8 +68,8 @@ class AccountService extends GetxService {
           'Account status initialized: $accountType with limit $collectionLimit, Device ID: $deviceId',
           tag: 'AccountService');
     } catch (e) {
-      Logger.error('Error initializing account status: $e',
-          tag: 'AccountService', error: e);
+      AppErrorHandler.handleErrorWithoutSnackbar(e,
+          context: 'AccountService._initializeAccountStatus');
       // Initialize with default values in case of error
       _accountController.initializeAccountStatus(
         accountType: 'free',
@@ -159,8 +160,8 @@ class AccountService extends GetxService {
 
       return true;
     } catch (e) {
-      Logger.error('Error checking account status with endpoint: $e',
-          tag: 'AccountService', error: e);
+      AppErrorHandler.handleErrorWithoutSnackbar(e,
+          context: 'AccountService.checkAccountStatusWithEndpoint');
       return false;
     }
   }
@@ -192,8 +193,8 @@ class AccountService extends GetxService {
             tag: 'AccountService');
       }
     } catch (e) {
-      Logger.error('Error updating account type: $e',
-          tag: 'AccountService', error: e);
+      AppErrorHandler.handleErrorWithoutSnackbar(e,
+          context: 'AccountService.updateAccountType');
     }
   }
 
@@ -265,8 +266,8 @@ class AccountService extends GetxService {
           currentDeviceId = 'unknown_${DateTime.now().millisecondsSinceEpoch}';
         }
       } catch (e) {
-        Logger.error('Error getting current device info: $e',
-            tag: 'AccountService', error: e);
+        AppErrorHandler.handleErrorWithoutSnackbar(e,
+            context: 'AccountService.verifyCurrentDevice.getCurrentDeviceInfo');
         return false;
       }
 
@@ -295,8 +296,8 @@ class AccountService extends GetxService {
           tag: 'AccountService');
       return isMatch;
     } catch (e) {
-      Logger.error('Error verifying device: $e',
-          tag: 'AccountService', error: e);
+      AppErrorHandler.handleErrorWithoutSnackbar(e,
+          context: 'AccountService.verifyCurrentDevice');
       return false;
     }
   }
@@ -324,8 +325,8 @@ class AccountService extends GetxService {
           deviceId = 'unknown_${DateTime.now().millisecondsSinceEpoch}';
         }
       } catch (e) {
-        Logger.error('Error getting device info for locking: $e',
-            tag: 'AccountService', error: e);
+        AppErrorHandler.handleErrorWithoutSnackbar(e,
+            context: 'AccountService.lockAccountToDevice.getDeviceInfo');
         return false;
       }
 
@@ -346,8 +347,8 @@ class AccountService extends GetxService {
       }
       return false;
     } catch (e) {
-      Logger.error('Error locking account to device: $e',
-          tag: 'AccountService', error: e);
+      AppErrorHandler.handleErrorWithoutSnackbar(e,
+          context: 'AccountService.lockAccountToDevice');
       return false;
     }
   }
@@ -368,8 +369,8 @@ class AccountService extends GetxService {
       // In a real implementation, this would return the success status of the API call
       return true;
     } catch (e) {
-      Logger.error('Error sending WhatsApp verification code: $e',
-          tag: 'AccountService', error: e);
+      AppErrorHandler.handleErrorWithoutSnackbar(e,
+          context: 'AccountService.sendWhatsAppVerificationCode');
       return false;
     }
   }
@@ -411,8 +412,8 @@ class AccountService extends GetxService {
 
       return false;
     } catch (e) {
-      Logger.error('Error verifying WhatsApp code: $e',
-          tag: 'AccountService', error: e);
+      AppErrorHandler.handleErrorWithoutSnackbar(e,
+          context: 'AccountService.verifyWhatsAppCodeAndLock');
       return false;
     }
   }
