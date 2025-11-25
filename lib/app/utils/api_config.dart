@@ -1,6 +1,7 @@
 import 'env_config.dart';
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
+import 'logger.dart';
 
 class ApiConfig {
   static String get baseUrl => EnvConfig.baseUrl;
@@ -62,10 +63,10 @@ class ApiConfig {
       }
 
       final fullUrl = '$base$endpoint';
-      debugPrint('Generated full URL: $fullUrl');
+      Logger.log('Generated full URL: $fullUrl', tag: 'ApiConfig');
       return fullUrl;
     } catch (e) {
-      debugPrint('Error generating full URL: $e');
+      Logger.error('Error generating full URL: $e', tag: 'ApiConfig', error: e);
       return '$baseUrl/$endpoint';
     }
   }
@@ -74,7 +75,7 @@ class ApiConfig {
   static String getImageUrl(String? imagePath) {
     try {
       if (imagePath == null || imagePath.trim().isEmpty) {
-        debugPrint('Image path is null or empty');
+        Logger.warning('Image path is null or empty', tag: 'ApiConfig');
         return '';
       }
 
@@ -95,10 +96,11 @@ class ApiConfig {
       }
 
       final fullUrl = '$base/$imagePath';
-      debugPrint('Generated image URL: $fullUrl');
+      Logger.log('Generated image URL: $fullUrl', tag: 'ApiConfig');
       return fullUrl;
     } catch (e) {
-      debugPrint('Error generating image URL: $e');
+      Logger.error('Error generating image URL: $e',
+          tag: 'ApiConfig', error: e);
       return imagePath ?? '';
     }
   }
@@ -109,7 +111,7 @@ class ApiConfig {
       final uri = Uri.parse(url);
       return uri.hasScheme && (uri.scheme == 'http' || uri.scheme == 'https');
     } catch (e) {
-      debugPrint('Invalid URL: $url, error: $e');
+      Logger.error('Invalid URL: $url', tag: 'ApiConfig', error: e);
       return false;
     }
   }

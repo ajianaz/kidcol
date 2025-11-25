@@ -2,9 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:kidcol/app/data/entities/koleksi.dart';
 import 'package:kidcol/app/data/services/isar_service.dart';
+import 'package:kidcol/app/utils/logger.dart';
 
 class KoleksiController extends GetxController {
-  final service = IsarService();
+  final service = Get.find<IsarService>();
 
   Future<void> simpanKoleksi(String value) async {
     try {
@@ -12,7 +13,8 @@ class KoleksiController extends GetxController {
       await service.saveKoleksi(data);
       // Optionally show success message
     } catch (e) {
-      debugPrint("Error saving koleksi: $e");
+      Logger.error("Error saving koleksi: $e",
+          tag: 'KoleksiController', error: e);
       // Show error to user
     }
   }

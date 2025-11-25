@@ -3,6 +3,7 @@ import 'package:flutter/foundation.dart';
 import 'package:isar_community/isar.dart';
 import 'package:kidcol/app/data/entities/gambar.dart';
 import 'package:kidcol/app/data/entities/koleksi.dart';
+import 'package:kidcol/app/utils/logger.dart';
 import 'package:path_provider/path_provider.dart';
 
 class IsarService {
@@ -14,7 +15,7 @@ class IsarService {
 
   // Private constructor for singleton pattern
   IsarService._internal() {
-    debugPrint('🔧 IsarService singleton instance created');
+    Logger.log('IsarService singleton instance created', tag: 'IsarService');
     db = openDB();
   }
 
@@ -23,7 +24,8 @@ class IsarService {
 
   // Factory constructor returns singleton
   factory IsarService() {
-    debugPrint('📦 IsarService factory called - returning singleton instance');
+    Logger.log('IsarService factory called - returning singleton instance',
+        tag: 'IsarService');
     return _instance;
   }
 
@@ -34,9 +36,10 @@ class IsarService {
       await isar.writeTxn(() async {
         await isar.koleksis.put(newKoleksi);
       });
-      debugPrint('✅ Koleksi saved: ${newKoleksi.title} (ID: ${newKoleksi.id})');
+      Logger.log('Koleksi saved: ${newKoleksi.title} (ID: ${newKoleksi.id})',
+          tag: 'IsarService');
     } catch (e) {
-      debugPrint('❌ Error saving koleksi: $e');
+      Logger.error('Error saving koleksi: $e', tag: 'IsarService', error: e);
       throw Exception('Failed to save koleksi: $e');
     }
   }
@@ -51,21 +54,22 @@ class IsarService {
         throw ArgumentError('Gambar endpoint cannot be empty');
       }
 
-      debugPrint('📸 Saving gambar: ${newGambar.endpoint}');
-      debugPrint('📚 Koleksis to link: ${koleksis?.length ?? 0}');
+      Logger.log('Saving gambar: ${newGambar.endpoint}', tag: 'IsarService');
+      Logger.log('Koleksis to link: ${koleksis?.length ?? 0}',
+          tag: 'IsarService');
 
       // Save the gambar first
       await isar.writeTxn(() async {
         await isar.gambars.put(newGambar);
       });
-      debugPrint('✅ Gambar saved with ID: ${newGambar.id}');
+      Logger.log('Gambar saved with ID: ${newGambar.id}', tag: 'IsarService');
 
       // Now save the relationships from the Koleksi side
       // Since Gambar.koleksis is a @Backlink, we must save from Koleksi.gambars
       if (koleksis != null && koleksis.isNotEmpty) {
         for (final koleksi in koleksis) {
-          debugPrint(
-              '🔗 Linking to koleksi: ${koleksi.title} (ID: ${koleksi.id})');
+          Logger.log('Linking to koleksi: ${koleksi.title} (ID: ${koleksi.id})',
+              tag: 'IsarService');
 
           // Reload koleksi from DB to get managed instance
           final managedKoleksi = await isar.koleksis.get(koleksi.id);
@@ -75,13 +79,15 @@ class IsarService {
               managedKoleksi.gambars.add(newGambar);
               await managedKoleksi.gambars.save();
             });
-            debugPrint('✅ Link saved for koleksi: ${koleksi.title}');
+            Logger.log('Link saved for koleksi: ${koleksi.title}',
+                tag: 'IsarService');
           }
         }
       }
-      debugPrint('🎉 All done! Gambar and relationships saved.');
+      Logger.log('All done! Gambar and relationships saved.',
+          tag: 'IsarService');
     } catch (e) {
-      debugPrint('❌ Error in saveGambar: $e');
+      Logger.error('Error in saveGambar: $e', tag: 'IsarService', error: e);
       throw Exception('Failed to save gambar: $e');
     }
   }
@@ -91,13 +97,14 @@ class IsarService {
     try {
       final isar = await db;
       final koleksis = await isar.koleksis.where().sortByTitle().findAll();
-      debugPrint('📚 getAllKoleksis: Found ${koleksis.length} collections');
+      Logger.log('getAllKoleksis: Found ${koleksis.length} collections',
+          tag: 'IsarService');
       for (var k in koleksis) {
-        debugPrint('  - ${k.title} (ID: ${k.id})');
+        Logger.log('  - ${k.title} (ID: ${k.id})', tag: 'IsarService');
       }
       return koleksis;
     } catch (e) {
-      debugPrint('❌ Error in getAllKoleksis: $e');
+      Logger.error('Error in getAllKoleksis: $e', tag: 'IsarService', error: e);
       throw Exception('Failed to get koleksis: $e');
     }
   }
@@ -140,7 +147,8 @@ class IsarService {
           .koleksis((q) => q.idEqualTo(koleksi.id))
           .watch(fireImmediately: true);
     } catch (e) {
-      debugPrint('Error in listenToGambars: $e');
+      Logger.error('Error in listenToGambars: $e',
+          tag: 'IsarService', error: e);
       throw Exception('Failed to listen to gambars: $e');
     }
   }
@@ -226,7 +234,7 @@ class IsarService {
       _isInitialized = false;
     } catch (e) {
       // Log the error but don't throw to prevent crashes
-      debugPrint('Error closing database: $e');
+      Logger.error('Error closing database: $e', tag: 'IsarService', error: e);
       // Ensure state is reset even if close fails
       _cachedInstance = null;
       _isInitialized = false;

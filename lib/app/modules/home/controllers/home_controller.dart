@@ -8,11 +8,12 @@ import 'package:kidcol/app/data/services/isar_service.dart';
 import 'package:kidcol/app/data/services/account_service.dart';
 import 'package:kidcol/app/utils/api_config.dart';
 import 'package:kidcol/app/utils/env_config.dart';
+import 'package:kidcol/app/utils/logger.dart';
 import 'package:kidcol/app/widgets/dialogs/whatsapp_verification.dart';
 import 'package:kidcol/i18n/translations.g.dart';
 
 class HomeController extends GetxController {
-  final service = IsarService();
+  final service = Get.find<IsarService>();
   final accountService = Get.find<AccountService>();
 
   // bool isLoaded = false;
@@ -183,21 +184,25 @@ class HomeController extends GetxController {
     try {
       final url =
           '/api/coloring-images/endless?page=${page.value}&limit=${limit.value}';
-      debugPrint('Making API request to: ${ApiConfig.baseUrl}$url');
-      debugPrint(
-          'Using gateway key: ${ApiConfig.gatewayKey.isNotEmpty ? "Yes" : "No"}');
-      debugPrint('Retry count: ${retryCount.value}');
+      Logger.log('Making API request to: ${ApiConfig.baseUrl}$url',
+          tag: 'HomeController');
+      Logger.log(
+          'Using gateway key: ${ApiConfig.gatewayKey.isNotEmpty ? "Yes" : "No"}',
+          tag: 'HomeController');
+      Logger.log('Retry count: ${retryCount.value}', tag: 'HomeController');
 
       var response = await dio.get(url,
           options: ApiConfig.gatewayKey.isNotEmpty
               ? Options(headers: ApiConfig.authHeaders)
               : null);
 
-      debugPrint('API response status: ${response.statusCode}');
+      Logger.log('API response status: ${response.statusCode}',
+          tag: 'HomeController');
 
       if (response.statusCode == 200) {
         var result = AssetsResponse.fromJson(response.data);
-        debugPrint('Successfully loaded ${result.assets?.length ?? 0} assets');
+        Logger.log('Successfully loaded ${result.assets?.length ?? 0} assets',
+            tag: 'HomeController');
 
         assets.addAll(result.assets as List<Asset>);
         totalPage.value = result.totalPages as int;
@@ -209,10 +214,11 @@ class HomeController extends GetxController {
             'Failed to load data: Status code ${response.statusCode}');
       }
     } on DioException catch (e) {
-      debugPrint('Dio error: ${e.message}');
-      debugPrint('Response data: ${e.response?.data}');
-      debugPrint('Status code: ${e.response?.statusCode}');
-      debugPrint('Error type: ${e.type}');
+      Logger.error('Dio error: ${e.message}', tag: 'HomeController', error: e);
+      Logger.error('Response data: ${e.response?.data}', tag: 'HomeController');
+      Logger.error('Status code: ${e.response?.statusCode}',
+          tag: 'HomeController');
+      Logger.error('Error type: ${e.type}', tag: 'HomeController');
 
       String errorMessage = t.error.failed_to_load_images;
 
@@ -259,8 +265,8 @@ class HomeController extends GetxController {
       isLoading.value = false;
       update();
     } catch (e) {
-      debugPrint('Unexpected error: $e');
-      debugPrint('Error type: ${e.runtimeType}');
+      Logger.error('Unexpected error: $e', tag: 'HomeController', error: e);
+      Logger.error('Error type: ${e.runtimeType}', tag: 'HomeController');
 
       String errorMessage = t.error.unexpected_error;
 
@@ -296,7 +302,8 @@ class HomeController extends GetxController {
       result = data.isEmpty;
       return result;
     } catch (e) {
-      debugPrint("Error checking if koleksi is empty: $e");
+      Logger.error("Error checking if koleksi is empty: $e",
+          tag: 'HomeController', error: e);
       return true; // Assume empty on error
     }
   }
@@ -324,7 +331,7 @@ class HomeController extends GetxController {
   /// Retry failed request with exponential backoff
   Future<void> retryRequest() async {
     if (retryCount.value >= maxRetries) {
-      debugPrint('Max retries reached, giving up');
+      Logger.warning('Max retries reached, giving up', tag: 'HomeController');
       Get.snackbar(
         'Error',
         'Failed to load data after $maxRetries attempts. Please check your connection.',
@@ -336,7 +343,8 @@ class HomeController extends GetxController {
     }
 
     retryCount.value++;
-    debugPrint('Retrying request, attempt ${retryCount.value}/$maxRetries');
+    Logger.log('Retrying request, attempt ${retryCount.value}/$maxRetries',
+        tag: 'HomeController');
 
     // Exponential backoff: 1s, 2s, 4s
     final delay = Duration(seconds: (1 << (retryCount.value - 1)));
@@ -358,7 +366,8 @@ class HomeController extends GetxController {
       );
       return response.statusCode == 200;
     } catch (e) {
-      debugPrint('Network connectivity check failed: $e');
+      Logger.error('Network connectivity check failed: $e',
+          tag: 'HomeController', error: e);
       return false;
     }
   }
@@ -366,13 +375,14 @@ class HomeController extends GetxController {
   //Get All Koleksi dari local DB
   getAllKoleksi() async {
     try {
-      debugPrint('🔍 HomeController: Loading all koleksis...');
+      Logger.log('Loading all koleksis...', tag: 'HomeController');
       var result = await service.getAllKoleksis();
       koleksis = result;
       update();
-      debugPrint("✅ HomeController: Loaded ${koleksis.length} koleksis");
+      Logger.log("Loaded ${koleksis.length} koleksis", tag: 'HomeController');
     } catch (e) {
-      debugPrint("❌ HomeController: Error getting all koleksis: $e");
+      Logger.error("Error getting all koleksis: $e",
+          tag: 'HomeController', error: e);
       // Show error to user if needed
     }
   }
@@ -405,7 +415,8 @@ class HomeController extends GetxController {
         // }
       }
     } catch (e) {
-      debugPrint("Error in scrollListener: $e");
+      Logger.error("Error in scrollListener: $e",
+          tag: 'HomeController', error: e);
     }
   }
 
@@ -441,7 +452,7 @@ class HomeController extends GetxController {
   @override
   void onReady() {
     super.onReady();
-    debugPrint("READY");
+    Logger.log("Controller ready", tag: 'HomeController');
     update();
 
     // Check account verification before making any requests

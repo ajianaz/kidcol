@@ -1,6 +1,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:kidcol/app/utils/api_config.dart';
+import 'package:kidcol/app/utils/logger.dart';
 import 'package:kidcol/i18n/translations.g.dart';
 
 class CardImage extends StatelessWidget {
@@ -11,7 +12,7 @@ class CardImage extends StatelessWidget {
   /// Validates and processes the image URL
   String? _processImageUrl(String? url) {
     if (url == null || url.trim().isEmpty) {
-      debugPrint('CardImage: Empty or null URL provided');
+      Logger.warning('Empty or null URL provided', tag: 'CardImage');
       return null;
     }
 
@@ -20,7 +21,7 @@ class CardImage extends StatelessWidget {
 
     // Use ApiConfig to properly format the URL
     final processedUrl = ApiConfig.getImageUrl(url);
-    debugPrint('CardImage: Processed URL from $url to $processedUrl');
+    Logger.log('Processed URL from $url to $processedUrl', tag: 'CardImage');
 
     return processedUrl.isNotEmpty ? processedUrl : null;
   }
@@ -60,8 +61,9 @@ class CardImage extends StatelessWidget {
                   ),
                 ),
                 errorWidget: (context, url, error) {
-                  debugPrint('CardImage: Failed to load image: $url');
-                  debugPrint('CardImage: Error details: $error');
+                  Logger.error('Failed to load image: $url', tag: 'CardImage');
+                  Logger.error('Error details: $error',
+                      tag: 'CardImage', error: error);
                   return Container(
                     color: Colors.grey[200],
                     child: Column(

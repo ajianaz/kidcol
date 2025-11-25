@@ -2,6 +2,7 @@ import 'package:get/get.dart';
 import 'package:device_info_plus/device_info_plus.dart';
 import '../models/account_status.dart';
 import '../../utils/env_config.dart';
+import '../../utils/logger.dart';
 
 /// Service for managing account status and providing global access to account information
 class AccountService extends GetxService {
@@ -47,7 +48,8 @@ class AccountService extends GetxService {
       } catch (e) {
         deviceInfo = 'Unknown Device';
         deviceId = 'error_${DateTime.now().millisecondsSinceEpoch}';
-        print('Error getting device info: $e');
+        Logger.error('Error getting device info: $e',
+            tag: 'AccountService', error: e);
       }
 
       // Initialize the account status
@@ -61,10 +63,12 @@ class AccountService extends GetxService {
             'free', // Free accounts don't need device verification
       );
 
-      print(
-          'Account status initialized: $accountType with limit $collectionLimit, Device ID: $deviceId');
+      Logger.log(
+          'Account status initialized: $accountType with limit $collectionLimit, Device ID: $deviceId',
+          tag: 'AccountService');
     } catch (e) {
-      print('Error initializing account status: $e');
+      Logger.error('Error initializing account status: $e',
+          tag: 'AccountService', error: e);
       // Initialize with default values in case of error
       _accountController.initializeAccountStatus(
         accountType: 'free',
@@ -142,7 +146,8 @@ class AccountService extends GetxService {
       // In the future, this will make an API call to check the account status
 
       // For now, we'll just return true to indicate the account is valid
-      print('Checking account status with endpoint (placeholder)');
+      Logger.log('Checking account status with endpoint (placeholder)',
+          tag: 'AccountService');
 
       // Simulate API call delay
       await Future.delayed(const Duration(milliseconds: 500));
@@ -154,7 +159,8 @@ class AccountService extends GetxService {
 
       return true;
     } catch (e) {
-      print('Error checking account status with endpoint: $e');
+      Logger.error('Error checking account status with endpoint: $e',
+          tag: 'AccountService', error: e);
       return false;
     }
   }
@@ -181,11 +187,13 @@ class AccountService extends GetxService {
           ),
         );
 
-        print(
-            'Account type updated to: $newAccountType with limit $collectionLimit');
+        Logger.log(
+            'Account type updated to: $newAccountType with limit $collectionLimit',
+            tag: 'AccountService');
       }
     } catch (e) {
-      print('Error updating account type: $e');
+      Logger.error('Error updating account type: $e',
+          tag: 'AccountService', error: e);
     }
   }
 
@@ -219,7 +227,8 @@ class AccountService extends GetxService {
           lastChecked: DateTime.now(),
         ),
       );
-      print('Phone number updated to: $phoneNumber');
+      Logger.log('Phone number updated to: $phoneNumber',
+          tag: 'AccountService');
     }
   }
 
@@ -256,14 +265,15 @@ class AccountService extends GetxService {
           currentDeviceId = 'unknown_${DateTime.now().millisecondsSinceEpoch}';
         }
       } catch (e) {
-        print('Error getting current device info: $e');
+        Logger.error('Error getting current device info: $e',
+            tag: 'AccountService', error: e);
         return false;
       }
 
       // Check if current device matches stored device ID
       final storedDeviceId = getDeviceId();
       if (storedDeviceId.isEmpty) {
-        print('No stored device ID found');
+        Logger.warning('No stored device ID found', tag: 'AccountService');
         return false;
       }
 
@@ -280,11 +290,13 @@ class AccountService extends GetxService {
         );
       }
 
-      print(
-          'Device verification: $isMatch (Current: $currentDeviceId, Stored: $storedDeviceId)');
+      Logger.log(
+          'Device verification: $isMatch (Current: $currentDeviceId, Stored: $storedDeviceId)',
+          tag: 'AccountService');
       return isMatch;
     } catch (e) {
-      print('Error verifying device: $e');
+      Logger.error('Error verifying device: $e',
+          tag: 'AccountService', error: e);
       return false;
     }
   }
@@ -312,7 +324,8 @@ class AccountService extends GetxService {
           deviceId = 'unknown_${DateTime.now().millisecondsSinceEpoch}';
         }
       } catch (e) {
-        print('Error getting device info for locking: $e');
+        Logger.error('Error getting device info for locking: $e',
+            tag: 'AccountService', error: e);
         return false;
       }
 
@@ -327,12 +340,14 @@ class AccountService extends GetxService {
             lastChecked: DateTime.now(),
           ),
         );
-        print('Account locked to device: $deviceInfo (ID: $deviceId)');
+        Logger.log('Account locked to device: $deviceInfo (ID: $deviceId)',
+            tag: 'AccountService');
         return true;
       }
       return false;
     } catch (e) {
-      print('Error locking account to device: $e');
+      Logger.error('Error locking account to device: $e',
+          tag: 'AccountService', error: e);
       return false;
     }
   }
@@ -343,7 +358,8 @@ class AccountService extends GetxService {
       // This is a placeholder for sending verification code
       // In a real implementation, this would integrate with a WhatsApp API
 
-      print('Sending WhatsApp verification code to: $phoneNumber');
+      Logger.log('Sending WhatsApp verification code to: $phoneNumber',
+          tag: 'AccountService');
 
       // Simulate API call delay
       await Future.delayed(const Duration(seconds: 1));
@@ -352,7 +368,8 @@ class AccountService extends GetxService {
       // In a real implementation, this would return the success status of the API call
       return true;
     } catch (e) {
-      print('Error sending WhatsApp verification code: $e');
+      Logger.error('Error sending WhatsApp verification code: $e',
+          tag: 'AccountService', error: e);
       return false;
     }
   }
@@ -364,8 +381,9 @@ class AccountService extends GetxService {
       // This is a placeholder for verifying the code
       // In a real implementation, this would validate the code with your backend
 
-      print(
-          'Verifying WhatsApp code for: $phoneNumber with code: $verificationCode');
+      Logger.log(
+          'Verifying WhatsApp code for: $phoneNumber with code: $verificationCode',
+          tag: 'AccountService');
 
       // Simulate verification delay
       await Future.delayed(const Duration(seconds: 1));
@@ -385,14 +403,16 @@ class AccountService extends GetxService {
               lastChecked: DateTime.now(),
             ),
           );
-          print('WhatsApp number verified and locked: $phoneNumber');
+          Logger.log('WhatsApp number verified and locked: $phoneNumber',
+              tag: 'AccountService');
           return true;
         }
       }
 
       return false;
     } catch (e) {
-      print('Error verifying WhatsApp code: $e');
+      Logger.error('Error verifying WhatsApp code: $e',
+          tag: 'AccountService', error: e);
       return false;
     }
   }

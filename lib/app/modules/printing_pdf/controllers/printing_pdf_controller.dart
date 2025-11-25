@@ -4,13 +4,14 @@ import 'package:get/get.dart';
 import 'package:kidcol/app/data/entities/gambar.dart';
 import 'package:kidcol/app/data/entities/koleksi.dart';
 import 'package:kidcol/app/data/services/isar_service.dart';
+import 'package:kidcol/app/utils/logger.dart';
 import 'package:kidcol/i18n/translations.g.dart';
 import 'package:pdf/widgets.dart' as pw;
 import 'package:printing/printing.dart';
 
 class PrintingPdfController extends GetxController {
   late Koleksi koleksi;
-  IsarService service = IsarService();
+  IsarService service = Get.find<IsarService>();
 
   List<Gambar> gambars = List.empty(growable: true);
 
@@ -27,11 +28,12 @@ class PrintingPdfController extends GetxController {
     try {
       gambars = await service.getGambarKoleksi(koleksi);
       totalImages.value = gambars.length;
-      debugPrint("Data Total: ${gambars.length}");
+      Logger.log("Data Total: ${gambars.length}", tag: 'PrintingPdfController');
       addImage();
       update();
     } catch (e) {
-      debugPrint("Error getting gambar koleksi: $e");
+      Logger.error("Error getting gambar koleksi: $e",
+          tag: 'PrintingPdfController', error: e);
       processingError.value =
           "${t.error.failed_to_load_images}: ${e.toString()}";
       update();
@@ -47,12 +49,14 @@ class PrintingPdfController extends GetxController {
     processingError.value = '';
     netImages.clear();
 
-    debugPrint("Starting to process ${gambars.length} images one by one");
+    Logger.log("Starting to process ${gambars.length} images one by one",
+        tag: 'PrintingPdfController');
 
     for (int i = 0; i < gambars.length; i++) {
       try {
-        debugPrint(
-            "Processing image ${i + 1}/${gambars.length}: ${gambars[i].endpoint}");
+        Logger.log(
+            "Processing image ${i + 1}/${gambars.length}: ${gambars[i].endpoint}",
+            tag: 'PrintingPdfController');
 
         // Process image one by one
         var netImage = await networkImage("${gambars[i].endpoint}");
@@ -62,7 +66,8 @@ class PrintingPdfController extends GetxController {
         processedImages.value = i + 1;
         imageProcessingProgress.value = (i + 1) / gambars.length;
 
-        debugPrint("Successfully processed image ${i + 1}/${gambars.length}");
+        Logger.log("Successfully processed image ${i + 1}/${gambars.length}",
+            tag: 'PrintingPdfController');
 
         // Add a small delay between processing images to prevent memory spikes
         if (i < gambars.length - 1) {
@@ -72,7 +77,8 @@ class PrintingPdfController extends GetxController {
         // Update UI after each image is processed
         update();
       } catch (e) {
-        debugPrint("Error processing image ${i + 1}: $e");
+        Logger.error("Error processing image ${i + 1}: $e",
+            tag: 'PrintingPdfController', error: e);
         processingError.value =
             "${t.error.failed_to_load_images} ${i + 1}: ${e.toString()}";
         // Continue processing other images even if one fails
@@ -80,8 +86,9 @@ class PrintingPdfController extends GetxController {
     }
 
     isProcessingImages.value = false;
-    debugPrint(
-        "Finished processing images. Total processed: ${netImages.length}");
+    Logger.log(
+        "Finished processing images. Total processed: ${netImages.length}",
+        tag: 'PrintingPdfController');
     update();
   }
 
@@ -90,7 +97,8 @@ class PrintingPdfController extends GetxController {
     super.onInit();
     if (Get.arguments != null) {
       koleksi = Get.arguments;
-      debugPrint("Data Diterima: ${koleksi.title}");
+      Logger.log("Data Diterima: ${koleksi.title}",
+          tag: 'PrintingPdfController');
       getGambarKoleksi(koleksi);
     }
   }

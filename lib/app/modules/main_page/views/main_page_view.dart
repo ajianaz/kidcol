@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 import 'package:get/get.dart';
+import 'package:kidcol/app/utils/logger.dart';
 import 'package:kidcol/app/utils/responsive_helper.dart';
 import 'package:kidcol/i18n/translations.g.dart' as i18n;
 
@@ -16,8 +17,9 @@ class MainPageView extends GetView<MainPageController> {
   Widget build(BuildContext context) {
     try {
       if (!ResponsiveHelper.isContextValid(context)) {
-        debugPrint(
-            'Context is invalid in MainPageView build, returning fallback widget');
+        Logger.warning(
+            'Context is invalid in MainPageView build, returning fallback widget',
+            tag: 'MainPageView');
         return const Scaffold(
           body: Center(
             child: CircularProgressIndicator(),
@@ -42,7 +44,8 @@ class MainPageView extends GetView<MainPageController> {
 
       final navigationType =
           ResponsiveHelper.getAdaptiveNavigationType(context);
-      debugPrint('Building MainPageView with navigation type: $navigationType');
+      Logger.log('Building MainPageView with navigation type: $navigationType',
+          tag: 'MainPageView');
 
       if (navigationType == 'navigationRail') {
         // Tablet and Desktop layout with NavigationRail
@@ -74,7 +77,8 @@ class MainPageView extends GetView<MainPageController> {
         );
       }
     } catch (e) {
-      debugPrint('Error in MainPageView build: $e');
+      Logger.error('Error in MainPageView build: $e',
+          tag: 'MainPageView', error: e);
       return Scaffold(
         backgroundColor: Theme.of(context).colorScheme.surface,
         body: Center(
@@ -116,8 +120,9 @@ class MainPageView extends GetView<MainPageController> {
   Widget _buildMainContent(BuildContext context) {
     try {
       if (!ResponsiveHelper.isContextValid(context)) {
-        debugPrint(
-            'Context is invalid in _buildMainContent, returning fallback widget');
+        Logger.warning(
+            'Context is invalid in _buildMainContent, returning fallback widget',
+            tag: 'MainPageView');
         return const Center(
           child: CircularProgressIndicator(),
         );
@@ -165,8 +170,9 @@ class MainPageView extends GetView<MainPageController> {
                         final contents = controller.mainContents;
 
                         if (activeIndex < 0 || activeIndex >= contents.length) {
-                          debugPrint(
-                              'Invalid active index: $activeIndex, contents length: ${contents.length}');
+                          Logger.warning(
+                              'Invalid active index: $activeIndex, contents length: ${contents.length}',
+                              tag: 'MainPageView');
                           return const Center(
                             child: Text('Page not found'),
                           );
@@ -174,7 +180,8 @@ class MainPageView extends GetView<MainPageController> {
 
                         return contents[activeIndex];
                       } catch (e) {
-                        debugPrint('Error in Obx callback: $e');
+                        Logger.error('Error in Obx callback: $e',
+                            tag: 'MainPageView', error: e);
                         return const Center(
                           child: Text('Error loading page'),
                         );
@@ -188,7 +195,8 @@ class MainPageView extends GetView<MainPageController> {
         ),
       );
     } catch (e) {
-      debugPrint('Error in _buildMainContent: $e');
+      Logger.error('Error in _buildMainContent: $e',
+          tag: 'MainPageView', error: e);
       return Container(
         color: Theme.of(context).colorScheme.surface,
         child: const Center(
@@ -204,13 +212,15 @@ class MainPageView extends GetView<MainPageController> {
     final t = i18n.Translations.of(context);
 
     return Obx(() {
-      debugPrint(
-          'NavigationRail: Building with activeIndex: ${controller.activeIndex.value}');
+      Logger.log(
+          'NavigationRail: Building with activeIndex: ${controller.activeIndex.value}',
+          tag: 'MainPageView');
       return NavigationRail(
         backgroundColor: colorScheme.surface,
         selectedIndex: controller.activeIndex.value,
         onDestinationSelected: (int index) {
-          debugPrint('NavigationRail: Destination selected with index: $index');
+          Logger.log('NavigationRail: Destination selected with index: $index',
+              tag: 'MainPageView');
           controller.navigateToPage(index);
         },
         labelType: NavigationRailLabelType.all,
@@ -270,8 +280,9 @@ class MainPageView extends GetView<MainPageController> {
   Widget _buildModernBottomNavBar(BuildContext context) {
     try {
       if (!ResponsiveHelper.isContextValid(context)) {
-        debugPrint(
-            'Context is invalid in _buildModernBottomNavBar, returning empty container');
+        Logger.warning(
+            'Context is invalid in _buildModernBottomNavBar, returning empty container',
+            tag: 'MainPageView');
         return const SizedBox.shrink();
       }
 
@@ -305,7 +316,8 @@ class MainPageView extends GetView<MainPageController> {
                 try {
                   controller.navigateToPage(i);
                 } catch (e) {
-                  debugPrint('Error navigating to page $i: $e');
+                  Logger.error('Error navigating to page $i: $e',
+                      tag: 'MainPageView', error: e);
                 }
               },
               backgroundColor: Colors.transparent,
@@ -337,7 +349,8 @@ class MainPageView extends GetView<MainPageController> {
         ),
       );
     } catch (e) {
-      debugPrint('Error in _buildModernBottomNavBar: $e');
+      Logger.error('Error in _buildModernBottomNavBar: $e',
+          tag: 'MainPageView', error: e);
       return const SizedBox.shrink();
     }
   }

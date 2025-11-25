@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:kidcol/app/utils/logger.dart';
 
 class ResponsiveHelper {
   // Breakpoint constants for easy reference
@@ -13,8 +14,9 @@ class ResponsiveHelper {
 
       // Ensure minimum width to prevent layout errors
       if (screenWidth <= 0) {
-        debugPrint(
-            'Warning: Invalid screen width detected: $screenWidth, using default');
+        Logger.warning(
+            'Invalid screen width detected: $screenWidth, using default',
+            tag: 'ResponsiveHelper');
         return 2; // Default to mobile layout
       }
 
@@ -32,7 +34,8 @@ class ResponsiveHelper {
         return 5;
       }
     } catch (e) {
-      debugPrint('Error in getCrossAxisCount: $e, returning default value');
+      Logger.error('Error in getCrossAxisCount: $e',
+          tag: 'ResponsiveHelper', error: e);
       return 2; // Default to mobile layout on error
     }
   }
@@ -43,7 +46,7 @@ class ResponsiveHelper {
       double width = MediaQuery.of(context).size.width;
       return width < mobileBreakpoint;
     } catch (e) {
-      debugPrint('Error in isMobile: $e, returning true (mobile)');
+      Logger.error('Error in isMobile: $e', tag: 'ResponsiveHelper', error: e);
       return true; // Default to mobile on error
     }
   }
@@ -54,7 +57,7 @@ class ResponsiveHelper {
       double width = MediaQuery.of(context).size.width;
       return width >= mobileBreakpoint && width < tabletBreakpoint;
     } catch (e) {
-      debugPrint('Error in isTablet: $e, returning false');
+      Logger.error('Error in isTablet: $e', tag: 'ResponsiveHelper', error: e);
       return false; // Default to not tablet on error
     }
   }
@@ -65,7 +68,7 @@ class ResponsiveHelper {
       double width = MediaQuery.of(context).size.width;
       return width >= tabletBreakpoint;
     } catch (e) {
-      debugPrint('Error in isDesktop: $e, returning false');
+      Logger.error('Error in isDesktop: $e', tag: 'ResponsiveHelper', error: e);
       return false; // Default to not desktop on error
     }
   }
@@ -78,8 +81,9 @@ class ResponsiveHelper {
 
       // Ensure minimum width to prevent layout errors
       if (screenWidth <= 0) {
-        debugPrint(
-            'Warning: Invalid screen width detected: $screenWidth, using default');
+        Logger.warning(
+            'Invalid screen width detected: $screenWidth, using default',
+            tag: 'ResponsiveHelper');
         return 600; // Default mobile width
       }
 
@@ -88,7 +92,8 @@ class ResponsiveHelper {
       }
       return screenWidth;
     } catch (e) {
-      debugPrint('Error in getMaxContentWidth: $e, returning default value');
+      Logger.error('Error in getMaxContentWidth: $e',
+          tag: 'ResponsiveHelper', error: e);
       return 600; // Default mobile width on error
     }
   }
@@ -102,8 +107,9 @@ class ResponsiveHelper {
 
       // Ensure minimum width to prevent layout errors
       if (screenWidth <= 0) {
-        debugPrint(
-            'Warning: Invalid screen width detected: $screenWidth, using default padding');
+        Logger.warning(
+            'Invalid screen width detected: $screenWidth, using default padding',
+            tag: 'ResponsiveHelper');
         return const EdgeInsets.all(16.0);
       }
 
@@ -117,8 +123,8 @@ class ResponsiveHelper {
       // Default padding for mobile and tablet
       return const EdgeInsets.all(16.0);
     } catch (e) {
-      debugPrint(
-          'Error in getCenteredContentPadding: $e, returning default padding');
+      Logger.error('Error in getCenteredContentPadding: $e',
+          tag: 'ResponsiveHelper', error: e);
       return const EdgeInsets.all(16.0);
     }
   }
@@ -148,8 +154,9 @@ class ResponsiveHelper {
 
       // Ensure minimum width to prevent layout errors
       if (screenWidth <= 0) {
-        debugPrint(
-            'Warning: Invalid screen width detected: $screenWidth, using default dialog width');
+        Logger.warning(
+            'Invalid screen width detected: $screenWidth, using default dialog width',
+            tag: 'ResponsiveHelper');
         return 300; // Default dialog width
       }
 
@@ -163,8 +170,8 @@ class ResponsiveHelper {
         return (screenWidth * 0.5).clamp(400.0, 600.0);
       }
     } catch (e) {
-      debugPrint(
-          'Error in getResponsiveDialogWidth: $e, returning default dialog width');
+      Logger.error('Error in getResponsiveDialogWidth: $e',
+          tag: 'ResponsiveHelper', error: e);
       return 300; // Default dialog width on error
     }
   }
@@ -180,8 +187,9 @@ class ResponsiveHelper {
 
       // Ensure minimum width to prevent layout errors
       if (screenWidth <= 0) {
-        debugPrint(
-            'Warning: Invalid screen width detected: $screenWidth, using default container width');
+        Logger.warning(
+            'Invalid screen width detected: $screenWidth, using default container width',
+            tag: 'ResponsiveHelper');
         return 600; // Default container width
       }
 
@@ -192,8 +200,8 @@ class ResponsiveHelper {
       }
       return screenWidth;
     } catch (e) {
-      debugPrint(
-          'Error in getResponsiveContainerWidth: $e, returning default container width');
+      Logger.error('Error in getResponsiveContainerWidth: $e',
+          tag: 'ResponsiveHelper', error: e);
       return 600; // Default container width on error
     }
   }
@@ -216,8 +224,8 @@ class ResponsiveHelper {
         minWidth: minWidth,
       );
     } catch (e) {
-      debugPrint(
-          'Error in getResponsiveContainerConstraints: $e, returning default constraints');
+      Logger.error('Error in getResponsiveContainerConstraints: $e',
+          tag: 'ResponsiveHelper', error: e);
       return const BoxConstraints(
         minWidth: 0,
         maxWidth: double.infinity,
@@ -231,7 +239,8 @@ class ResponsiveHelper {
     try {
       return isDesktop(context);
     } catch (e) {
-      debugPrint('Error in shouldUseCenteredLayout: $e, returning false');
+      Logger.error('Error in shouldUseCenteredLayout: $e',
+          tag: 'ResponsiveHelper', error: e);
       return false; // Default to not centered on error
     }
   }
@@ -241,7 +250,8 @@ class ResponsiveHelper {
     try {
       return MediaQuery.of(context).size;
     } catch (e) {
-      debugPrint('Error getting screen size: $e, returning default size');
+      Logger.error('Error getting screen size: $e',
+          tag: 'ResponsiveHelper', error: e);
       return const Size(600, 800); // Default mobile size
     }
   }
@@ -251,7 +261,8 @@ class ResponsiveHelper {
     try {
       return context.mounted && MediaQuery.of(context).size.width > 0;
     } catch (e) {
-      debugPrint('Error checking context validity: $e');
+      Logger.error('Error checking context validity: $e',
+          tag: 'ResponsiveHelper', error: e);
       return false;
     }
   }
@@ -270,7 +281,8 @@ class ResponsiveHelper {
       try {
         onLayoutChanged();
       } catch (e) {
-        debugPrint('Error handling layout change: $e');
+        Logger.error('Error handling layout change: $e',
+            tag: 'ResponsiveHelper', error: e);
       }
     }
   }

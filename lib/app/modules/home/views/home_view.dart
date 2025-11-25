@@ -7,6 +7,7 @@ import 'package:kidcol/app/data/models/asset.dart';
 import 'package:kidcol/app/utils/constants.dart';
 import 'package:kidcol/app/utils/colors.dart';
 import 'package:kidcol/app/utils/app_dialogs.dart';
+import 'package:kidcol/app/utils/logger.dart';
 import 'package:kidcol/app/utils/responsive_helper.dart';
 import 'package:kidcol/app/utils/api_config.dart';
 import 'package:kidcol/app/utils/image_preview_helper.dart';
@@ -59,7 +60,8 @@ class HomeView extends GetView<HomeController> {
                   t.messages.image_failed_to_add_to_collection,
                   title: t.common.error,
                 );
-                debugPrint('Error saving image to collection: $e');
+                Logger.error('Error saving image to collection: $e',
+                    tag: 'HomeView', error: e);
               }
             },
           );
@@ -156,8 +158,9 @@ Widget _buildLoadingState() {
   try {
     final context = Get.context;
     if (context == null || !ResponsiveHelper.isContextValid(context)) {
-      debugPrint(
-          'Context is invalid in _buildLoadingState, returning empty widget');
+      Logger.warning(
+          'Context is invalid in _buildLoadingState, returning empty widget',
+          tag: 'HomeView');
       return const SliverToBoxAdapter(child: SizedBox());
     }
 
@@ -186,7 +189,7 @@ Widget _buildLoadingState() {
       ),
     );
   } catch (e) {
-    debugPrint('Error in _buildLoadingState: $e');
+    Logger.error('Error in _buildLoadingState: $e', tag: 'HomeView', error: e);
     return const SliverToBoxAdapter(
       child: Center(
         child: CircularProgressIndicator(),
@@ -266,16 +269,18 @@ Widget _buildImageGrid(
 ) {
   try {
     if (!ResponsiveHelper.isContextValid(context)) {
-      debugPrint(
-          'Context is invalid in _buildImageGrid, returning empty widget');
+      Logger.warning(
+          'Context is invalid in _buildImageGrid, returning empty widget',
+          tag: 'HomeView');
       return const SliverToBoxAdapter(child: SizedBox());
     }
 
     final crossAxisCount = ResponsiveHelper.getCrossAxisCount(context);
     final screenSize = ResponsiveHelper.getScreenSize(context);
 
-    debugPrint(
-        'Building image grid with $crossAxisCount columns for screen size: $screenSize');
+    Logger.log(
+        'Building image grid with $crossAxisCount columns for screen size: $screenSize',
+        tag: 'HomeView');
 
     return SliverPadding(
       padding: AppPadding.getResponsiveAllPadding(context),
@@ -290,8 +295,9 @@ Widget _buildImageGrid(
           (context, index) {
             try {
               if (index >= controller.assets.length) {
-                debugPrint(
-                    'Index $index is out of bounds for assets list with ${controller.assets.length} items');
+                Logger.warning(
+                    'Index $index is out of bounds for assets list with ${controller.assets.length} items',
+                    tag: 'HomeView');
                 return const SizedBox.shrink();
               }
 
@@ -305,7 +311,8 @@ Widget _buildImageGrid(
                 ),
               );
             } catch (e) {
-              debugPrint('Error building grid item at index $index: $e');
+              Logger.error('Error building grid item at index $index: $e',
+                  tag: 'HomeView', error: e);
               return const SizedBox.shrink();
             }
           },
@@ -314,7 +321,7 @@ Widget _buildImageGrid(
       ),
     );
   } catch (e) {
-    debugPrint('Error in _buildImageGrid: $e');
+    Logger.error('Error in _buildImageGrid: $e', tag: 'HomeView', error: e);
     return SliverToBoxAdapter(
       child: Center(
         child: Column(
@@ -364,7 +371,7 @@ class _CustomShimmer extends StatefulWidget {
 
 class _CustomShimmerState extends State<_CustomShimmer>
     with SingleTickerProviderStateMixin {
-  late AnimationController _controller;
+  AnimationController? _controller;
   late Animation<double> _animation;
 
   @override
@@ -379,16 +386,20 @@ class _CustomShimmerState extends State<_CustomShimmer>
       begin: -2.0,
       end: 2.0,
     ).animate(CurvedAnimation(
-      parent: _controller,
+      parent: _controller!,
       curve: Curves.easeInOut,
     ));
 
-    _controller.repeat();
+    _controller!.repeat();
   }
 
   @override
   void dispose() {
-    _controller.dispose();
+    if (_controller?.isAnimating == true) {
+      _controller!.stop();
+    }
+    _controller?.dispose();
+    _controller = null;
     super.dispose();
   }
 
@@ -434,8 +445,8 @@ class _AnimatedGridItem extends StatefulWidget {
 }
 
 class _AnimatedGridItemState extends State<_AnimatedGridItem>
-    with SingleTickerProviderStateMixin {
-  late AnimationController _controller;
+    with SingleTickerProviderStateMixin, AutomaticKeepAliveClientMixin {
+  AnimationController? _controller;
   late Animation<double> _scaleAnimation;
   late Animation<double> _fadeAnimation;
 
@@ -451,7 +462,7 @@ class _AnimatedGridItemState extends State<_AnimatedGridItem>
       begin: 0.8,
       end: 1.0,
     ).animate(CurvedAnimation(
-      parent: _controller,
+      parent: _controller!,
       curve: Curves.elasticOut,
     ));
 
@@ -459,23 +470,31 @@ class _AnimatedGridItemState extends State<_AnimatedGridItem>
       begin: 0.0,
       end: 1.0,
     ).animate(CurvedAnimation(
-      parent: _controller,
+      parent: _controller!,
       curve: Curves.easeInOut,
     ));
 
-    _controller.forward();
+    _controller!.forward();
   }
 
   @override
   void dispose() {
-    _controller.dispose();
+    if (_controller?.isAnimating == true) {
+      _controller!.stop();
+    }
+    _controller?.dispose();
+    _controller = null;
     super.dispose();
   }
 
   @override
+  bool get wantKeepAlive => true;
+
+  @override
   Widget build(BuildContext context) {
+    super.build(context); // Required for AutomaticKeepAliveClientMixin
     return AnimatedBuilder(
-      animation: _controller,
+      animation: _controller!,
       builder: (context, child) {
         return FadeTransition(
           opacity: _fadeAnimation,
@@ -505,7 +524,7 @@ class _EnhancedImageCard extends StatefulWidget {
 
 class _EnhancedImageCardState extends State<_EnhancedImageCard>
     with SingleTickerProviderStateMixin {
-  late AnimationController _animationController;
+  AnimationController? _animationController;
   late Animation<double> _scaleAnimation;
   bool _isPressed = false;
 
@@ -520,14 +539,18 @@ class _EnhancedImageCardState extends State<_EnhancedImageCard>
       begin: 1.0,
       end: 0.95,
     ).animate(CurvedAnimation(
-      parent: _animationController,
+      parent: _animationController!,
       curve: Curves.easeInOut,
     ));
   }
 
   @override
   void dispose() {
-    _animationController.dispose();
+    if (_animationController?.isAnimating == true) {
+      _animationController!.stop();
+    }
+    _animationController?.dispose();
+    _animationController = null;
     super.dispose();
   }
 
@@ -535,14 +558,14 @@ class _EnhancedImageCardState extends State<_EnhancedImageCard>
     setState(() {
       _isPressed = true;
     });
-    _animationController.forward();
+    _animationController?.forward();
   }
 
   void _handleTapUp(TapUpDetails details) {
     setState(() {
       _isPressed = false;
     });
-    _animationController.reverse();
+    _animationController?.reverse();
     widget.onTap();
   }
 
@@ -550,7 +573,7 @@ class _EnhancedImageCardState extends State<_EnhancedImageCard>
     setState(() {
       _isPressed = false;
     });
-    _animationController.reverse();
+    _animationController?.reverse();
   }
 
   @override
@@ -645,8 +668,9 @@ class _EnhancedCardImage extends StatelessWidget {
   Widget build(BuildContext context) {
     try {
       if (!ResponsiveHelper.isContextValid(context)) {
-        debugPrint(
-            'Context is invalid in _EnhancedImageCard, returning placeholder');
+        Logger.warning(
+            'Context is invalid in _EnhancedImageCard, returning placeholder',
+            tag: 'HomeView');
         return Container(
           color: AppColors.surfaceLight,
           child: Center(
@@ -724,7 +748,8 @@ class _EnhancedCardImage extends StatelessWidget {
               ),
             );
     } catch (e) {
-      debugPrint('Error in _EnhancedImageCard build: $e');
+      Logger.error('Error in _EnhancedImageCard build: $e',
+          tag: 'HomeView', error: e);
       return Container(
         color: AppColors.surfaceLight,
         child: Center(
@@ -758,7 +783,7 @@ class _ModernCollectionDialog extends StatefulWidget {
 
 class _ModernCollectionDialogState extends State<_ModernCollectionDialog>
     with SingleTickerProviderStateMixin {
-  late AnimationController _animationController;
+  AnimationController? _animationController;
   late Animation<double> _fadeAnimation;
   late Animation<double> _scaleAnimation;
 
@@ -778,7 +803,7 @@ class _ModernCollectionDialogState extends State<_ModernCollectionDialog>
       begin: 0.0,
       end: 1.0,
     ).animate(CurvedAnimation(
-      parent: _animationController,
+      parent: _animationController!,
       curve: Curves.easeInOut,
     ));
 
@@ -786,16 +811,20 @@ class _ModernCollectionDialogState extends State<_ModernCollectionDialog>
       begin: 0.8,
       end: 1.0,
     ).animate(CurvedAnimation(
-      parent: _animationController,
+      parent: _animationController!,
       curve: Curves.elasticOut,
     ));
 
-    _animationController.forward();
+    _animationController!.forward();
   }
 
   @override
   void dispose() {
-    _animationController.dispose();
+    if (_animationController?.isAnimating == true) {
+      _animationController!.stop();
+    }
+    _animationController?.dispose();
+    _animationController = null;
     super.dispose();
   }
 
@@ -805,7 +834,7 @@ class _ModernCollectionDialogState extends State<_ModernCollectionDialog>
     final dialogWidth = isMobile ? double.infinity : 400.0;
 
     return AnimatedBuilder(
-      animation: _animationController,
+      animation: _animationController!,
       builder: (context, child) {
         return FadeTransition(
           opacity: _fadeAnimation,

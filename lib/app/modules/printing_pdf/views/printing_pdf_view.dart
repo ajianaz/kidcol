@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 
 import 'package:get/get.dart';
 import 'package:kidcol/app/data/entities/gambar.dart';
+import 'package:kidcol/app/utils/logger.dart';
 import 'package:pdf/pdf.dart';
 import 'package:pdf/widgets.dart' as pw;
 import 'package:printing/printing.dart';
@@ -99,9 +100,9 @@ class PrintingPdfView extends GetView<PrintingPdfController> {
     final pdf = pw.Document(version: PdfVersion.pdf_1_5, compress: true);
     // final font = await PdfGoogleFonts.nunitoExtraLight();
 
-    debugPrint("Gambars : ${gambars.length}");
-
-    debugPrint("Total Gambar : ${controller.netImages.length}");
+    Logger.log("Gambars : ${gambars.length}", tag: 'PrintingPdfView');
+    Logger.log("Total Gambar : ${controller.netImages.length}",
+        tag: 'PrintingPdfView');
 
     pdf.addPage(
       pw.Page(
@@ -112,7 +113,7 @@ class PrintingPdfView extends GetView<PrintingPdfController> {
               child: pw.ListView.builder(
                 itemCount: gambars.length,
                 itemBuilder: (context, index) {
-                  debugPrint("index : $index");
+                  Logger.log("index : $index", tag: 'PrintingPdfView');
 
                   return pw.Container(
                     child: pw.Flexible(
@@ -150,7 +151,7 @@ class PrintingPdfView extends GetView<PrintingPdfController> {
             pw.ListView.builder(
               itemCount: gambars.length,
               itemBuilder: (context, index) {
-                debugPrint("index : $index");
+                Logger.log("index : $index", tag: 'PrintingPdfView');
 
                 return pw.Container(
                   alignment: pw.Alignment.center,

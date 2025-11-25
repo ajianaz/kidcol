@@ -9,6 +9,7 @@ import 'app/utils/env_config.dart';
 import 'app/utils/app_theme.dart';
 import 'app/controllers/theme_controller.dart';
 import 'app/data/services/account_service.dart';
+import 'app/data/services/isar_service.dart';
 import 'i18n/translations.g.dart';
 
 void main() async {
@@ -19,6 +20,7 @@ void main() async {
   await EnvConfig.init();
 
   // Initialize GetX services
+  Get.put(IsarService());
   Get.put(AccountService());
   Get.put(ThemeController());
 

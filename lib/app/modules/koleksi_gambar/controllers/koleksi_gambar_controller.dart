@@ -4,11 +4,12 @@ import 'package:kidcol/app/data/entities/gambar.dart';
 import 'package:kidcol/app/data/entities/koleksi.dart';
 import 'package:kidcol/app/data/services/isar_service.dart';
 import 'package:kidcol/app/utils/app_dialogs.dart';
+import 'package:kidcol/app/utils/logger.dart';
 import 'package:kidcol/i18n/translations.g.dart';
 
 class KoleksiGambarController extends GetxController {
   late Koleksi koleksi;
-  IsarService service = IsarService();
+  IsarService service = Get.find<IsarService>();
 
   // List<Gambar> gambars = List.empty(growable: true);
 
@@ -22,7 +23,8 @@ class KoleksiGambarController extends GetxController {
       await service.deleteGambar(gambar);
       // getGambarKoleksi(koleksi);
     } catch (e) {
-      debugPrint("Error deleting gambar: $e");
+      Logger.error("Error deleting gambar: $e",
+          tag: 'KoleksiGambarController', error: e);
       // Show error to user
     }
   }
@@ -50,7 +52,8 @@ class KoleksiGambarController extends GetxController {
         },
       );
     } catch (e) {
-      debugPrint("Error deleting koleksi: $e");
+      Logger.error("Error deleting koleksi: $e",
+          tag: 'KoleksiGambarController', error: e);
 
       // Show error to user
       AppDialogs.showError(
@@ -65,7 +68,8 @@ class KoleksiGambarController extends GetxController {
     super.onInit();
     if (Get.arguments != null) {
       koleksi = Get.arguments;
-      debugPrint("Data Diterima: ${koleksi.title}");
+      Logger.log("Data Diterima: ${koleksi.title}",
+          tag: 'KoleksiGambarController');
       // getGambarKoleksi(koleksi);
     }
   }
