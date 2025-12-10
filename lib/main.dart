@@ -10,6 +10,7 @@ import 'app/utils/app_theme.dart';
 import 'app/controllers/theme_controller.dart';
 import 'app/data/services/account_service.dart';
 import 'app/data/services/filter_service.dart';
+import 'app/data/services/image_server_service.dart';
 import 'app/data/services/isar_service.dart';
 import 'i18n/translations.g.dart';
 
@@ -25,6 +26,10 @@ void main() async {
   Get.put(AccountService());
   Get.put(FilterService());
   Get.put(ThemeController());
+
+  // Initialize and check image server health
+  final imageServerService = Get.put(ImageServerService());
+  await imageServerService.checkServerHealth();
 
   // Initialize slang
   LocaleSettings.setLocale(AppLocale.en);

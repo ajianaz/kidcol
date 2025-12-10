@@ -42,7 +42,7 @@ class HomeView extends GetView<HomeController> {
                 var data = Gambar()..endpoint = imageUrl;
                 // Find the corresponding asset to get the object name
                 var asset = controller.assets
-                    .firstWhereOrNull((a) => a.imageUrl == imageUrl);
+                    .firstWhereOrNull((a) => a.getImageUrl() == imageUrl);
                 if (asset != null) {
                   data.object = asset.object;
                 }
@@ -373,7 +373,7 @@ Widget _buildImageGrid(
                 child: _EnhancedImageCard(
                   asset: asset,
                   onTap: () =>
-                      showImagePreviewDialog("${asset.imageUrl}", asset.object),
+                      showImagePreviewDialog(asset.getImageUrl(), asset.object),
                 ),
               );
             } catch (e) {
@@ -672,7 +672,7 @@ class _EnhancedImageCardState extends State<_EnhancedImageCard>
                 child: Stack(
                   children: [
                     // Image
-                    _EnhancedCardImage(imageUrl: widget.asset.imageUrl ?? ''),
+                    _EnhancedCardImage(imageUrl: widget.asset.getImageUrl()),
 
                     // Gradient overlay for better text visibility
                     Positioned(

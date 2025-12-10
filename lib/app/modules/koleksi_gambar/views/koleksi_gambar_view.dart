@@ -159,7 +159,7 @@ class KoleksiGambarView extends GetView<KoleksiGambarController> {
           onTap: () => _showImagePreview(gambar, index),
           onLongPress: () => _showImageOptions(gambar),
           child: CardImage(
-            imageUrl: "${gambar.endpoint}",
+            imageUrl: gambar.getImageUrl(),
           ),
         ),
       ),
@@ -169,12 +169,12 @@ class KoleksiGambarView extends GetView<KoleksiGambarController> {
   void _showImagePreview(gambar, int index) {
     ImagePreviewHelper.showImagePreview(
       context: Get.context!,
-      imageUrl: "${gambar.endpoint}",
+      imageUrl: gambar.getImageUrl(),
       tag: 'image_${gambar.id ?? index}',
       title: gambar.object,
       actions: ImagePreviewHelper.getKoleksiGambarActions(
         context: Get.context!,
-        imageUrl: "${gambar.endpoint}",
+        imageUrl: gambar.getImageUrl(),
         onDelete: () => controller.deleteGambarKoleksi(gambar),
       ),
     );
@@ -252,7 +252,7 @@ class KoleksiGambarView extends GetView<KoleksiGambarController> {
         child: ClipRRect(
           borderRadius: BorderRadius.circular(12),
           child: CachedNetworkImage(
-            imageUrl: "${gambar.endpoint}",
+            imageUrl: gambar.getImageUrl(),
             fit: BoxFit.cover,
           ),
         ),

@@ -3,6 +3,8 @@
 //     final asset = assetFromJson(jsonString);
 
 import 'dart:convert';
+import 'package:get/get.dart';
+import 'package:kidcol/app/data/services/image_server_service.dart';
 
 List<Asset> assetFromJson(String str) =>
     List<Asset>.from(json.decode(str).map((x) => Asset.fromJson(x)));
@@ -56,4 +58,19 @@ class Asset {
         "created_at": createdAt?.toIso8601String(),
         "deleted_at": deletedAt?.toIso8601String(),
       };
+
+  /// Get image URL with automatic server failover
+  /// If primary server is down, it will automatically use backup server
+  String getImageUrl() {
+    if (imageUrl == null || imageUrl!.isEmpty) return '';
+
+    try {
+      // Try to get ImageServerService
+      final imageServerService = Get.find<ImageServerService>();
+      return imageServerService.getImageUrl(imageUrl!);
+    } catch (e) {
+      // If service not found, return original URL
+      return imageUrl!;
+    }
+  }
 }

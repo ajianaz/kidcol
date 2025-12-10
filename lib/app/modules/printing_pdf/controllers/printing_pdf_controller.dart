@@ -55,11 +55,11 @@ class PrintingPdfController extends GetxController {
     for (int i = 0; i < gambars.length; i++) {
       try {
         Logger.log(
-            "Processing image ${i + 1}/${gambars.length}: ${gambars[i].endpoint}",
+            "Processing image ${i + 1}/${gambars.length}: ${gambars[i].getImageUrl()}",
             tag: 'PrintingPdfController');
 
         // Process image one by one
-        var netImage = await networkImage("${gambars[i].endpoint}");
+        var netImage = await networkImage(gambars[i].getImageUrl());
         netImages.add(netImage);
 
         // Update progress
