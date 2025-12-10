@@ -49,6 +49,7 @@ class Translations with BaseTranslations<AppLocale, Translations> {
 	late final TranslationsCollectionEn collection = TranslationsCollectionEn.internal(_root);
 	late final TranslationsSearchEn search = TranslationsSearchEn.internal(_root);
 	late final TranslationsUiEn ui = TranslationsUiEn.internal(_root);
+	late final TranslationsFilterEn filter = TranslationsFilterEn.internal(_root);
 }
 
 // Path: app
@@ -543,6 +544,45 @@ class TranslationsUiEn {
 
 	/// en: 'Swipe up for more images'
 	String get swipe_for_more => 'Swipe up for more images';
+}
+
+// Path: filter
+class TranslationsFilterEn {
+	TranslationsFilterEn.internal(this._root);
+
+	final Translations _root; // ignore: unused_field
+
+	// Translations
+
+	/// en: 'Filter Images'
+	String get title => 'Filter Images';
+
+	/// en: 'Select category and image level'
+	String get subtitle => 'Select category and image level';
+
+	/// en: 'Filter Images'
+	String get tooltip => 'Filter Images';
+
+	/// en: 'Close'
+	String get close_tooltip => 'Close';
+
+	/// en: 'Category'
+	String get category => 'Category';
+
+	/// en: 'Select Category'
+	String get select_category => 'Select Category';
+
+	/// en: 'All Categories'
+	String get all_categories => 'All Categories';
+
+	/// en: 'Level'
+	String get level => 'Level';
+
+	/// en: 'Reset'
+	String get reset => 'Reset';
+
+	/// en: 'Apply'
+	String get apply => 'Apply';
 }
 
 // Path: dialog.whatsapp_verification

@@ -108,7 +108,7 @@ class HomeView extends GetView<HomeController> {
                       IconButton(
                         onPressed: () => _showFilterDialog(context),
                         icon: const Icon(Icons.filter_list),
-                        tooltip: "Filter Gambar",
+                        tooltip: t.filter.tooltip,
                       ),
                       if (controller.hasActiveFilters.value)
                         Positioned(

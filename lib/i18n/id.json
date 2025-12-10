@@ -168,5 +168,17 @@
   "ui": {
     "tap_to_view": "Ketuk untuk melihat",
     "swipe_for_more": "Geser ke atas untuk gambar lainnya"
+  },
+  "filter": {
+    "title": "Filter Gambar",
+    "subtitle": "Pilih kategori dan level gambar",
+    "tooltip": "Filter Gambar",
+    "close_tooltip": "Tutup",
+    "category": "Kategori",
+    "select_category": "Pilih Kategori",
+    "all_categories": "Semua Kategori",
+    "level": "Level",
+    "reset": "Reset",
+    "apply": "Terapkan"
   }
 }

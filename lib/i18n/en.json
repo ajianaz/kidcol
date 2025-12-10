@@ -168,5 +168,17 @@
   "ui": {
     "tap_to_view": "Tap to view",
     "swipe_for_more": "Swipe up for more images"
+  },
+  "filter": {
+    "title": "Filter Images",
+    "subtitle": "Select category and image level",
+    "tooltip": "Filter Images",
+    "close_tooltip": "Close",
+    "category": "Category",
+    "select_category": "Select Category",
+    "all_categories": "All Categories",
+    "level": "Level",
+    "reset": "Reset",
+    "apply": "Apply"
   }
 }

@@ -4,6 +4,7 @@ import 'package:kidcol/app/data/models/filter_options.dart';
 import 'package:kidcol/app/modules/home/controllers/home_controller.dart';
 import 'package:kidcol/app/utils/colors.dart';
 import 'package:kidcol/app/utils/responsive_helper.dart';
+import 'package:kidcol/i18n/translations.g.dart';
 
 class FilterDialog extends StatefulWidget {
   final FilterOptions filterOptions;
@@ -160,7 +161,7 @@ class _FilterDialogState extends State<FilterDialog>
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
               Text(
-                'Filter Gambar',
+                t.filter.title,
                 style: TextStyle(
                   fontSize: 20,
                   fontWeight: FontWeight.bold,
@@ -168,7 +169,7 @@ class _FilterDialogState extends State<FilterDialog>
                 ),
               ),
               Text(
-                'Pilih kategori dan level gambar',
+                t.filter.subtitle,
                 style: TextStyle(
                   fontSize: 14,
                   color: AppColors.textSecondary,
@@ -183,7 +184,7 @@ class _FilterDialogState extends State<FilterDialog>
             Icons.close,
             color: AppColors.textSecondary,
           ),
-          tooltip: 'Tutup',
+          tooltip: t.filter.close_tooltip,
         ),
       ],
     );
@@ -194,7 +195,7 @@ class _FilterDialogState extends State<FilterDialog>
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          'Kategori',
+          t.filter.category,
           style: TextStyle(
             fontSize: 16,
             fontWeight: FontWeight.w600,
@@ -224,7 +225,7 @@ class _FilterDialogState extends State<FilterDialog>
           hint: Padding(
             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
             child: Text(
-              'Pilih Kategori',
+              t.filter.select_category,
               style: TextStyle(
                 color: AppColors.textSecondary,
               ),
@@ -238,11 +239,11 @@ class _FilterDialogState extends State<FilterDialog>
             ),
           ),
           items: [
-            const DropdownMenuItem<String>(
+            DropdownMenuItem<String>(
               value: null,
               child: Padding(
                 padding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-                child: Text('Semua Kategori'),
+                child: Text(t.filter.all_categories),
               ),
             ),
             ...widget.filterOptions.categories.map((category) {
@@ -263,9 +264,9 @@ class _FilterDialogState extends State<FilterDialog>
           },
           selectedItemBuilder: (context) {
             return [
-              const Padding(
+              Padding(
                 padding: EdgeInsets.symmetric(horizontal: 16, vertical: 12),
-                child: Text('Semua Kategori'),
+                child: Text(t.filter.all_categories),
               ),
               ...widget.filterOptions.categories.map((category) {
                 return Padding(
@@ -286,7 +287,7 @@ class _FilterDialogState extends State<FilterDialog>
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
         Text(
-          'Level',
+          t.filter.level,
           style: TextStyle(
             fontSize: 16,
             fontWeight: FontWeight.w600,
@@ -306,7 +307,7 @@ class _FilterDialogState extends State<FilterDialog>
       children: widget.filterOptions.levels.map((level) {
         final isSelected = selectedLevel == level;
         return _AnimatedChip(
-          label: 'Level $level',
+          label: '${t.filter.level} $level',
           isSelected: isSelected,
           onTap: () {
             setState(() {
@@ -334,7 +335,7 @@ class _FilterDialogState extends State<FilterDialog>
               ),
             ),
             child: Text(
-              'Reset',
+              t.filter.reset,
               style: TextStyle(
                 color: AppColors.primary,
                 fontWeight: FontWeight.w500,
@@ -356,7 +357,7 @@ class _FilterDialogState extends State<FilterDialog>
               elevation: 2,
             ),
             child: Text(
-              'Terapkan',
+              t.filter.apply,
               style: TextStyle(
                 fontWeight: FontWeight.w500,
               ),

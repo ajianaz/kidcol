@@ -47,6 +47,7 @@ class TranslationsId extends Translations with BaseTranslations<AppLocale, Trans
 	@override late final _TranslationsCollectionId collection = _TranslationsCollectionId._(_root);
 	@override late final _TranslationsSearchId search = _TranslationsSearchId._(_root);
 	@override late final _TranslationsUiId ui = _TranslationsUiId._(_root);
+	@override late final _TranslationsFilterId filter = _TranslationsFilterId._(_root);
 }
 
 // Path: app
@@ -296,6 +297,25 @@ class _TranslationsUiId extends TranslationsUiEn {
 	// Translations
 	@override String get tap_to_view => 'Ketuk untuk melihat';
 	@override String get swipe_for_more => 'Geser ke atas untuk gambar lainnya';
+}
+
+// Path: filter
+class _TranslationsFilterId extends TranslationsFilterEn {
+	_TranslationsFilterId._(TranslationsId root) : this._root = root, super.internal(root);
+
+	final TranslationsId _root; // ignore: unused_field
+
+	// Translations
+	@override String get title => 'Filter Gambar';
+	@override String get subtitle => 'Pilih kategori dan level gambar';
+	@override String get tooltip => 'Filter Gambar';
+	@override String get close_tooltip => 'Tutup';
+	@override String get category => 'Kategori';
+	@override String get select_category => 'Pilih Kategori';
+	@override String get all_categories => 'Semua Kategori';
+	@override String get level => 'Level';
+	@override String get reset => 'Reset';
+	@override String get apply => 'Terapkan';
 }
 
 // Path: dialog.whatsapp_verification
