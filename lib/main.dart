@@ -9,6 +9,7 @@ import 'app/utils/env_config.dart';
 import 'app/utils/app_theme.dart';
 import 'app/controllers/theme_controller.dart';
 import 'app/data/services/account_service.dart';
+import 'app/data/services/filter_service.dart';
 import 'app/data/services/isar_service.dart';
 import 'i18n/translations.g.dart';
 
@@ -22,6 +23,7 @@ void main() async {
   // Initialize GetX services
   Get.put(IsarService());
   Get.put(AccountService());
+  Get.put(FilterService());
   Get.put(ThemeController());
 
   // Initialize slang

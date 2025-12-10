@@ -15,6 +15,9 @@ import 'package:kidcol/i18n/translations.g.dart';
 
 import '../../../routes/app_pages.dart';
 import '../controllers/home_controller.dart';
+import '../widgets/filter_dialog.dart';
+import '../../../data/services/filter_service.dart';
+import '../../../data/models/filter_options.dart';
 
 class HomeView extends GetView<HomeController> {
   const HomeView({super.key});
@@ -97,6 +100,34 @@ class HomeView extends GetView<HomeController> {
             ),
             elevation: 1,
             centerTitle: true,
+            actions: [
+              GetBuilder<HomeController>(
+                builder: (controller) {
+                  return Stack(
+                    children: [
+                      IconButton(
+                        onPressed: () => _showFilterDialog(context),
+                        icon: const Icon(Icons.filter_list),
+                        tooltip: "Filter Gambar",
+                      ),
+                      if (controller.hasActiveFilters.value)
+                        Positioned(
+                          right: 8,
+                          top: 8,
+                          child: Container(
+                            width: 8,
+                            height: 8,
+                            decoration: const BoxDecoration(
+                              color: Colors.red,
+                              shape: BoxShape.circle,
+                            ),
+                          ),
+                        ),
+                    ],
+                  );
+                },
+              ),
+            ],
           ),
           body: RefreshIndicator(
             onRefresh: () async {
@@ -131,6 +162,41 @@ class HomeView extends GetView<HomeController> {
               ),
             ),
           ),
+        );
+      },
+    );
+  }
+
+  void _showFilterDialog(BuildContext context) {
+    final filterService = Get.find<FilterService>();
+
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        return FutureBuilder<FilterOptions>(
+          future: filterService.getFilterOptions(),
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return const Center(child: CircularProgressIndicator());
+            }
+
+            if (snapshot.hasError) {
+              return AlertDialog(
+                title: const Text("Error"),
+                content: const Text("Gagal memuat filter options"),
+                actions: [
+                  TextButton(
+                    onPressed: () => Navigator.of(context).pop(),
+                    child: const Text("Tutup"),
+                  ),
+                ],
+              );
+            }
+
+            return FilterDialog(
+              filterOptions: snapshot.data!,
+            );
+          },
         );
       },
     );

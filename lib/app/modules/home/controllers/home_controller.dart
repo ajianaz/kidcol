@@ -6,6 +6,7 @@ import 'package:kidcol/app/data/models/asset.dart';
 import 'package:kidcol/app/data/models/assets_response.dart';
 import 'package:kidcol/app/data/services/isar_service.dart';
 import 'package:kidcol/app/data/services/account_service.dart';
+import 'package:kidcol/app/data/services/filter_service.dart';
 import 'package:kidcol/app/utils/api_config.dart';
 import 'package:kidcol/app/utils/env_config.dart';
 import 'package:kidcol/app/utils/error_handler.dart';
@@ -16,6 +17,7 @@ import 'package:kidcol/i18n/translations.g.dart';
 class HomeController extends GetxController {
   final service = Get.find<IsarService>();
   final accountService = Get.find<AccountService>();
+  final filterService = Get.find<FilterService>();
 
   // bool isLoaded = false;
 
@@ -33,6 +35,11 @@ class HomeController extends GetxController {
   List<Asset> assets = List.empty(growable: true);
 
   List<Koleksi> koleksis = List.empty(growable: true);
+
+  // Filter state variables
+  final selectedLevel = Rxn<int>();
+  final selectedCategory = Rxn<String>();
+  final hasActiveFilters = RxBool(false);
 
   /// Check account verification status and show necessary dialogs
   Future<void> _checkAccountVerification() async {
@@ -182,27 +189,95 @@ class HomeController extends GetxController {
     isLoading.value = true;
     update();
 
+    // Track request start time
+    final startTime = DateTime.now();
+
     try {
-      final url =
+      var url =
           '/api/coloring-images/endless?page=${page.value}&limit=${limit.value}';
-      Logger.log('Making API request to: ${ApiConfig.baseUrl}$url',
+
+      // Add filter parameters if active
+      if (selectedLevel.value != null) {
+        url += '&level=${selectedLevel.value}';
+      }
+      if (selectedCategory.value != null) {
+        url += '&category=${selectedCategory.value}';
+      }
+
+      // Log request with filters
+      Logger.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━',
           tag: 'HomeController');
-      Logger.log(
-          'Using gateway key: ${ApiConfig.gatewayKey.isNotEmpty ? "Yes" : "No"}',
+      Logger.log('🎨 Requesting images: Page ${page.value}/${totalPage.value}',
           tag: 'HomeController');
-      Logger.log('Retry count: ${retryCount.value}', tag: 'HomeController');
+
+      if (hasActiveFilters.value) {
+        final filters = <String>[];
+        if (selectedLevel.value != null)
+          filters.add('Level ${selectedLevel.value}');
+        if (selectedCategory.value != null)
+          filters.add(selectedCategory.value!);
+        Logger.log('🔍 Filters: ${filters.join(", ")}', tag: 'HomeController');
+      }
+
+      Logger.log('📤 ${ApiConfig.baseUrl}$url', tag: 'HomeController');
 
       var response = await dio.get(url,
           options: ApiConfig.gatewayKey.isNotEmpty
               ? Options(headers: ApiConfig.authHeaders)
               : null);
 
-      Logger.log('API response status: ${response.statusCode}',
-          tag: 'HomeController');
+      final endTime = DateTime.now();
+      final duration = endTime.difference(startTime);
 
       if (response.statusCode == 200) {
-        var result = AssetsResponse.fromJson(response.data);
-        Logger.log('Successfully loaded ${result.assets?.length ?? 0} assets',
+        // Validate response data
+        if (response.data == null) {
+          Logger.error('❌ Response data is null', tag: 'HomeController');
+          Logger.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━',
+              tag: 'HomeController');
+          throw Exception('Response data is null');
+        }
+
+        // Check if response.data is a Map
+        if (response.data is! Map<String, dynamic>) {
+          Logger.error('❌ Invalid response type: ${response.data.runtimeType}',
+              tag: 'HomeController');
+          Logger.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━',
+              tag: 'HomeController');
+          throw Exception(
+              'Invalid response format: expected Map<String, dynamic>, got ${response.data.runtimeType}');
+        }
+
+        AssetsResponse result;
+        try {
+          result = AssetsResponse.fromJson(response.data);
+        } catch (parseError) {
+          Logger.error('❌ Parse error: $parseError', tag: 'HomeController');
+          Logger.error('Response keys: ${(response.data as Map).keys.toList()}',
+              tag: 'HomeController');
+          Logger.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━',
+              tag: 'HomeController');
+          throw Exception('Failed to parse response: $parseError');
+        }
+
+        // Check if empty result
+        if (result.assets == null || result.assets!.isEmpty) {
+          Logger.log('⚠️  No assets found', tag: 'HomeController');
+          if (hasActiveFilters.value) {
+            final filters = <String>[];
+            if (selectedLevel.value != null)
+              filters.add('Level ${selectedLevel.value}');
+            if (selectedCategory.value != null)
+              filters.add(selectedCategory.value!);
+            Logger.log('Active filters: ${filters.join(", ")}',
+                tag: 'HomeController');
+          }
+        }
+
+        Logger.log(
+            '✅ Loaded ${result.assets?.length ?? 0} assets (${duration.inMilliseconds}ms)',
+            tag: 'HomeController');
+        Logger.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━',
             tag: 'HomeController');
 
         assets.addAll(result.assets as List<Asset>);
@@ -211,15 +286,26 @@ class HomeController extends GetxController {
         retryCount.value = 0; // Reset retry count on success
         update();
       } else {
+        Logger.error('❌ Failed with status code: ${response.statusCode}',
+            tag: 'HomeController');
+        Logger.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━',
+            tag: 'HomeController');
         throw Exception(
             'Failed to load data: Status code ${response.statusCode}');
       }
     } on DioException catch (e) {
-      Logger.error('Dio error: ${e.message}', tag: 'HomeController', error: e);
-      Logger.error('Response data: ${e.response?.data}', tag: 'HomeController');
-      Logger.error('Status code: ${e.response?.statusCode}',
+      final endTime = DateTime.now();
+      final duration = endTime.difference(startTime);
+
+      Logger.error(
+          '❌ Dio Error [${e.type}]: ${e.message} (${duration.inMilliseconds}ms)',
           tag: 'HomeController');
-      Logger.error('Error type: ${e.type}', tag: 'HomeController');
+      if (e.response != null) {
+        Logger.error('Status ${e.response?.statusCode}: ${e.response?.data}',
+            tag: 'HomeController');
+      }
+      Logger.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━',
+          tag: 'HomeController');
 
       // Show error with retry option for connection errors
       if (ApiConfig.isRetryableError(e)) {
@@ -231,8 +317,14 @@ class HomeController extends GetxController {
       isLoading.value = false;
       update();
     } catch (e) {
-      Logger.error('Unexpected error: $e', tag: 'HomeController', error: e);
-      Logger.error('Error type: ${e.runtimeType}', tag: 'HomeController');
+      final endTime = DateTime.now();
+      final duration = endTime.difference(startTime);
+
+      Logger.error(
+          '❌ Error [${e.runtimeType}]: $e (${duration.inMilliseconds}ms)',
+          tag: 'HomeController');
+      Logger.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━',
+          tag: 'HomeController');
 
       // Handle specific error types
       if (e.toString().contains('Network') || e.toString().contains('Socket')) {
@@ -279,6 +371,71 @@ class HomeController extends GetxController {
     }
   }
 
+  /// Apply filters and refresh data
+  void applyFilters() {
+    final filters = <String>[];
+    if (selectedLevel.value != null)
+      filters.add('Level ${selectedLevel.value}');
+    if (selectedCategory.value != null) filters.add(selectedCategory.value!);
+
+    Logger.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━',
+        tag: 'HomeController');
+    Logger.log(
+        '🔄 Applying Filters: ${filters.isNotEmpty ? filters.join(", ") : "None"}',
+        tag: 'HomeController');
+    Logger.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━',
+        tag: 'HomeController');
+
+    _updateFilterStatus();
+    resetData();
+    requestData();
+  }
+
+  /// Reset all filters and refresh data
+  void resetFilters() {
+    Logger.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━',
+        tag: 'HomeController');
+    Logger.log('🔄 Resetting All Filters', tag: 'HomeController');
+    Logger.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━',
+        tag: 'HomeController');
+
+    selectedLevel.value = null;
+    selectedCategory.value = null;
+    hasActiveFilters.value = false;
+    resetData();
+    requestData();
+  }
+
+  /// Update filter status based on active filters
+  void _updateFilterStatus() {
+    hasActiveFilters.value =
+        selectedLevel.value != null || selectedCategory.value != null;
+  }
+
+  /// Set filter values and apply
+  void setFilters({int? level, String? category}) {
+    final oldFilters = <String>[];
+    if (selectedLevel.value != null)
+      oldFilters.add('Level ${selectedLevel.value}');
+    if (selectedCategory.value != null) oldFilters.add(selectedCategory.value!);
+
+    final newFilters = <String>[];
+    if (level != null) newFilters.add('Level $level');
+    if (category != null) newFilters.add(category);
+
+    Logger.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━',
+        tag: 'HomeController');
+    Logger.log(
+        '⚙️  Setting Filters: ${newFilters.isNotEmpty ? newFilters.join(", ") : "None"}',
+        tag: 'HomeController');
+    Logger.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━',
+        tag: 'HomeController');
+
+    selectedLevel.value = level;
+    selectedCategory.value = category;
+    applyFilters();
+  }
+
   /// Retry failed request with exponential backoff
   Future<void> retryRequest() async {
     if (retryCount.value >= maxRetries) {
@@ -302,25 +459,6 @@ class HomeController extends GetxController {
     await Future.delayed(delay);
 
     await requestData(isRetry: true);
-  }
-
-  /// Check if network is available
-  Future<bool> _checkNetworkConnectivity() async {
-    try {
-      // Try to connect to a reliable endpoint
-      final response = await dio.head(
-        '${ApiConfig.baseUrl}/health',
-        options: Options(
-          receiveTimeout: const Duration(seconds: 5),
-          sendTimeout: const Duration(seconds: 5),
-        ),
-      );
-      return response.statusCode == 200;
-    } catch (e) {
-      AppErrorHandler.handleErrorWithoutSnackbar(e,
-          context: 'HomeController._checkNetworkConnectivity');
-      return false;
-    }
   }
 
   //Get All Koleksi dari local DB
@@ -399,6 +537,9 @@ class HomeController extends GetxController {
     scrollController = ScrollController()..addListener(scrollListener);
 
     getAllKoleksi();
+
+    // Initialize filter status
+    _updateFilterStatus();
   }
 
   @override
